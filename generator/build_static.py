@@ -24,16 +24,20 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent  # livemap/
 MAPS_DIR = ROOT / "maps"
 
+from mapmeta import card_meta
+
 
 def collect_maps():
     maps = []
     for f in sorted(MAPS_DIR.glob("*.html")):
-        maps.append({
+        entry = {
             "name": f.stem,
             "url": f"maps/{f.name}",          # 静态版用相对路径
             "size_kb": f.stat().st_size // 1024,
             "mtime": int(f.stat().st_mtime),
-        })
+        }
+        entry.update(card_meta(f))            # title / emoji / en / query / color_scheme / tags
+        maps.append(entry)
     return maps
 
 

@@ -862,49 +862,43 @@ $ open http://localhost:5005
       const hardcoded = ['usnp_top20_5d', 'kyoto_6d', 'yellowstone_5d', 'big_island_7d', 'hokkaido_5d'];
       const extras = (data.maps || []).filter(m => !hardcoded.includes(m.name));
       if (!extras.length) return;
-      // 颜色方案池：根据 slug 自动派色
-      const COLOR_MAP = {
-        seoul: { bg: 'radial-gradient(ellipse at center, #ff8aac 0%, #b04060 60%, #2a0a18 100%)', emoji: '🇰🇷', tags: ['🍜 美食','🎬 韩剧','💄 购物'] },
-        barcelona: { bg: 'radial-gradient(ellipse at center, #f4a86c 0%, #c2542e 60%, #2a1208 100%)', emoji: '🇪🇸', tags: ['🏛️ 高迪','🥘 西班牙菜','🏖️ 地中海'] },
-        orlando: { bg: 'radial-gradient(ellipse at center, #d4854e 0%, #6b2e1a 60%, #1a0a05 100%)', emoji: '🎢', tags: ['🎢 主题乐园','🏰 迪士尼','🪄 哈利波特'] },
-        chiangmai: { bg: 'radial-gradient(ellipse at center, #e89d4a 0%, #8a4520 60%, #2a1208 100%)', emoji: '🇹🇭', tags: ['⛩️ 寺庙','🍜 街头小吃','🐘 大象'] },
-        paris: { bg: 'radial-gradient(ellipse at center, #c4a574 0%, #6b4a2e 60%, #1a1208 100%)', emoji: '🇫🇷', tags: ['🗼 铁塔','🥖 美食','🎨 博物馆'] },
-        iceland: { bg: 'radial-gradient(ellipse at center, #5a8ab0 0%, #1f4860 60%, #050a14 100%)', emoji: '🇮🇸', tags: ['🌌 极光','💦 瀑布','♨️ 蓝湖'] },
-        tokyo: { bg: 'radial-gradient(ellipse at center, #e8a5c0 0%, #6b3a5a 60%, #1a0a18 100%)', emoji: '🗼', tags: ['🏯 寺庙','🍣 寿司','🎌 文化'] },
-        venice: { bg: 'radial-gradient(ellipse at center, #5a9bb0 0%, #1f5870 60%, #050a14 100%)', emoji: '🛶', tags: ['🛶 贡多拉','🎭 嘉年华','🍝 意餐'] },
+      // 配色方案 → 卡片渐变底（与地图主题一致；图片加载前的占位）
+      const SCHEME_BG = {
+        warm:   'radial-gradient(ellipse at center, #d4854e 0%, #6b3a1e 60%, #1a0e08 100%)',
+        sakura: 'radial-gradient(ellipse at center, #e8a5c0 0%, #6b3a5a 60%, #1a0e16 100%)',
+        ocean:  'radial-gradient(ellipse at center, #4a9bb5 0%, #1f4d66 60%, #050d14 100%)',
+        snow:   'radial-gradient(ellipse at center, #7fa8c8 0%, #2f4a66 60%, #070d16 100%)',
+        forest: 'radial-gradient(ellipse at center, #5a8a4a 0%, #2a4d28 60%, #060f08 100%)',
       };
-      const DEFAULT_COLOR = { bg: 'radial-gradient(ellipse at center, #6a7a8a 0%, #2a3a4a 60%, #050811 100%)', emoji: '🌍', tags: ['✨ AI 生成'] };
+      const DEFAULT_BG = 'radial-gradient(ellipse at center, #6a7a8a 0%, #2a3a4a 60%, #050811 100%)';
+      const esc = s => String(s == null ? '' : s).replace(/[<>"]/g, c => ({'<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
       const container = document.getElementById('moreMapsContainer');
       container.style.display = 'contents';  // 让子卡片融入 gallery grid
       container.innerHTML = extras.map(m => {
-        // 解析 slug：seoul_3d → slug=seoul, days=3
         const match = m.name.match(/^(.+)_(\d+)d$/);
         if (!match) return '';
-        const [_, slug, days] = match;
-        const color = COLOR_MAP[slug] || DEFAULT_COLOR;
-        const nameMap = {
-          seoul: '首尔', barcelona: '巴塞罗那', orlando: '奥兰多', chiangmai: '清迈',
-          paris: '巴黎', iceland: '冰岛', tokyo: '东京', venice: '威尼斯',
-          new_york: '纽约', rome: '罗马', bangkok: '曼谷', sapporo: '札幌',
-        };
-        const cnName = nameMap[slug] || slug.replace(/_/g, ' ');
-        const enName = slug.toUpperCase().replace(/_/g, ' ');
+        const days = match[2];
+        const title = m.title || match[1].replace(/_/g, ' ');
+        const emoji = m.emoji || '🌍';
+        const enName = m.en || match[1].toUpperCase().replace(/_/g, ' ');
+        const tags = (m.tags && m.tags.length ? m.tags : ['✨ AI 生成']).slice(0, 4);
+        const bg = SCHEME_BG[m.color_scheme] || DEFAULT_BG;
         return `
         <a class="map-card" href="${m.url}">
-          <div class="preview" style="background: ${color.bg};">
-            <div class="preview-emoji">${color.emoji}</div>
+          <div class="preview" data-q="${esc(m.query || title)}" style="background:${bg};background-size:cover;background-position:center;">
+            <div class="preview-emoji">${emoji}</div>
             <div style="position:absolute;top:10px;left:10px;z-index:3;display:flex;gap:4px;">
               <span style="padding:2px 6px;background:rgba(255,212,72,0.95);color:#1a1410;font-size:9px;border-radius:4px;font-weight:800;">🤖 AI</span>
             </div>
           </div>
           <div class="card-body">
             <div class="card-title-row">
-              <div class="card-title">${cnName} ${days} 天</div>
+              <div class="card-title">${esc(title)}</div>
               <div class="card-days">${days} DAYS</div>
             </div>
-            <div class="card-en">${enName}</div>
+            <div class="card-en">${esc(enName)}</div>
             <div class="card-tags">
-              ${color.tags.map(t => `<span class="card-tag">${t}</span>`).join('')}
+              ${tags.map(t => `<span class="card-tag">${esc(t)}</span>`).join('')}
             </div>
             <div class="card-stats">
               <span>${m.size_kb} KB · 自动生成</span>
@@ -913,9 +907,47 @@ $ open http://localhost:5005
           </div>
         </a>`;
       }).join('');
+      loadCardScenery();  // 懒加载每张卡片的目的地风景图
     } catch (e) {
       console.warn('加载更多地图失败：', e);
     }
+  }
+
+  // ===== 卡片目的地风景图（Wikipedia，懒加载，失败回退渐变底）=====
+  const _isGoodImg = u => u && /\.(jpg|jpeg|png)$/i.test(u) && !/logo|icon|seal|coat[_-]of[_-]arms|svg|flag|map|chart/i.test(u);
+  async function fetchSceneryImage(query) {
+    try {
+      const sr = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&srlimit=1&format=json&origin=*`);
+      const title = (await sr.json()).query?.search?.[0]?.title;
+      if (!title) return null;
+      const mr = await fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${encodeURIComponent(title)}`);
+      if (!mr.ok) return null;
+      for (const item of ((await mr.json()).items || [])) {
+        if (item.type !== 'image') continue;
+        const ss = item.srcset || [];
+        const best = ss.find(s => s.scale === '1.5x') || ss.find(s => s.scale === '1x') || ss[0];
+        let src = best?.src || item.original?.source || '';
+        if (src.startsWith('//')) src = 'https:' + src;
+        if (_isGoodImg(src)) return src;
+      }
+    } catch (e) {}
+    return null;
+  }
+  function loadCardScenery() {
+    document.querySelectorAll('.preview[data-q]:not([data-loaded])').forEach(async el => {
+      el.dataset.loaded = '1';
+      const q = el.dataset.q;
+      if (!q) return;
+      const url = await fetchSceneryImage(q + ' landscape') || await fetchSceneryImage(q);
+      if (!url) return;
+      const pre = new Image();
+      pre.onload = () => {
+        el.style.backgroundImage = `url("${url}")`;
+        const emoji = el.querySelector('.preview-emoji');
+        if (emoji) emoji.style.display = 'none';
+      };
+      pre.src = url;
+    });
   }
 </script>
 </body>

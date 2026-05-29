@@ -141,15 +141,18 @@ class LiveMapHandler(http.server.SimpleHTTPRequestHandler):
 
     def _list_maps(self):
         """列出所有已生成的地图。"""
+        from mapmeta import card_meta
         maps = []
         if MAPS_DIR.exists():
             for f in sorted(MAPS_DIR.glob("*.html")):
-                maps.append({
+                entry = {
                     "name": f.stem,
                     "url": f"/maps/{f.name}",
                     "size_kb": f.stat().st_size // 1024,
                     "mtime": int(f.stat().st_mtime),
-                })
+                }
+                entry.update(card_meta(f))
+                maps.append(entry)
         return self._json(200, {"maps": maps})
 
     def _json(self, code, data):

@@ -871,7 +871,7 @@ POIs.forEach(p => {
   });
   const marker = L.marker([p.lat, p.lng], { icon }).addTo(map);
   marker.on('click', () => showDetail(p));
-  marker.bindTooltip(poiTipHtml(p), { permanent: true, direction: (p.num % 2 ? 'top' : 'bottom'), offset: (p.num % 2 ? [0, -16] : [0, 16]), className: 'poi-tip', interactive: false });
+  const _ts = poiTipSide(p); marker.bindTooltip(poiTipHtml(p), { permanent: true, direction: _ts, offset: (_ts === 'right' ? [14, 0] : [-14, 0]), className: 'poi-tip', interactive: false });
   markers[p.id] = marker;
 });
 function poiBriefFeature(p) {
@@ -879,6 +879,12 @@ function poiBriefFeature(p) {
   t = t.split(/[。.!！?？;；\n]/)[0].trim();
   if (t.length > 20) t = t.slice(0, 19) + '…';
   return t;
+}
+function poiTipSide(p) {
+  // 同一天按纬度从北到南排名，奇偶分到右/左两侧，确保纵向相邻点不叠
+  const sameDay = POIs.filter(q => q.day === p.day).sort((a, b) => b.lat - a.lat);
+  const rank = sameDay.findIndex(q => q.id === p.id);
+  return rank % 2 === 0 ? 'right' : 'left';
 }
 function poiTipHtml(p) {
   const feat = poiBriefFeature(p);

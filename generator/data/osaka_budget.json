@@ -1,0 +1,472 @@
+{
+  "meta": {
+    "title": "🍜 大阪 3 天美食之旅",
+    "title_short": "大阪美食游",
+    "subtitle": "Osaka Culinary Adventure",
+    "eyebrow": "OSAKA · LIVEMAP · 2026",
+    "header_emoji": "🍜",
+    "color_scheme": "warm",
+    "currency": "JPY",
+    "map_center": [
+      34.6937,
+      135.5023
+    ],
+    "map_zoom": 11,
+    "where_summary": "大阪国际机场进/出",
+    "all_tip": "🎯 主题定调：这是一场围绕美食展开的旅行，深入大阪街头巷尾，品尝地道平价美食，感受当地烟火气。\n\n🎬 节奏递进：三天行程由浅入深，Day1 初尝大阪美食，适应节奏；Day2 深入美食街区，尽情享受；Day3 收尾，品尝特色小吃，留下美好回忆。\n\n🗺️ 路线设计：以难波为基地，不换酒店，减少折腾。每天围绕周边美食区域展开，避免来回折返，符合预算和体能曲线。\n\n💡 实用建议：建议提前购买大阪周游卡，乘坐公交地铁更划算。必带转换插头，避开樱花季和黄金周，提前预订热门餐厅。",
+    "stats": [
+      {
+        "num": "3",
+        "label": "天数",
+        "hint": "DAYS"
+      },
+      {
+        "num": "12",
+        "label": "景点",
+        "hint": "POI"
+      },
+      {
+        "num": "¥3K-6K",
+        "label": "预计花费/人",
+        "hint": "BUDGET / PERSON",
+        "tooltip": "不含国际机票，含食宿门票当地交通"
+      },
+      {
+        "num": "地铁|公交",
+        "label": "交通方式",
+        "hint": "TRANSPORT",
+        "tooltip": "推荐主要交通方式"
+      }
+    ],
+    "highlight_title": "🔥 大阪美食独门绝技",
+    "highlight_items": [
+      "<b>道顿堀美食街</b>（大阪最热闹的美食街，汇聚各种特色小吃）",
+      "<b>黑门市场</b>（可以品尝到新鲜的海鲜和地道的大阪美食）",
+      "<b>大阪烧</b>（大阪特色美食，必尝）",
+      "<b>章鱼小丸子</b>（经典小吃，口感鲜美）"
+    ],
+    "warning_title": "⚠️ 安全/礼仪/避坑",
+    "warning_text": "注意垃圾分类，在餐厅用餐时不要大声喧哗。",
+    "footer": "OSAKA · 品尝地道美食 · 2026",
+    "pretrip": {
+      "visa": "需提前办签证（¥300 元，5 个工作日）",
+      "voltage": "100V · A型插头（需转换头）",
+      "sim": "eSIM 推荐 Airalo（¥80/5GB）· 当地买卡 ¥150",
+      "currency": "¥1 RMB ≈ ¥18 JPY · 推荐银联卡免手续费",
+      "tipping": "不需小费",
+      "emergency": "110 报警/119 消防急救/中国驻大阪总领事馆 +81-6-6445-9427"
+    },
+    "mode": "budget"
+  },
+  "days": {
+    "1": {
+      "color": "#c97b5a",
+      "title": "Day 1 · 初尝大阪美食",
+      "where": "📍 难波",
+      "tip": "💡 购买大阪周游卡，乘坐交通更实惠。",
+      "hotel": {
+        "name_cn": "大阪难波东横INN酒店",
+        "name_en": "Toyoko Inn Osaka Namba",
+        "address": "大阪府大阪市中央区难波千日前1-2-10",
+        "price": "¥300/晚",
+        "parking": "不提供",
+        "highlights": "步行 5 分钟到难波地铁站",
+        "url": "https://www.booking.com/hotel/jp/toyoko-inn-osaka-namba.zh-cn.html"
+      },
+      "plan_b": "💧 雨天/旺季备选：改去难波公园商场 + 近铁百货美食街"
+    },
+    "2": {
+      "color": "#c97b5a",
+      "title": "Day 2 · 深入美食街区",
+      "where": "📍 难波",
+      "tip": "💡 提前预订热门餐厅，避免排队。",
+      "hotel": {
+        "name_cn": "大阪难波东横INN酒店",
+        "name_en": "Toyoko Inn Osaka Namba",
+        "address": "大阪府大阪市中央区难波千日前1-2-10",
+        "price": "¥300/晚",
+        "parking": "不提供",
+        "highlights": "步行 5 分钟到难波地铁站",
+        "url": "https://www.booking.com/hotel/jp/toyoko-inn-osaka-namba.zh-cn.html"
+      },
+      "plan_b": "💧 雨天/旺季备选：改去心斋桥筋商业街 + 大丸百货美食区"
+    },
+    "3": {
+      "color": "#c97b5a",
+      "title": "Day 3 · 特色小吃收尾",
+      "where": "📍 难波",
+      "tip": "💡 预留足够时间前往机场。",
+      "hotel": {
+        "name_cn": "大阪难波东横INN酒店",
+        "name_en": "Toyoko Inn Osaka Namba",
+        "address": "大阪府大阪市中央区难波千日前1-2-10",
+        "price": "¥300/晚",
+        "parking": "不提供",
+        "highlights": "步行 5 分钟到难波地铁站",
+        "url": "https://www.booking.com/hotel/jp/toyoko-inn-osaka-namba.zh-cn.html"
+      },
+      "plan_b": "💧 雨天/旺季备选：改去天王寺车站商场美食街"
+    }
+  },
+  "pois": [
+    {
+      "id": "dotonbori",
+      "day": 1,
+      "num": 1,
+      "name": "道顿堀",
+      "en": "Dotonbori",
+      "lat": 34.6698,
+      "lng": 135.5018,
+      "icon": "🍜",
+      "color": "#c97b5a",
+      "search": "Dotonbori",
+      "price": "免费",
+      "hours": "24h",
+      "duration": "2-3 小时",
+      "desc": "大阪最热闹的美食街，必去打卡！晚上灯光璀璨，氛围超棒。省钱 tip：部分餐厅有优惠券可领。",
+      "tags": [
+        "必去",
+        "美食"
+      ],
+      "time": "晚上",
+      "photo_spots": [
+        "📸 蟹道乐招牌前合影",
+        "📸 道顿堀运河边拍夜景"
+      ],
+      "foods": [
+        "🍜 大阪烧（¥800）",
+        "🍜 炸串（¥500）"
+      ]
+    },
+    {
+      "id": "shinsaibashi",
+      "day": 1,
+      "num": 2,
+      "name": "心斋桥",
+      "en": "Shinsaibashi",
+      "lat": 34.6678,
+      "lng": 135.5028,
+      "icon": "🛍️",
+      "color": "#c97b5a",
+      "search": "Shinsaibashi",
+      "price": "免费",
+      "hours": "10:00-22:00",
+      "duration": "1-2 小时",
+      "desc": "购物美食一体的街道，逛街品尝小吃两不误。省钱 tip：部分店铺有折扣活动。",
+      "tags": [
+        "必去",
+        "美食"
+      ],
+      "time": "下午",
+      "photo_spots": [
+        "📸 心斋桥筋商店街入口拍照"
+      ],
+      "foods": [
+        "🍜 章鱼小丸子（¥300）",
+        "🍜 冰淇淋（¥500）"
+      ]
+    },
+    {
+      "id": "kuromon_market",
+      "day": 1,
+      "num": 3,
+      "name": "黑门市场",
+      "en": "Kuromon Market",
+      "lat": 34.6648,
+      "lng": 135.5048,
+      "icon": "🍱",
+      "color": "#c97b5a",
+      "search": "Kuromon Market",
+      "price": "免费",
+      "hours": "09:00-18:00",
+      "duration": "1-1.5 小时",
+      "desc": "新鲜海鲜和特色美食聚集地。省钱 tip：可讲价，早上食材更新鲜。",
+      "tags": [
+        "必去",
+        "美食"
+      ],
+      "time": "上午",
+      "photo_spots": [
+        "📸 市场入口标志性拱门拍照"
+      ],
+      "foods": [
+        "🍜 生鱼片（¥1000）",
+        "🍜 烤扇贝（¥500）"
+      ]
+    },
+    {
+      "id": "america_mura",
+      "day": 1,
+      "num": 4,
+      "name": "美国村",
+      "en": "Amerika Mura",
+      "lat": 34.6668,
+      "lng": 135.5068,
+      "icon": "👚",
+      "color": "#c97b5a",
+      "search": "Amerika Mura",
+      "price": "免费",
+      "hours": "11:00-21:00",
+      "duration": "1-2 小时",
+      "desc": "潮流文化街区，有很多特色小店和美食。省钱 tip：部分小店有优惠。",
+      "tags": [
+        "必去",
+        "美食"
+      ],
+      "time": "傍晚",
+      "photo_spots": [
+        "📸 彩色外墙建筑前拍照"
+      ],
+      "foods": [
+        "🍜 汉堡（¥800）",
+        "🍜 奶昔（¥500）"
+      ]
+    },
+    {
+      "id": "osaka_castle",
+      "day": 2,
+      "num": 1,
+      "name": "大阪城公园",
+      "en": "Osaka Castle Park",
+      "lat": 34.6875,
+      "lng": 135.5262,
+      "icon": "🏯",
+      "color": "#6b7a6e",
+      "search": "Osaka Castle Park",
+      "price": "免费",
+      "hours": "05:00-23:00",
+      "duration": "1-2 小时",
+      "desc": "历史悠久的公园，可俯瞰大阪城。省钱 tip：公园免费，登城需门票。",
+      "tags": [
+        "必看",
+        "观景"
+      ],
+      "time": "上午",
+      "photo_spots": [
+        "📸 大阪城天守阁前拍照",
+        "📸 公园樱花季美拍"
+      ],
+      "foods": []
+    },
+    {
+      "id": "tenjinbashisuji",
+      "day": 2,
+      "num": 2,
+      "name": "天神桥筋商店街",
+      "en": "Tenjinbashisuji Shopping Street",
+      "lat": 34.6938,
+      "lng": 135.5078,
+      "icon": "🛍️",
+      "color": "#c97b5a",
+      "search": "Tenjinbashisuji Shopping Street",
+      "price": "免费",
+      "hours": "10:00-20:00",
+      "duration": "1-2 小时",
+      "desc": "日本最长的商店街，有各种美食和商品。省钱 tip：部分店铺有满减活动。",
+      "tags": [
+        "必去",
+        "美食"
+      ],
+      "time": "下午",
+      "photo_spots": [
+        "📸 商店街入口标志拍照"
+      ],
+      "foods": [
+        "🍜 拉面（¥800）",
+        "🍜 豆沙包（¥300）"
+      ]
+    },
+    {
+      "id": "namba_parks",
+      "day": 2,
+      "num": 3,
+      "name": "难波公园",
+      "en": "Namba Parks",
+      "lat": 34.6662,
+      "lng": 135.5042,
+      "icon": "🌳",
+      "color": "#5a7a4a",
+      "search": "Namba Parks",
+      "price": "免费",
+      "hours": "10:00-22:00",
+      "duration": "1-1.5 小时",
+      "desc": "融合自然与商业的购物中心，有很多美食餐厅。省钱 tip：部分餐厅有套餐优惠。",
+      "tags": [
+        "必去",
+        "美食"
+      ],
+      "time": "傍晚",
+      "photo_spots": [
+        "📸 公园内绿色景观拍照"
+      ],
+      "foods": [
+        "🍜 意大利面（¥1000）",
+        "🍜 咖啡（¥300）"
+      ]
+    },
+    {
+      "id": "kitashinchi",
+      "day": 2,
+      "num": 4,
+      "name": "北新地",
+      "en": "Kitashinchi",
+      "lat": 34.6958,
+      "lng": 135.5038,
+      "icon": "🍶",
+      "color": "#c97b5a",
+      "search": "Kitashinchi",
+      "price": "免费",
+      "hours": "17:00-02:00",
+      "duration": "2-3 小时",
+      "desc": "热闹的美食酒吧区，可品尝大阪特色料理。省钱 tip：部分酒吧有优惠时段。",
+      "tags": [
+        "必去",
+        "美食"
+      ],
+      "time": "晚上",
+      "photo_spots": [
+        "📸 街道霓虹灯夜景拍照"
+      ],
+      "foods": [
+        "🍜 烤鸡肉串（¥500）",
+        "🍜 清酒（¥800）"
+      ]
+    },
+    {
+      "id": "tempozan_market",
+      "day": 3,
+      "num": 1,
+      "name": "天保山市场",
+      "en": "Tempozan Market",
+      "lat": 34.6478,
+      "lng": 135.4968,
+      "icon": "🍱",
+      "color": "#c97b5a",
+      "search": "Tempozan Market",
+      "price": "免费",
+      "hours": "10:00-20:00",
+      "duration": "1-1.5 小时",
+      "desc": "靠近港口的美食市场，海鲜新鲜。省钱 tip：可购买海鲜现场加工。",
+      "tags": [
+        "必去",
+        "美食"
+      ],
+      "time": "上午",
+      "photo_spots": [
+        "📸 市场内海鲜摊位拍照"
+      ],
+      "foods": [
+        "🍜 海鲜丼（¥1500）",
+        "🍜 寿司（¥1000）"
+      ]
+    },
+    {
+      "id": "tsutenkaku",
+      "day": 3,
+      "num": 2,
+      "name": "通天阁",
+      "en": "Tsutenkaku",
+      "lat": 34.6638,
+      "lng": 135.5128,
+      "icon": "🗼",
+      "color": "#6b7a6e",
+      "search": "Tsutenkaku",
+      "price": "¥700",
+      "hours": "10:00-22:00",
+      "duration": "1-1.5 小时",
+      "desc": "大阪地标建筑，可登高观景。省钱 tip：购买大阪周游卡可免费登塔。",
+      "tags": [
+        "必看",
+        "观景"
+      ],
+      "time": "下午",
+      "photo_spots": [
+        "📸 通天阁外观拍照",
+        "📸 塔顶俯瞰大阪城"
+      ],
+      "foods": []
+    },
+    {
+      "id": "ebisu_bridge",
+      "day": 3,
+      "num": 3,
+      "name": "惠比寿桥",
+      "en": "Ebisu Bridge",
+      "lat": 34.6688,
+      "lng": 135.5058,
+      "icon": "🌉",
+      "color": "#6b7a6e",
+      "search": "Ebisu Bridge",
+      "price": "免费",
+      "hours": "24h",
+      "duration": "30 分钟",
+      "desc": "道顿堀运河上的桥，夜景很美。省钱 tip：晚上灯光亮起时拍照最佳。",
+      "tags": [
+        "观景"
+      ],
+      "time": "傍晚",
+      "photo_spots": [
+        "📸 桥上拍运河夜景"
+      ],
+      "foods": []
+    },
+    {
+      "id": "okonomiyaki",
+      "day": 3,
+      "num": 4,
+      "name": "大阪烧店",
+      "en": "Okonomiyaki Restaurant",
+      "lat": 34.6692,
+      "lng": 135.5022,
+      "icon": "🍳",
+      "color": "#c97b5a",
+      "search": "Okonomiyaki Restaurant in Osaka",
+      "price": "¥800-1500",
+      "hours": "11:00-22:00",
+      "duration": "1-1.5 小时",
+      "desc": "品尝正宗大阪烧的好地方。省钱 tip：部分店铺有午餐特惠。",
+      "tags": [
+        "美食"
+      ],
+      "time": "中午",
+      "photo_spots": [
+        "📸 大阪烧制作过程拍照"
+      ],
+      "foods": [
+        "🍜 大阪烧（¥1000）"
+      ]
+    }
+  ],
+  "legend": [
+    {
+      "color": "#6b4a7e",
+      "icon": "🏯",
+      "label": "寺庙"
+    },
+    {
+      "color": "#b04060",
+      "icon": "⛩️",
+      "label": "神社"
+    },
+    {
+      "color": "#5a7a4a",
+      "icon": "🌳",
+      "label": "自然"
+    },
+    {
+      "color": "#c97b5a",
+      "icon": "🍜",
+      "label": "美食"
+    },
+    {
+      "color": "#6b7a6e",
+      "icon": "🗼",
+      "label": "观景"
+    },
+    {
+      "color": "#4a5d52",
+      "icon": "🚇",
+      "label": "交通"
+    }
+  ]
+}

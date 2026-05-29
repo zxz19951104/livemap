@@ -1,0 +1,15 @@
+# API secrets
+generator/.env
+*.env
+.env.local
+
+# Generated
+__pycache__/
+*.pyc
+.DS_Store
+
+# Build output (rebuilt by CI)
+dist/
+
+# Unrelated
+Nestle MMM Executive Summary.html

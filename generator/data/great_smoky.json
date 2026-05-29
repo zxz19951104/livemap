@@ -1,0 +1,268 @@
+{
+  "meta": {
+    "title": "🌫️ 大烟山国家公园 3 天",
+    "title_short": "大烟山国家公园 3 天",
+    "subtitle": "Great Smoky Mountains · Tennessee / North Carolina",
+    "eyebrow": "GREAT SMOKY · LIVEMAP · 2026",
+    "header_emoji": "🌫️",
+    "color_scheme": "forest",
+    "currency": "USD",
+    "map_center": [35.61, -83.49],
+    "map_zoom": 10,
+    "where_summary": "田纳西/北卡跨州 · 门户机场 Knoxville TYS",
+    "all_tip": "🎯 主题定调：大烟山是全美游客量最大的国家公园，连绵阔叶林常年笼罩青蓝雾气，免门票却藏着观景塔、晨雾环路与红叶萤火两大奇观。这趟 3 天从田纳西一侧进，翻越 Newfound Gap 把南北两州都走到。\n\n🎬 节奏递进：Day1 从 Knoxville TYS 取车，先在西北 Cades Cove 晨雾环路看野生动物与历史村落；Day2 是高潮，翻 Newfound Gap 登 Clingmans Dome 观景塔俯瞰云海；Day3 慢节奏走瀑布步道并逛 Gatlinburg 小镇收尾。\n\n🗺️ 路线设计：以田纳西侧 Gatlinburg 小镇为住宿基地，不换酒店。Cades Cove 在西北、Clingmans Dome 在主脊、瀑布步道在东侧，三条线呈扇形从 Gatlinburg 辐射，单程车程均在 1 小时内。\n\n💡 实用建议：① 公园免门票，但停车需购 parking tag（$5/日起）；② 秋季红叶（10 月中下旬）人潮汹涌，建议平日清晨前往、错峰避堵；③ 初夏（6 月初）同步闪烁萤火虫是限定奇观，Elkmont 观萤需抽签；④ Cades Cove 与 Clingmans Dome 道路季节性管制，出发前查 NPS 路况。",
+    "stats": [
+      {"num": "3", "label": "天数", "hint": "DAYS"},
+      {"num": "12", "label": "景点", "hint": "POI"},
+      {"num": "$700-1000", "label": "预计花费/人", "hint": "BUDGET / PERSON", "tooltip": "不含国际机票，含食宿停车当地交通"},
+      {"num": "自驾", "label": "交通方式", "hint": "TRANSPORT", "tooltip": "Knoxville TYS 取车，全程自驾"}
+    ],
+    "highlight_title": "🔥 大烟山独门绝技",
+    "highlight_items": [
+      "<b>Clingmans Dome 观景塔</b>（公园最高点 2025m，螺旋坡道登顶俯瞰 360° 云海）",
+      "<b>Cades Cove 晨雾环路</b>（11 英里单行环路，晨雾中黑熊、白尾鹿与历史木屋）",
+      "<b>Newfound Gap 跨州垭口</b>（田纳西/北卡分界，阿巴拉契亚步道在此穿越）",
+      "<b>Gatlinburg 小镇</b>（公园门户，松饼、缆车与山城烟火气）",
+      "<b>初夏同步萤火虫</b>（Elkmont 6 月限定，成千上万萤火虫同步闪烁）"
+    ],
+    "warning_title": "⚠️ 安全/礼仪/避坑",
+    "warning_text": "① 免门票但需买停车 tag，热门点位停车位极紧；② 秋季红叶周末堵到水泄不通，务必平日清晨出发；③ 黑熊常见，保持 50m 以上距离、勿投喂、车窗别留食物；④ 山区午后多雷雨与浓雾，山路慢行开雾灯。",
+    "footer": "GREAT SMOKY MOUNTAINS · 烟雾缭绕的古老森林 · 2026",
+    "pretrip": {
+      "visa": "美签 B1/B2 或 ESTA（视国籍），建议提前 1-2 月办理",
+      "voltage": "110V · A/B 型插头",
+      "sim": "eSIM 推荐 Airalo / T-Mobile 预付卡；山区信号弱，提前离线下载地图",
+      "currency": "$1 USD ≈ ¥7 RMB · 镇上多可刷卡，停车 tag 可线上购",
+      "tipping": "餐厅 15-20%",
+      "emergency": "911 报警急救 · 中国驻美使馆 +1-202-495-2266"
+    }
+  },
+  "days": {
+    "1": {
+      "color": "#2e7d32",
+      "title": "Day 1 · Knoxville 取车 · Cades Cove 晨雾环路",
+      "where": "📍 Knoxville TYS → Gatlinburg → Cades Cove",
+      "tip": "💡 落地取车直奔西北 Cades Cove，晨雾里寻黑熊与历史村落，傍晚回 Gatlinburg 入住。",
+      "hotel": {
+        "name_cn": "加特林堡溪畔酒店",
+        "name_en": "Park Vista - DoubleTree by Hilton Gatlinburg",
+        "address": "705 Cherokee Orchard Rd, Gatlinburg, TN 37738",
+        "price": "$150-210/晚",
+        "parking": "$15/晚",
+        "highlights": "山景客房，步行可达 Gatlinburg 主街",
+        "url": "https://www.hilton.com/en/hotels/tysgtdt-the-park-vista-a-doubletree-by-hilton-hotel-gatlinburg/"
+      },
+      "plan_b": "💧 Cades Cove 封路备选：改走 Roaring Fork Motor Nature Trail"
+    },
+    "2": {
+      "color": "#1f7a5a",
+      "title": "Day 2 · 翻 Newfound Gap 登 Clingmans Dome",
+      "where": "📍 Newfound Gap Rd · Newfound Gap · Clingmans Dome",
+      "tip": "💡 上午沿 Newfound Gap Rd 翻越主脊到北卡侧垭口，再上 Clingmans Dome 观景塔俯瞰云海。",
+      "hotel": {
+        "name_cn": "加特林堡溪畔酒店",
+        "name_en": "Park Vista - DoubleTree by Hilton Gatlinburg",
+        "address": "705 Cherokee Orchard Rd, Gatlinburg, TN 37738",
+        "price": "$150-210/晚",
+        "parking": "$15/晚",
+        "highlights": "山景客房，步行可达 Gatlinburg 主街",
+        "url": "https://www.hilton.com/en/hotels/tysgtdt-the-park-vista-a-doubletree-by-hilton-hotel-gatlinburg/"
+      },
+      "plan_b": "💧 Clingmans Dome 路封备选：在 Newfound Gap 走一段阿巴拉契亚步道"
+    },
+    "3": {
+      "color": "#3a6a2e",
+      "title": "Day 3 · 瀑布步道 · Gatlinburg 收尾",
+      "where": "📍 Laurel Falls / Roaring Fork → Gatlinburg 主街 → 返程",
+      "tip": "💡 上午走 Laurel Falls 短途瀑布步道，下午逛 Gatlinburg 主街、坐缆车后返 Knoxville。",
+      "hotel": {
+        "name_cn": "加特林堡溪畔酒店",
+        "name_en": "Park Vista - DoubleTree by Hilton Gatlinburg",
+        "address": "705 Cherokee Orchard Rd, Gatlinburg, TN 37738",
+        "price": "$150-210/晚",
+        "parking": "$15/晚",
+        "highlights": "山景客房，步行可达 Gatlinburg 主街",
+        "url": "https://www.hilton.com/en/hotels/tysgtdt-the-park-vista-a-doubletree-by-hilton-hotel-gatlinburg/"
+      },
+      "plan_b": "💧 雨天备选：改逛室内水族馆 + 主街手作店"
+    }
+  },
+  "pois": [
+    {
+      "id": "knoxville_airport",
+      "day": 1, "num": 1,
+      "name": "诺克斯维尔机场", "en": "McGhee Tyson Airport (TYS)",
+      "lat": 35.8110, "lng": -83.9940,
+      "icon": "✈️", "color": "#4a5d52",
+      "search": "McGhee Tyson Airport Knoxville",
+      "price": "免费", "hours": "24h",
+      "desc": "大烟山门户机场，取车后向东南约 1 小时即达 Gatlinburg 与公园北入口。",
+      "tags": ["交通", "门户"],
+      "time": "上午",
+      "photo_spots": [],
+      "foods": []
+    },
+    {
+      "id": "cades_cove",
+      "day": 1, "num": 2,
+      "name": "凯兹湾环路", "en": "Cades Cove",
+      "lat": 35.6030, "lng": -83.7760,
+      "icon": "🦌", "color": "#2e7d32",
+      "search": "Cades Cove Great Smoky Mountains",
+      "price": "免费（需停车 tag）", "hours": "日出至日落",
+      "desc": "11 英里单行环路穿越宽阔山谷，晨雾中常见黑熊、白尾鹿与火鸡，沿途散布 19 世纪木屋与教堂。",
+      "tags": ["必去", "野生动物"],
+      "time": "上午",
+      "photo_spots": ["📸 晨雾草甸黑熊", "📸 历史木屋教堂"],
+      "foods": ["🥪 环路野餐区"]
+    },
+    {
+      "id": "cades_cove_methodist",
+      "day": 1, "num": 3,
+      "name": "凯兹湾循道会教堂", "en": "Cades Cove Methodist Church",
+      "lat": 35.6080, "lng": -83.8270,
+      "icon": "⛪", "color": "#6b4a7e",
+      "search": "Cades Cove Methodist Church",
+      "price": "免费", "hours": "日出至日落",
+      "desc": "环路旁保存完好的白色木质老教堂，是大烟山拓荒历史的活标本，晨雾中尤为静谧上镜。",
+      "tags": ["传统", "历史"],
+      "time": "中午",
+      "photo_spots": ["📸 白色教堂晨雾"],
+      "foods": []
+    },
+    {
+      "id": "abrams_falls",
+      "day": 1, "num": 4,
+      "name": "艾布拉姆斯瀑布", "en": "Abrams Falls",
+      "lat": 35.5930, "lng": -83.8540,
+      "icon": "💧", "color": "#3a6a2e",
+      "search": "Abrams Falls Trail Cades Cove",
+      "price": "免费", "hours": "日出至日落",
+      "desc": "从 Cades Cove 环路出发约 8km 往返的步道，终点是水量充沛、宽阔有力的瀑布与深潭。",
+      "tags": ["徒步", "瀑布"],
+      "time": "下午",
+      "photo_spots": ["📸 宽幅瀑布深潭"],
+      "foods": []
+    },
+    {
+      "id": "newfound_gap_road",
+      "day": 2, "num": 1,
+      "name": "新隘口公路", "en": "Newfound Gap Road",
+      "lat": 35.6280, "lng": -83.4400,
+      "icon": "🛣️", "color": "#1f7a5a",
+      "search": "Newfound Gap Road Great Smoky Mountains",
+      "price": "免费", "hours": "全年（冬季可能临时封闭）",
+      "desc": "贯穿公园南北的主干道，从田纳西 Gatlinburg 一路盘升翻越主脊到北卡 Cherokee，沿途观景台层层云山。",
+      "tags": ["必去", "自驾"],
+      "time": "上午",
+      "photo_spots": ["📸 Morton Overlook 云海", "📸 盘山公路"],
+      "foods": ["🥪 观景台补给"]
+    },
+    {
+      "id": "newfound_gap",
+      "day": 2, "num": 2,
+      "name": "新隘口", "en": "Newfound Gap",
+      "lat": 35.6113, "lng": -83.4250,
+      "icon": "⛰️", "color": "#1f7a5a",
+      "search": "Newfound Gap Great Smoky Mountains",
+      "price": "免费", "hours": "全年",
+      "desc": "海拔 1539m 的跨州垭口，田纳西与北卡分界。阿巴拉契亚步道（AT）在此穿越，立有罗斯福纪念碑。",
+      "tags": ["必看", "垭口"],
+      "time": "上午",
+      "photo_spots": ["📸 州界标牌", "📸 AT 步道入口"],
+      "foods": []
+    },
+    {
+      "id": "clingmans_dome",
+      "day": 2, "num": 3,
+      "name": "克林曼斯穹顶观景塔", "en": "Clingmans Dome",
+      "lat": 35.5628, "lng": -83.4986,
+      "icon": "🗼", "color": "#1f7a5a",
+      "search": "Clingmans Dome Great Smoky Mountains",
+      "price": "免费", "hours": "约4月-11月（道路季节性开放）",
+      "desc": "公园最高点（2025m），停车场步行陡坡约 1km 至螺旋坡道观景塔，晴日可俯瞰 360° 云海与连绵山脊。",
+      "tags": ["必去", "观景"],
+      "time": "中午",
+      "photo_spots": ["📸 螺旋观景塔", "📸 塔顶云海"],
+      "foods": []
+    },
+    {
+      "id": "mingus_mill",
+      "day": 2, "num": 4,
+      "name": "明格斯磨坊", "en": "Mingus Mill",
+      "lat": 35.5210, "lng": -83.3060,
+      "icon": "⚙️", "color": "#6b4a7e",
+      "search": "Mingus Mill Great Smoky Mountains",
+      "price": "免费", "hours": "约春秋季白天",
+      "desc": "北卡侧的水力磨坊，19 世纪建成至今仍能运转，旁边的 Oconaluftee 游客中心可了解原住民与拓荒历史。",
+      "tags": ["传统", "历史"],
+      "time": "下午",
+      "photo_spots": ["📸 水力磨坊水渠"],
+      "foods": []
+    },
+    {
+      "id": "laurel_falls",
+      "day": 3, "num": 1,
+      "name": "月桂瀑布", "en": "Laurel Falls",
+      "lat": 35.6790, "lng": -83.5950,
+      "icon": "💧", "color": "#3a6a2e",
+      "search": "Laurel Falls Trail Great Smoky Mountains",
+      "price": "免费（需停车 tag）", "hours": "日出至日落",
+      "desc": "公园最受欢迎的瀑布步道之一，约 4km 往返铺装路面，老少皆宜，终点是分两级倾泻的 24m 瀑布。",
+      "tags": ["必看", "瀑布"],
+      "time": "上午",
+      "photo_spots": ["📸 双级瀑布"],
+      "foods": []
+    },
+    {
+      "id": "roaring_fork",
+      "day": 3, "num": 2,
+      "name": "咆哮叉自然之路", "en": "Roaring Fork Motor Nature Trail",
+      "lat": 35.6850, "lng": -83.4860,
+      "icon": "🌲", "color": "#3a6a2e",
+      "search": "Roaring Fork Motor Nature Trail Gatlinburg",
+      "price": "免费", "hours": "约3月-11月",
+      "desc": "从 Gatlinburg 出发的 9km 单行环路，穿越苔藓老林、溪流与拓荒木屋，紧邻 Grotto Falls 步道口。",
+      "tags": ["自驾", "森林"],
+      "time": "中午",
+      "photo_spots": ["📸 苔藓老林", "📸 溪畔木屋"],
+      "foods": []
+    },
+    {
+      "id": "gatlinburg",
+      "day": 3, "num": 3,
+      "name": "加特林堡主街", "en": "Gatlinburg",
+      "lat": 35.7143, "lng": -83.5102,
+      "icon": "🏘️", "color": "#6b7a6e",
+      "search": "Gatlinburg Tennessee Parkway",
+      "price": "免费", "hours": "全年",
+      "desc": "公园北门户山城小镇，主街糖果店、松饼屋与手作铺林立，可坐缆车上 Ober Mountain 俯瞰山城。",
+      "tags": ["小镇", "美食"],
+      "time": "下午",
+      "photo_spots": ["📸 主街山城夜景", "📸 缆车俯瞰"],
+      "foods": ["🥞 老牌松饼屋", "🍬 手工太妃糖"]
+    },
+    {
+      "id": "sugarlands_vc",
+      "day": 3, "num": 4,
+      "name": "糖谷游客中心", "en": "Sugarlands Visitor Center",
+      "lat": 35.6870, "lng": -83.5370,
+      "icon": "🏛️", "color": "#6b4a7e",
+      "search": "Sugarlands Visitor Center Great Smoky Mountains",
+      "price": "免费", "hours": "8:30-16:30",
+      "desc": "田纳西侧主游客中心，紧邻北入口。返程前盖章打卡、看自然展览与购买纪念品的好去处。",
+      "tags": ["服务", "传统"],
+      "time": "下午",
+      "photo_spots": ["📸 游客中心森林背景"],
+      "foods": []
+    }
+  ],
+  "legend": [
+    {"color": "#2e7d32", "icon": "🦌", "label": "野生动物环路"},
+    {"color": "#1f7a5a", "icon": "🗼", "label": "主脊垭口/观景"},
+    {"color": "#3a6a2e", "icon": "💧", "label": "瀑布森林"},
+    {"color": "#6b7a6e", "icon": "🏘️", "label": "小镇服务"},
+    {"color": "#6b4a7e", "icon": "🏛️", "label": "历史/游客中心"},
+    {"color": "#4a5d52", "icon": "✈️", "label": "交通枢纽"}
+  ]
+}

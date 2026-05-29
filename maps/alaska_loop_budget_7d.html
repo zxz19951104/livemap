@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阿拉斯加环线 7 天  穷游省钱 · LiveMap</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    background: radial-gradient(ellipse at top, #e8f0f5 0%, #c8dde8 50%, #a0bccc 100%);
+    color: #1a2838;
+    overflow-x: hidden; min-height: 100vh; padding: 20px;
+  }
+  .app { max-width: 1400px; margin: 0 auto; }
+  header {
+    text-align: center; padding: 22px 30px 18px;
+    background: linear-gradient(135deg, rgba(220, 235, 250, 0.85) 0%, rgba(180, 210, 235, 0.7) 100%);
+    border-radius: 16px; margin-bottom: 18px;
+    border: 1px solid rgba(80, 130, 170, 0.25);
+    position: relative; overflow: hidden;
+    box-shadow: 0 4px 16px rgba(60, 40, 20, 0.1);
+  }
+  header::before { content: "❄️"; position: absolute; font-size: 180px; opacity: 0.08; right: -20px; top: -30px; }
+  .eyebrow { font-size: 11px; letter-spacing: 5px; color: #3a6f9a; opacity: 0.85; margin-bottom: 6px; }
+  header h1 {
+    font-size: 30px; font-weight: 700; letter-spacing: 1.5px;
+    background: linear-gradient(90deg, #3a6f9a 0%, #5a8ab0 50%, #a0bcd4 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text; margin-bottom: 6px;
+  }
+  header .sub { font-size: 13px; opacity: 0.7; letter-spacing: 1px; color: #4a5a6a; }
+
+  .day-tabs { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 18px; }
+  .tab {
+    padding: 9px 16px; background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(80, 130, 170, 0.25); border-radius: 22px;
+    color: #4a5a6a; font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s ease;
+    letter-spacing: 0.5px; user-select: none;
+    display: flex; align-items: center; gap: 6px; backdrop-filter: blur(8px);
+  }
+  .tab .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+  .tab:hover { background: rgba(255, 255, 255, 0.95); transform: translateY(-1px); }
+  .tab.active {
+    background: linear-gradient(135deg, #7ab0d4 0%, #3a6f9a 100%);
+    color: #fff; border-color: transparent;
+    box-shadow: 0 4px 14px rgba(80, 130, 170, 0.25);
+  }
+  .tab.active .dot { background: #fff; }
+  .tab.all { background: rgba(248, 230, 200, 0.8); border-color: rgba(80, 130, 170, 0.25); }
+  .tab.all.active { background: linear-gradient(135deg, #7a9a4d 0%, #4a6a32 100%); color: #fff; }
+
+  .main { display: grid; grid-template-columns: 1fr 420px; gap: 18px; }
+  @media (max-width: 1050px) { .main { grid-template-columns: 1fr; } }
+
+  /* ===== 移动端适配（≤768px）===== */
+  @media (max-width: 768px) {
+    body { padding: 10px; }
+    header { padding: 16px 14px 12px; margin-bottom: 12px; }
+    header h1 { font-size: 22px; letter-spacing: 0.5px; }
+    header .sub { font-size: 11px; letter-spacing: 0.3px; }
+    .eyebrow { font-size: 9px; letter-spacing: 3px; }
+    /* Day tabs 横向滚动 */
+    .day-tabs { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 4px; -webkit-overflow-scrolling: touch; margin-bottom: 12px; }
+    .day-tabs::-webkit-scrollbar { display: none; }
+    .tab { padding: 7px 12px; font-size: 12px; flex-shrink: 0; }
+    /* Main 单列 */
+    .main { gap: 12px; }
+    .map-wrap { padding: 8px; border-radius: 12px; }
+    #map { height: 360px; border-radius: 8px; }
+    .style-switcher { top: 14px; right: 14px; }
+    .style-btn { padding: 5px 8px; font-size: 10px; }
+    .legend { padding: 8px 10px; gap: 6px 10px; font-size: 10px; }
+    .legend-dot { width: 12px; height: 12px; font-size: 8px; }
+    /* Info panel */
+    .info-panel { padding: 16px; min-height: auto; max-height: none; border-radius: 12px; }
+    .day-title { font-size: 16px; }
+    .day-tips.all-tip { font-size: 11.5px; padding: 12px; line-height: 1.6; }
+    .stats-bar { padding: 10px 6px; gap: 4px; }
+    .stat-num { font-size: 15px; }
+    .stat-label { font-size: 9px; letter-spacing: 0.5px; }
+    .stat-hint { font-size: 8.5px; }
+    /* POI 详情 hero 4 宫格变 2x2 但更小 */
+    .poi-hero { height: 200px; }
+    .poi-detail h3 { font-size: 17px; }
+    .info-row { grid-template-columns: 1fr; gap: 6px; }
+    /* 拍照打卡卡 */
+    .spot-card { padding: 6px; gap: 8px; }
+    .spot-thumb { width: 56px; height: 56px; }
+    .spot-text { font-size: 12px; }
+    /* 酒店卡 */
+    .hotel-card { padding: 10px 12px; }
+    .hotel-name-cn { font-size: 13px; }
+    .hotel-row { font-size: 11px; }
+    .hotel-btn { font-size: 10px; padding: 3px 8px; }
+    /* footer */
+    footer { font-size: 9px; letter-spacing: 1.5px; padding: 12px; margin-top: 16px; }
+  }
+  /* 超小屏（手机竖屏）的额外优化 */
+  @media (max-width: 480px) {
+    header h1 { font-size: 19px; }
+    #map { height: 320px; }
+    .poi-hero { height: 180px; }
+    .day-route-list li { padding: 8px 10px; }
+    .route-name { font-size: 12.5px; }
+  }
+
+  .map-wrap {
+    background: #fdf6ec; border-radius: 16px;
+    border: 1px solid rgba(80, 130, 170, 0.25);
+    padding: 14px; position: relative; overflow: hidden;
+    box-shadow: 0 6px 20px rgba(60, 40, 20, 0.1);
+  }
+  #map { width: 100%; height: 620px; border-radius: 12px; background: #f4ebe0; box-shadow: inset 0 0 30px rgba(180, 130, 100, 0.15); }
+  .leaflet-tile-pane { transition: filter 0.3s ease; }
+  .map-wrap.topo .leaflet-tile-pane { filter: sepia(0.15) saturate(1.1) contrast(0.95); }
+
+  .style-switcher {
+    position: absolute; top: 22px; right: 22px;
+    background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px);
+    border-radius: 8px; padding: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 1000; display: flex; gap: 2px;
+    border: 1px solid rgba(80, 130, 170, 0.25);
+  }
+  .style-btn { padding: 6px 10px; background: transparent; border: none; border-radius: 5px; font-size: 11px; font-weight: 600; color: #4a5a6a; cursor: pointer; transition: all 0.15s; }
+  .style-btn:hover { background: rgba(122, 176, 212, 0.18); }
+  .style-btn.active { background: linear-gradient(135deg, #7ab0d4 0%, #3a6f9a 100%); color: #fff; }
+
+  .poi-marker { background: transparent !important; border: none !important; }
+  .poi-pin {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 2.5px solid #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4), 0 0 0 1px rgba(60,40,40,0.2);
+    position: relative; cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+  .poi-pin:hover { transform: scale(1.25); filter: drop-shadow(0 0 8px rgba(58, 111, 154, 0.8)); z-index: 1000; }
+  .poi-pin.active { transform: scale(1.4); filter: drop-shadow(0 0 14px #3a6f9a); z-index: 1001; }
+  .poi-num { position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; background: #fff; color: #3a6f9a; font-size: 10px; font-weight: 800; border-radius: 50%; border: 1.5px solid #3a6f9a; display: flex; align-items: center; justify-content: center; }
+  .poi-label-overlay { position: absolute; top: 36px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.95); color: #1a2838; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 6px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.15s; box-shadow: 0 2px 6px rgba(0,0,0,0.15); border: 1px solid rgba(80, 130, 170, 0.25); }
+  .poi-pin:hover + .poi-label-overlay, .poi-pin.active + .poi-label-overlay { opacity: 1; }
+
+  .leaflet-control-attribution { background: rgba(253, 246, 236, 0.85) !important; color: #4a5a6a !important; font-size: 10px !important; }
+  .leaflet-control-attribution a { color: #3a6f9a !important; }
+  .leaflet-control-zoom a { background: rgba(255, 255, 255, 0.9) !important; color: #3a6f9a !important; border-color: rgba(80, 130, 170, 0.25) !important; }
+
+  .legend { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 12px 18px; padding: 12px 16px; background: rgba(255, 255, 255, 0.6); border-radius: 10px; font-size: 11px; color: #4a5a6a; backdrop-filter: blur(8px); }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+
+  .info-panel {
+    background: linear-gradient(160deg, #fffaf3 0%, #fdf3ea 100%);
+    border-radius: 16px; border: 1px solid rgba(80, 130, 170, 0.25);
+    padding: 22px; min-height: 620px; max-height: 720px;
+    overflow-y: auto; display: flex; flex-direction: column;
+    position: relative; box-shadow: 0 6px 20px rgba(60, 40, 20, 0.1);
+  }
+  .info-panel::-webkit-scrollbar { width: 6px; }
+  .info-panel::-webkit-scrollbar-thumb { background: rgba(122, 176, 212, 0.18); border-radius: 3px; }
+
+  .day-header { padding-bottom: 14px; border-bottom: 1px solid rgba(80, 130, 170, 0.25); margin-bottom: 14px; }
+  .day-badge { display: inline-block; padding: 4px 11px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; color: #fff; }
+  .day-title { font-size: 19px; font-weight: 700; color: #3a6f9a; margin-bottom: 4px; }
+  .day-where { font-size: 12px; color: #4a5a6a; }
+  .day-route-list { list-style: none; margin-bottom: 16px; }
+  .day-route-distance { font-size: 10px; color: #4a5a6a; padding: 4px 0 4px 30px; opacity: 0.75; display: flex; align-items: center; gap: 6px; line-height: 1.4; }
+  .day-route-distance::before { content: '↓'; color: #3a6f9a; font-weight: 700; opacity: 0.5; }
+  .day-route-distance .dot-sep { opacity: 0.4; }
+  .day-route-list li { padding: 10px 12px; margin-bottom: 6px; background: rgba(255, 240, 220, 0.5); border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: all 0.15s ease; border-left: 3px solid transparent; }
+  .day-route-list li:hover { background: rgba(122, 176, 212, 0.18); border-left-color: #3a6f9a; transform: translateX(2px); }
+  .route-num { width: 22px; height: 22px; border-radius: 50%; background: rgba(122, 176, 212, 0.18); color: #3a6f9a; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .route-info { flex: 1; min-width: 0; }
+  .route-name { font-size: 13px; color: #1a2838; font-weight: 600; margin-bottom: 2px; }
+  .route-time { font-size: 10px; color: #4a5a6a; }
+  .route-icon { font-size: 16px; }
+  .day-tips { background: rgba(122, 176, 212, 0.18); border-left: 3px solid #3a6f9a; padding: 10px 12px; border-radius: 6px; font-size: 11.5px; color: #1a2838; line-height: 1.55; }
+  .day-tips.all-tip { padding: 14px 16px; font-size: 12px; line-height: 1.7; }
+  /* 结构化 all_tip：分段卡片 + 关键词高亮 */
+  .tip-section { margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px dashed rgba(0,0,0,0.12); }
+  .tip-section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .tip-section-head { font-size: 16px; font-weight: 800; color: #3a6f9a; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
+  .tip-section-head .tip-emoji { font-size: 20px; }
+  .tip-body { font-size: 12.5px; line-height: 1.8; padding-left: 28px; color: #1a2838; }
+  /* 关键词高亮：黄色记号笔风格 */
+  .hl-quote {
+    background: linear-gradient(180deg, transparent 55%, rgba(255,224,102,0.6) 55%);
+    color: inherit;
+    font-weight: 700;
+    padding: 0 3px;
+  }
+  .hl-day { display: inline-block; padding: 1px 7px; background: #5a6c7d; color: #fff; border-radius: 4px; font-size: 11px; font-weight: 700; margin: 0 2px; letter-spacing: 0.3px; }
+  .hl-price {
+    background: linear-gradient(180deg, transparent 55%, rgba(255,170,80,0.5) 55%);
+    color: #c2542e;
+    font-weight: 700;
+    padding: 0 3px;
+  }
+  .hl-num { font-weight: 700; color: #3a6f9a; }
+  .hl-time {
+    background: linear-gradient(180deg, transparent 55%, rgba(122,180,230,0.55) 55%);
+    color: #2d5f8a;
+    font-weight: 700;
+    padding: 0 3px;
+  }
+
+  /* 酒店推荐卡 */
+  .hotel-card { background: linear-gradient(135deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.5) 100%); border: 1px solid rgba(80, 130, 170, 0.25); border-left: 3px solid #3a6f9a; border-radius: 10px; padding: 12px 14px; margin: 14px 0 8px; }
+  .hotel-card-title { font-size: 11px; font-weight: 700; color: #3a6f9a; letter-spacing: 1px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .hotel-name-cn { font-size: 14px; font-weight: 700; color: #1a2838; margin-bottom: 2px; }
+  .hotel-name-en { font-size: 10.5px; color: #4a5a6a; letter-spacing: 0.3px; margin-bottom: 8px; }
+  .hotel-row { font-size: 11.5px; color: #1a2838; line-height: 1.5; padding: 3px 0; display: flex; gap: 6px; align-items: flex-start; }
+  .hotel-row .label { color: #4a5a6a; flex-shrink: 0; min-width: 38px; }
+  .hotel-actions { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+  .hotel-btn { font-size: 10.5px; padding: 4px 10px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: all 0.15s; display: inline-flex; align-items: center; gap: 4px; }
+  .hotel-btn.gmaps { background: rgba(74, 141, 181, 0.18); color: #2d5f8a; }
+  .hotel-btn.gmaps:hover { background: rgba(74, 141, 181, 0.35); }
+  .hotel-btn.booking { background: rgba(0, 113, 194, 0.18); color: #0071c2; }
+  .hotel-btn.booking:hover { background: rgba(0, 113, 194, 0.35); }
+  .hotel-btn.official { background: rgba(122, 176, 212, 0.18); color: #3a6f9a; }
+  .hotel-btn.official:hover { background: rgba(122, 176, 212, 0.35); }
+  .hotel-empty { padding: 12px; background: rgba(0,0,0,0.04); border-radius: 8px; font-size: 11.5px; color: #4a5a6a; text-align: center; font-style: italic; }
+  /* 出行前清单 */
+  .pretrip-card { background: linear-gradient(135deg, rgba(74,141,181,0.12) 0%, rgba(45,95,138,0.06) 100%); border: 1px solid rgba(74,141,181,0.3); border-left: 3px solid #2d5f8a; border-radius: 10px; padding: 12px 14px; margin: 14px 0 8px; }
+  .pretrip-title { font-size: 11px; font-weight: 700; color: #2d5f8a; letter-spacing: 1px; margin-bottom: 8px; }
+  .pretrip-row { font-size: 11.5px; color: #1a2838; line-height: 1.5; padding: 3px 0; display: flex; gap: 6px; }
+  .pretrip-row .pretrip-label { color: #4a5a6a; flex-shrink: 0; min-width: 50px; font-weight: 600; }
+  /* Plan B */
+  .planb-card { background: linear-gradient(135deg, rgba(74,141,181,0.1) 0%, rgba(45,95,138,0.05) 100%); border-left: 3px solid #4a8db5; border-radius: 8px; padding: 10px 12px; margin: 10px 0 8px; font-size: 11.5px; color: #1a2838; line-height: 1.55; }
+  /* GPX 按钮 */
+  .gpx-export { width: 100%; padding: 11px; background: linear-gradient(135deg, #58a87c 0%, #1f7a5a 100%); border: none; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.15s; }
+  .gpx-export:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(31,122,90,0.4); }
+
+  .poi-detail { display: none; }
+  .poi-detail.show { display: block; }
+  .poi-detail .back-btn { background: rgba(122, 176, 212, 0.18); border: none; color: #3a6f9a; padding: 6px 12px; border-radius: 6px; font-size: 11px; cursor: pointer; font-weight: 600; }
+  .poi-detail .back-btn:hover { background: rgba(122, 176, 212, 0.35); }
+  .poi-nav-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .poi-nav-arrows { display: flex; align-items: center; gap: 4px; }
+  .nav-arrow { background: rgba(122, 176, 212, 0.18); border: none; color: #3a6f9a; width: 28px; height: 28px; border-radius: 6px; font-size: 18px; font-weight: 700; cursor: pointer; line-height: 1; display: flex; align-items: center; justify-content: center; }
+  .nav-arrow:hover { background: rgba(122, 176, 212, 0.35); }
+  .nav-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+  .nav-counter { font-size: 10.5px; color: #4a5a6a; min-width: 50px; text-align: center; font-weight: 600; }
+
+  .poi-hero { width: 100%; height: 240px; border-radius: 12px; overflow: hidden; margin-bottom: 14px; position: relative; background: linear-gradient(135deg, #7ab0d4 0%, #3a6f9a 100%); box-shadow: 0 4px 12px rgba(60, 40, 20, 0.15); }
+  .poi-hero img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease, opacity 0.3s ease; }
+  .poi-hero.grid-mode { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 4px; padding: 0; }
+  .poi-hero-cell { position: relative; overflow: hidden; border-radius: 4px; background: rgba(122, 176, 212, 0.18); }
+  .poi-hero-cell img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; cursor: pointer; }
+  .poi-hero-cell:hover img { transform: scale(1.1); }
+  .poi-hero-cell.empty { display: flex; align-items: center; justify-content: center; font-size: 42px; opacity: 0.5; color: #fff; }
+  .src-badge { position: absolute; top: 4px; left: 4px; padding: 1px 5px; font-size: 9px; font-weight: 700; color: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); pointer-events: none; opacity: 0.8; }
+  .poi-hero-loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: rgba(255,255,255,0.9); font-size: 14px; z-index: 10; pointer-events: none; }
+  .loader { width: 28px; height: 28px; border: 3px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .poi-hero-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 80px; }
+  .poi-hero .image-source { position: absolute; bottom: 4px; right: 8px; font-size: 10px; color: rgba(255,255,255,0.85); background: rgba(0,0,0,0.55); padding: 3px 8px; border-radius: 4px; text-decoration: none; z-index: 5; }
+  .poi-hero .image-source:hover { color: #fff; background: rgba(0,0,0,0.75); }
+
+  .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.92); display: none; align-items: center; justify-content: center; z-index: 9999; cursor: zoom-out; }
+  .lightbox.show { display: flex; }
+  .lightbox img { max-width: 86%; max-height: 86%; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); cursor: default; }
+  .lightbox-close { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 32px; cursor: pointer; opacity: 0.7; z-index: 10; }
+  .lightbox-close:hover { opacity: 1; }
+  .lightbox-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; width: 48px; height: 48px; border-radius: 50%; font-size: 28px; cursor: pointer; backdrop-filter: blur(8px); transition: all 0.15s; display: flex; align-items: center; justify-content: center; line-height: 1; }
+  .lightbox-arrow:hover { background: rgba(255,255,255,0.2); transform: translateY(-50%) scale(1.1); }
+  .lightbox-arrow:disabled { opacity: 0.2; cursor: not-allowed; }
+  .lightbox-prev { left: 30px; }
+  .lightbox-next { right: 30px; }
+  .lightbox-dots { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; }
+  .lightbox-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: all 0.2s; }
+  .lightbox-dot.active { background: #fff; transform: scale(1.4); }
+  @media (max-width: 768px) {
+    .lightbox-arrow { width: 36px; height: 36px; font-size: 22px; }
+    .lightbox-prev { left: 10px; }
+    .lightbox-next { right: 10px; }
+  }
+
+  .poi-detail h3 { font-size: 20px; color: #3a6f9a; margin-bottom: 4px; }
+  .poi-detail .en { font-size: 12px; color: #4a5a6a; margin-bottom: 12px; letter-spacing: 0.5px; }
+  .poi-detail .meta-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .meta-chip { background: rgba(255, 240, 220, 0.6); padding: 4px 10px; border-radius: 6px; font-size: 11px; color: #4a5a6a; display: inline-flex; align-items: center; gap: 4px; border: 1px solid rgba(80, 130, 170, 0.25); }
+  .meta-chip.day { background: rgba(122, 176, 212, 0.35); color: #3a6f9a; font-weight: 700; border-color: rgba(80, 130, 170, 0.25); }
+  .meta-chip.time { background: rgba(122, 154, 77, 0.2); color: #4a6a32; border-color: rgba(74, 106, 50, 0.3); }
+  .tag-chip { font-size: 10px; padding: 3px 9px; border-radius: 10px; font-weight: 700; letter-spacing: 0.5px; background: #8a7565; color: #fff; }
+  .tag-必去, .tag-必看, .tag-地标 { background: #c73620; color: #fff; }
+  .tag-震撼, .tag-火山 { background: #c2542e; color: #fff; }
+  .tag-野生动物, .tag-自然 { background: #7a9a4d; color: #fff; }
+  .tag-喷泉, .tag-地热, .tag-温泉 { background: #d4854e; color: #fff; }
+  .tag-瀑布, .tag-峡谷, .tag-观景 { background: #2d5f8a; color: #fff; }
+  .tag-湖泊 { background: #4a8db5; color: #fff; }
+  .tag-亲子, .tag-免费 { background: #58a87c; color: #fff; }
+  .tag-小镇, .tag-美食, .tag-小吃 { background: #c97b5a; color: #fff; }
+  .tag-独家, .tag-夜景, .tag-传统, .tag-体验 { background: #b8722e; color: #fff; }
+  .tag-寺庙, .tag-神社 { background: #b04060; color: #fff; }
+
+  .info-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 4px; }
+  @media (max-width: 768px) { .info-row { grid-template-columns: 1fr 1fr; } .info-row > .info-cell:last-child { grid-column: 1 / -1; } }
+  .info-cell { background: rgba(255, 255, 255, 0.7); padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(80, 130, 170, 0.25); }
+  .info-label { font-size: 10px; color: #4a5a6a; font-weight: 700; letter-spacing: 1px; margin-bottom: 4px; display: flex; align-items: center; gap: 4px; }
+  .info-value { font-size: 12px; color: #1a2838; line-height: 1.4; font-weight: 600; }
+  .fx-note { font-size: 10px; color: #4a5a6a; margin: 4px 0 12px; text-align: right; }
+
+  .poi-detail .desc { font-size: 13px; color: #1a2838; line-height: 1.65; padding: 14px; background: rgba(255, 255, 255, 0.5); border-radius: 8px; margin-bottom: 14px; border: 1px solid rgba(80, 130, 170, 0.25); }
+
+  .detail-section { margin-bottom: 14px; padding: 12px 14px; background: rgba(255, 255, 255, 0.5); border-radius: 8px; border: 1px solid rgba(80, 130, 170, 0.25); }
+  .detail-section-title { font-size: 11px; font-weight: 700; color: #3a6f9a; margin-bottom: 8px; letter-spacing: 1px; display: flex; align-items: center; gap: 6px; }
+  .detail-section-title.photo { color: #b8722e; }
+  .detail-section-title.food { color: #c97b5a; }
+  .detail-section-title.michelin { color: #c73660; }
+  .detail-section-title.avoid { color: #c73620; }
+  .detail-section.avoid-section { background: linear-gradient(135deg, rgba(199, 54, 32, 0.08) 0%, rgba(199, 54, 32, 0.04) 100%); border-left: 3px solid #c73620; }
+  .detail-section ul { list-style: none; }
+  .detail-section li { font-size: 12px; color: #1a2838; line-height: 1.6; padding: 5px 0 5px 8px; border-left: 2px solid rgba(122, 176, 212, 0.18); margin-bottom: 2px; }
+  /* 拍照点卡片（纯文字 + 搜更多） */
+  .spot-card { padding: 8px 10px; border-radius: 8px; background: rgba(255,255,255,0.4); border-left: 3px solid #3a6f9a; margin-bottom: 6px; transition: all 0.15s; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .spot-card:hover { background: rgba(255,255,255,0.7); transform: translateX(2px); }
+  .spot-text { font-size: 12.5px; color: #1a2838; line-height: 1.5; font-weight: 500; flex: 1; }
+  .spot-more { font-size: 10px; color: #3a6f9a; text-decoration: none; padding: 3px 8px; border-radius: 4px; background: rgba(122, 176, 212, 0.18); flex-shrink: 0; font-weight: 600; }
+  .spot-more:hover { background: rgba(122, 176, 212, 0.35); }
+  /* 美食列表（每项可跳 Google Maps）*/
+  .food-link { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 8px; margin-bottom: 4px; border-radius: 6px; cursor: pointer; transition: all 0.15s; text-decoration: none; color: #1a2838; border-left: 2px solid rgba(122, 176, 212, 0.18); }
+  .food-link:hover { background: rgba(74,141,181,0.1); border-left-color: #4a8db5; transform: translateX(2px); }
+  .food-text { font-size: 12px; line-height: 1.5; flex: 1; }
+  .food-pin { font-size: 11px; color: #4a8db5; opacity: 0.7; flex-shrink: 0; }
+  .food-link:hover .food-pin { opacity: 1; }
+
+  .open-gmaps-btn { width: 100%; padding: 11px; background: linear-gradient(135deg, #4a8db5 0%, #2d6688 100%); border: none; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 10px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.15s; }
+  .open-gmaps-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(74, 141, 181, 0.4); }
+
+  .stats-bar { display: flex; justify-content: space-around; padding: 14px; background: rgba(255, 255, 255, 0.5); border-radius: 10px; margin-top: 14px; border: 1px solid rgba(80, 130, 170, 0.25); }
+  .stat { text-align: center; }
+  .stat-num { font-size: 18px; font-weight: 800; color: #3a6f9a; display: block; }
+  .stat-label { font-size: 10px; color: #4a5a6a; letter-spacing: 1px; font-weight: 600; }
+  .stat-hint { font-size: 9.5px; color: #7a8a9a; margin-top: 2px; display: block; }
+  footer { text-align: center; margin-top: 24px; padding: 16px; color: #4a5a6a; font-size: 11px; letter-spacing: 3px; }
+</style>
+<style id="hero-bg-style">
+  .hero-bg { position: absolute; inset: 0; z-index: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 0.8s ease; }
+  header.has-hero .hero-bg { opacity: 1; }
+  header.has-hero .hero-bg::after { content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.58) 0%, rgba(255,255,255,0.40) 45%, rgba(255,255,255,0.62) 100%); }
+  header.has-hero::before { display: none; }
+  header.has-hero .eyebrow, header.has-hero h1, header.has-hero .sub { position: relative; z-index: 2; }
+  header.has-hero .sub { text-shadow: 0 1px 3px rgba(255,255,255,0.7); }
+</style>
+</head>
+<body>
+<!-- LIVEMAP-BACK-BTN -->
+<a href="../index.html" id="livemapBackBtn" style="position:fixed; top:14px; left:14px; z-index:9999; display:inline-flex; align-items:center; gap:6px; padding:7px 13px; background:rgba(255,255,255,0.92); color:#3a2a1a; font-size:13px; font-weight:600; text-decoration:none; border-radius:20px; box-shadow:0 2px 10px rgba(0,0,0,0.18); backdrop-filter:blur(6px); transition:transform 0.15s, box-shadow 0.15s;" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 14px rgba(0,0,0,0.25)'" onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 10px rgba(0,0,0,0.18)'">🗺️ LiveMap 首页</a>
+<!-- /LIVEMAP-BACK-BTN -->
+
+<div class="app">
+  <header>
+    <div class="eyebrow">ALASKA · LIVEMAP · 2026</div>
+    <h1>❄️ 阿拉斯加环线 7 天 · 穷游省钱</h1>
+    <div class="sub">Alaska Grand Loop · Budget Backpacker Edition</div>
+  </header>
+
+  <div class="day-tabs" id="dayTabs">
+    <div class="tab all active" data-day="all"><span class="dot"></span>全部 7 天</div>
+    
+    <div class="tab" data-day="1" style="color:#6b7a6e"><span class="dot"></span>Day 1 · 安克雷奇抵达取车</div>
+    <div class="tab" data-day="2" style="color:#5a7a4a"><span class="dot"></span>Day 2 · 安克雷奇 → 德纳利</div>
+    <div class="tab" data-day="3" style="color:#4a8db5"><span class="dot"></span>Day 3 · 德纳利国家公园深度</div>
+    <div class="tab" data-day="4" style="color:#1f7a5a"><span class="dot"></span>Day 4 · 德纳利 → 安克雷奇（Talkeetna）</div>
+    <div class="tab" data-day="5" style="color:#5a7a8a"><span class="dot"></span>Day 5 · 安克雷奇 → 西沃德</div>
+    <div class="tab" data-day="6" style="color:#4a8db5"><span class="dot"></span>Day 6 · 基奈峡湾国家公园游船</div>
+    <div class="tab" data-day="7" style="color:#6b7a6e"><span class="dot"></span>Day 7 · 西沃德 → 安克雷奇返程</div>
+  </div>
+
+  <div class="main">
+    <div class="map-wrap" id="mapWrap">
+      <div id="map"></div>
+      <div class="style-switcher">
+        <button class="style-btn active" data-style="clean" onclick="switchStyle('clean')">🗺️ 简洁</button>
+        <button class="style-btn" data-style="topo" onclick="switchStyle('topo')">🌄 地形</button>
+        <button class="style-btn" data-style="satellite" onclick="switchStyle('satellite')">🛰️ 实景</button>
+      </div>
+      <div class="legend"><div class="legend-item"><span class="legend-dot" style="background:#6b4a7e;color:#fff">🏛️</span>博物馆</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#5a7a4a;color:#fff">🌲</span>自然/园区</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#5a7a8a;color:#fff">🏔️</span>雪山雪峰</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#4a8db5;color:#fff">🧊</span>冰川/湖泊</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#1f7a5a;color:#fff">🚤</span>海滨/峡湾</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#c97b5a;color:#fff">🛒</span>小镇/美食</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#4a5d52;color:#fff">🚗</span>自驾/交通</div></div>
+    </div>
+
+    <div class="info-panel">
+      <div id="dayOverview"></div>
+      <div id="poiDetail" class="poi-detail">
+        <div class="poi-nav-bar">
+          <button class="back-btn" onclick="closeDetail()">← 返回行程</button>
+          <div class="poi-nav-arrows">
+            <button class="nav-arrow" id="prevPoiBtn" onclick="navPoi(-1)" title="上一个 POI (←)">‹</button>
+            <span class="nav-counter" id="poiCounter">1 / 1</span>
+            <button class="nav-arrow" id="nextPoiBtn" onclick="navPoi(1)" title="下一个 POI (→)">›</button>
+          </div>
+        </div>
+        <div class="poi-hero" id="pdHero"></div>
+        <h3 id="pdName"></h3>
+        <div class="en" id="pdEn"></div>
+        <div class="meta-row" id="pdMeta"></div>
+        <div class="info-row">
+          <div class="info-cell" title="价格为人民币（RMB）·括号内为美元原价">
+            <div class="info-label">💴 门票/价格 <span style="color:#c97b5a;font-weight:800;">[RMB · 含美元原价]</span></div>
+            <div class="info-value" id="pdPrice">—</div>
+          </div>
+          <div class="info-cell">
+            <div class="info-label">⏰ 营业时间</div>
+            <div class="info-value" id="pdHours">—</div>
+          </div>
+          <div class="info-cell" title="建议在此 POI 停留的时间">
+            <div class="info-label">⏱️ 建议游玩</div>
+            <div class="info-value" id="pdDuration">—</div>
+          </div>
+        </div>
+        <div class="fx-note">💱 价格已换算为人民币 · 汇率 $1 USD ≈ ¥7.2 RMB</div>
+        <div class="desc" id="pdDesc"></div>
+        <div class="detail-section" id="pdPhotoSection" style="display:none;">
+          <div class="detail-section-title photo">📸 拍照打卡点</div>
+          <div id="pdPhotoSpots"></div>
+        </div>
+        <div class="detail-section" id="pdFoodSection" style="display:none;">
+          <div class="detail-section-title food">🍜 推荐美食（点击 📍 跳 Google Maps）</div>
+          <div id="pdFoods"></div>
+        </div>
+        <div class="detail-section" id="pdMichelinSection" style="display:none;">
+          <div class="detail-section-title michelin">⭐ 米其林 / 高级餐厅</div>
+          <ul id="pdMichelin"></ul>
+        </div>
+        <div class="detail-section avoid-section" id="pdAvoidSection" style="display:none;">
+          <div class="detail-section-title avoid">⚠️ 避雷提醒</div>
+          <ul id="pdAvoid"></ul>
+        </div>
+        <a class="open-gmaps-btn" id="pdGmaps" target="_blank">📍 在 Google Maps 打开导航</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>ALASKA GRAND LOOP · 穷游省钱版 · 2026</footer>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close" onclick="event.stopPropagation();closeLightbox();">×</span>
+  <button class="lightbox-arrow lightbox-prev" onclick="event.stopPropagation();navLightbox(-1);">‹</button>
+  <img id="lightboxImg" alt="" onclick="event.stopPropagation();">
+  <button class="lightbox-arrow lightbox-next" onclick="event.stopPropagation();navLightbox(1);">›</button>
+  <div class="lightbox-dots" id="lightboxDots" onclick="event.stopPropagation();"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<script>
+const POIs = [{"id": "anchorage_museum", "day": 1, "num": 1, "name": "安克雷奇博物馆", "en": "Anchorage Museum", "lat": 61.2173, "lng": -149.8957, "icon": "🏛️", "color": "#6b4a7e", "search": "Anchorage Museum", "price": "$20", "hours": "10:00-17:00", "desc": "了解阿拉斯加历史与原住民文化的好去处，建议提前在官网订票，避开周末高峰。", "tags": ["必看", "传统"], "time": "下午 2-3h", "photo_spots": ["📸 博物馆玻璃幕墙外观"], "foods": ["🍔 馆内 Muse 餐厅（$18）"]}, {"id": "earthquake_park", "day": 1, "num": 2, "name": "地震公园", "en": "Earthquake Park", "lat": 61.1992, "lng": -149.9037, "icon": "🌏", "color": "#6b7a6e", "search": "Earthquake Park Anchorage", "price": "免费", "hours": "24h", "desc": "纪念 1964 年大地震的公园，可俯瞰库克湾，傍晚落日景色极美。", "tags": ["观景", "免费"], "time": "傍晚 1h", "photo_spots": ["📸 库克湾落日"], "foods": []}, {"id": "anchorage_market", "day": 1, "num": 3, "name": "安克雷奇市集", "en": "Anchorage Market", "lat": 61.2181, "lng": -149.9003, "icon": "🛒", "color": "#c97b5a", "search": "Anchorage Market", "price": "免费", "hours": "周末 10:00-18:00", "desc": "可品尝当地美食与采购特色商品，推荐三文鱼制品与驯鹿香肠。", "tags": ["美食", "小镇"], "time": "中午", "photo_spots": ["📸 市集摊位"], "foods": ["🛒 Fred Meyer 超市采购野餐（省一半餐费）"]}, {"id": "parks_hwy_drive", "day": 2, "num": 1, "name": "Parks 公路自驾", "en": "Parks Highway Drive", "lat": 62.5, "lng": -150.2, "icon": "🚗", "color": "#4a5d52", "search": "George Parks Highway Alaska", "price": "油费约 $40", "hours": "全天", "desc": "安克雷奇北上德纳利的主干道，约 4h 车程，沿途阿拉斯加山脉与河谷风光。", "tags": ["自驾", "观景"], "time": "约 4h", "photo_spots": ["📸 公路尽头的德纳利雪峰"], "foods": ["☕ 途中加油站咖啡"]}, {"id": "denali_visitor_center", "day": 2, "num": 2, "name": "德纳利游客中心", "en": "Denali Visitor Center", "lat": 63.7283, "lng": -148.8859, "icon": "ℹ️", "color": "#5a7a4a", "search": "Denali Visitor Center", "price": "园区门票 $15/人（7天）", "hours": "8:00-18:00（旺季）", "desc": "园区入口的信息枢纽，办理门票、确认次日巴士、看地质与野生动物展。", "tags": ["必去", "信息"], "time": "1-1.5h", "photo_spots": ["📸 园区入口标志牌"], "foods": ["🥪 Canyon 商业区简餐"]}, {"id": "denali_national_park", "day": 3, "num": 1, "name": "德纳利国家公园", "en": "Denali National Park", "lat": 63.1148, "lng": -151.1926, "icon": "🏔️", "color": "#5a7a8a", "search": "Denali National Park Alaska", "price": "Transit 巴士 $50/人", "hours": "旺季 6-8 月", "desc": "德纳利国家公园 · 省钱：坐 Transit 公交巴士（约 $50，比 Tundra 观光巴士便宜近半），可在任意点下车徒步再上下一班，自带午餐。", "tags": ["必去", "极地荒野"], "time": "全天", "photo_spots": ["📸 德纳利雪峰全景", "📸 Polychrome Pass 彩色山口"], "foods": ["🍖 自带午餐 / 巴士途中补给"]}, {"id": "wonder_lake", "day": 3, "num": 2, "name": "Wonder Lake", "en": "Wonder Lake", "lat": 63.4733, "lng": -150.8689, "icon": "🏞️", "color": "#4a8db5", "search": "Wonder Lake Denali", "price": "含巴士票", "hours": "随巴士到达", "desc": "园区深处的湖泊，晴天可见德纳利雪峰倒映湖中，是公园最经典的明信片机位。", "tags": ["必看", "湖泊"], "time": "约 1h（停留）", "photo_spots": ["📸 雪峰湖中倒影"], "foods": []}, {"id": "savage_river", "day": 3, "num": 3, "name": "Savage River 步道", "en": "Savage River Trail", "lat": 63.7423, "lng": -149.3033, "icon": "🥾", "color": "#5a7a4a", "search": "Savage River Loop Trail Denali", "price": "免费", "hours": "全天", "desc": "私家车可达的 15 英里处环形步道，约 3km 平缓沿河走，适合返程前轻徒步看驼鹿。", "tags": ["徒步", "自然"], "time": "1-1.5h", "photo_spots": ["📸 河谷与冻原"], "foods": []}, {"id": "talkeetna", "day": 4, "num": 1, "name": "Talkeetna 小镇", "en": "Talkeetna", "lat": 62.3236, "lng": -150.1108, "icon": "🏘️", "color": "#c97b5a", "search": "Talkeetna Alaska", "price": "免费", "hours": "全天", "desc": "登山者前往德纳利的大本营小镇，复古铁路风情，河畔可无遮挡远眺北美最高峰。", "tags": ["小镇", "观景"], "time": "2-3h", "photo_spots": ["📸 河畔德纳利全景", "📸 复古主街"], "foods": ["🥧 Talkeetna Roadhouse 派与面包"]}, {"id": "talkeetna_river_view", "day": 4, "num": 2, "name": "Talkeetna 河滨观景点", "en": "Talkeetna River Overlook", "lat": 62.3275, "lng": -150.1192, "icon": "🏔️", "color": "#5a7a8a", "search": "Talkeetna River Overlook Denali View", "price": "免费", "hours": "全天", "desc": "三河交汇处的开阔河滩，天气好时正对德纳利山，是看全景的免费最佳点。", "tags": ["观景", "免费"], "time": "30-45min", "photo_spots": ["📸 三河交汇 + 雪峰"], "foods": []}, {"id": "downtown_anchorage", "day": 4, "num": 3, "name": "安克雷奇市中心", "en": "Downtown Anchorage", "lat": 61.2181, "lng": -149.9003, "icon": "🏙️", "color": "#6b7a6e", "search": "Downtown Anchorage", "price": "免费", "hours": "全天", "desc": "返城后晚餐与购物，可在第四大道一带逛纪念品店，尝阿拉斯加海鲜。", "tags": ["小镇", "美食"], "time": "傍晚", "photo_spots": ["📸 城市街景"], "foods": ["🌭 街头驯鹿热狗（$10）", "🍜 经济亚洲餐馆"]}, {"id": "seward_hwy_drive", "day": 5, "num": 1, "name": "Seward 公路自驾", "en": "Seward Highway Drive", "lat": 60.85, "lng": -149.15, "icon": "🚗", "color": "#4a5d52", "search": "Seward Highway Scenic Byway", "price": "油费约 $25", "hours": "全天", "desc": "全美最美公路之一，沿 Turnagain Arm 海湾行驶，可见白鲸、潮汐与雪山。", "tags": ["自驾", "观景"], "time": "约 2.5h", "photo_spots": ["📸 Turnagain Arm 海湾雪山"], "foods": ["☕ Girdwood 路口咖啡"]}, {"id": "portage_glacier", "day": 5, "num": 2, "name": "波特奇冰川", "en": "Portage Glacier", "lat": 60.9039, "lng": -148.8347, "icon": "🧊", "color": "#4a8db5", "search": "Portage Glacier", "price": "免费（游客中心）", "hours": "夏季游船 10:30-16:30", "desc": "波特奇冰川 · 省钱：跳过 $49 游船，直接到 Begich-Boggs 游客中心免费看冰川展与远观。", "tags": ["省钱", "自然"], "time": "1.5-2h", "photo_spots": ["📸 冰川特写", "📸 冰川倒影"], "foods": []}, {"id": "seward_small_boat_harbor", "day": 5, "num": 3, "name": "西沃德小船港", "en": "Seward Small Boat Harbor", "lat": 60.1268, "lng": -149.4197, "icon": "🚤", "color": "#1f7a5a", "search": "Seward Small Boat Harbor", "price": "免费", "hours": "全天", "desc": "次日游船的出发地，傍晚可在港口散步看渔船归港，确认登船码头。", "tags": ["必去", "观景"], "time": "傍晚 1h", "photo_spots": ["📸 港口全景"], "foods": ["🐟 超市买熏三文鱼自备"]}, {"id": "kenai_fjords_national_park", "day": 6, "num": 1, "name": "基奈峡湾国家公园", "en": "Kenai Fjords National Park", "lat": 59.8, "lng": -149.65, "icon": "🌊", "color": "#4a8db5", "search": "Kenai Fjords National Park", "price": "$90/基础观鲸团", "hours": "游船 6-8h", "desc": "基奈峡湾 · 省钱：选 6h 基础观鲸团（约 $90，非全天豪华团），提前网上订常有早鸟折扣。", "tags": ["必看", "自然"], "time": "全天 6-8h", "photo_spots": ["📸 冰川入海", "📸 跃出水面的鲸"], "foods": ["🥪 自带三明治上船"]}, {"id": "exit_glacier", "day": 6, "num": 2, "name": "Exit Glacier", "en": "Exit Glacier", "lat": 60.1886, "lng": -149.6306, "icon": "🧊", "color": "#5a7a8a", "search": "Exit Glacier Kenai Fjords", "price": "免费", "hours": "全天", "desc": "Exit Glacier · 省钱：免费自驾抵达 + 免费步道近观冰舌，是峡湾最划算的冰川体验。", "tags": ["震撼", "徒步"], "time": "1-1.5h", "photo_spots": ["📸 冰舌近景"], "foods": []}, {"id": "alaska_sealife_center", "day": 6, "num": 3, "name": "阿拉斯加海洋生命中心", "en": "Alaska SeaLife Center", "lat": 60.1042, "lng": -149.4419, "icon": "🐟", "color": "#1f7a5a", "search": "Alaska SeaLife Center Seward", "price": "$30", "hours": "9:00-17:00", "desc": "西沃德海滨的海洋科普中心，可近距离看海狮、海鸟与海獭，海况差停航时的好备选。", "tags": ["亲子", "室内"], "time": "1.5h", "photo_spots": ["📸 海狮水下视窗"], "foods": []}, {"id": "alyeska_resort", "day": 7, "num": 1, "name": "Alyeska 缆车", "en": "Alyeska Resort Tram", "lat": 60.9706, "lng": -149.0972, "icon": "🚡", "color": "#5a7a8a", "search": "Alyeska Resort Tram Girdwood", "price": "免费（仅山脚步道）", "hours": "夏季 10:00-21:00", "desc": "Alyeska · 省钱：跳过 $45 缆车，走山脚免费步道看冰川，或直接返机场。", "tags": ["观景", "震撼"], "time": "1.5-2h", "photo_spots": ["📸 山顶七冰川全景"], "foods": []}, {"id": "anchorage_airport", "day": 7, "num": 2, "name": "安克雷奇国际机场", "en": "Ted Stevens Anchorage International Airport", "lat": 61.1743, "lng": -149.9965, "icon": "✈️", "color": "#4a5d52", "search": "Ted Stevens Anchorage International Airport", "price": "免费", "hours": "24h", "desc": "环线终点，机场还车后办理登机，结束阿拉斯加之旅。", "tags": ["交通"], "time": "晚上", "photo_spots": [], "foods": []}];
+const DAYS = {"1": {"color": "#6b7a6e", "title": "Day 1 · 安克雷奇抵达取车", "where": "📍 安克雷奇市中心", "tip": "💡 落地取车后先休整时差，市区轻度适应。地震公园傍晚看库克湾落日。", "hotel": {"name_cn": "安克雷奇国际青旅", "name_en": "Anchorage Guesthouse / Hostel", "address": "2001 Hillcrest Dr, Anchorage, AK 99503", "price": "$110-160/晚", "parking": "免费", "highlights": "床位/经济房，公共厨房可自炊省餐费", "url": "https://www.anchorageguesthouse.com/"}, "plan_b": "💧 雨天/旺季备选：安克雷奇博物馆 + 当地商场室内活动"}, "2": {"color": "#5a7a4a", "title": "Day 2 · 安克雷奇 → 德纳利", "where": "📍 沿 Parks Hwy 北上 · 德纳利园区门口", "tip": "💡 上午出发，沿 Parks Hwy 北行约 4h。途经 Talkeetna 路口可短停补给。", "hotel": {"name_cn": "德纳利门口营地/旅舍", "name_en": "Riley Creek Campground / Denali Hostel", "address": "Mile 237 Parks Hwy, Denali National Park, AK 99755", "price": "$30 营地 / $130 旅舍", "parking": "免费", "highlights": "园内 Riley Creek 营地最省，或门口经济旅舍床位", "url": "https://www.nps.gov/dena/planyourvisit/campgrounds.htm"}, "plan_b": "💧 雨天备选：园门 Canyon 商业区餐饮 + 游客中心影院"}, "3": {"color": "#4a8db5", "title": "Day 3 · 德纳利国家公园深度", "where": "📍 德纳利国家公园 · 园区巴士线", "tip": "💡 全天乘园区巴士深入，看北美最高峰、棕熊与驯鹿。务必提前订巴士票。", "hotel": {"name_cn": "德纳利门口营地/旅舍", "name_en": "Riley Creek Campground / Denali Hostel", "address": "Mile 237 Parks Hwy, Denali National Park, AK 99755", "price": "$30 营地 / $130 旅舍", "parking": "免费", "highlights": "园内 Riley Creek 营地最省，或门口经济旅舍床位", "url": "https://www.nps.gov/dena/planyourvisit/campgrounds.htm"}, "plan_b": "💧 阴天看不到最高峰备选：Savage River 步道短线徒步 + 雪橇犬营地参观"}, "4": {"color": "#1f7a5a", "title": "Day 4 · 德纳利 → 安克雷奇（Talkeetna）", "where": "📍 Talkeetna 小镇 · 返安克雷奇", "tip": "💡 南返途中在 Talkeetna 停留，河畔远眺德纳利全景，逛复古小镇。", "hotel": {"name_cn": "安克雷奇国际青旅", "name_en": "Anchorage Guesthouse / Hostel", "address": "2001 Hillcrest Dr, Anchorage, AK 99503", "price": "$110-160/晚", "parking": "免费", "highlights": "床位/经济房，公共厨房可自炊省餐费", "url": "https://www.anchorageguesthouse.com/"}, "plan_b": "💧 雨天备选：Talkeetna 改室内逛酒馆/烘焙坊，提前返安克雷奇休息"}, "5": {"color": "#5a7a8a", "title": "Day 5 · 安克雷奇 → 西沃德", "where": "📍 沿 Seward Hwy 南下 · 西沃德镇", "tip": "💡 走全美最美公路之一 Seward Hwy，途中停 Portage 冰川。约 2.5h 抵西沃德。", "hotel": {"name_cn": "西沃德海滨营地", "name_en": "Seward Waterfront Campground", "address": "Ballaine Blvd, Seward, AK 99664", "price": "$20-30 营地 / $150 经济房", "parking": "免费", "highlights": "市政海滨营地，正对 Resurrection Bay，步行到港口", "url": "https://www.cityofseward.us/departments/parks-recreation/campgrounds"}, "plan_b": "💧 雨天备选：Portage 的 Begich-Boggs 游客中心室内看冰川展"}, "6": {"color": "#4a8db5", "title": "Day 6 · 基奈峡湾国家公园游船", "where": "📍 西沃德小船港出发 · 基奈峡湾", "tip": "💡 全天观鲸 + 冰川游船（6-8h）。提前预约，带保暖防水衣物。", "hotel": {"name_cn": "西沃德海滨营地", "name_en": "Seward Waterfront Campground", "address": "Ballaine Blvd, Seward, AK 99664", "price": "$20-30 营地 / $150 经济房", "parking": "免费", "highlights": "市政海滨营地，正对 Resurrection Bay，步行到港口", "url": "https://www.cityofseward.us/departments/parks-recreation/campgrounds"}, "plan_b": "💧 海况太差停航备选：Exit Glacier 步行近观冰川 + Alaska SeaLife Center 海洋中心"}, "7": {"color": "#6b7a6e", "title": "Day 7 · 西沃德 → 安克雷奇返程", "where": "📍 Alyeska · 安克雷奇机场", "tip": "💡 北返途中 Girdwood 停 Alyeska 缆车，再到机场还车，结束环线。", "hotel": {"name_cn": "（当日离开，无住宿）", "name_en": "Departure Day", "address": "Ted Stevens Anchorage International Airport, AK 99502", "price": "—", "parking": "—", "highlights": "机场还车，结束行程", "url": "https://dot.alaska.gov/anc/"}, "plan_b": "💧 时间紧备选：跳过 Alyeska 直接返机场"}};
+const META = {"title": "❄️ 阿拉斯加环线 7 天 · 穷游省钱", "title_short": "阿拉斯加环线·穷游", "subtitle": "Alaska Grand Loop · Budget Backpacker Edition", "eyebrow": "ALASKA · LIVEMAP · 2026", "header_emoji": "❄️", "color_scheme": "snow", "currency": "USD", "map_center": [62.0, -150.0], "map_zoom": 6, "where_summary": "安克雷奇 ANC 进/出 · 青旅营地 + 自驾拼车", "all_tip": "🎯 主题定调：同一条经典环线，用穷游姿势走——青旅、营地、经济连锁压住宿，游船选基础档，景点多挑免费的自然与步道，照样看到德纳利与峡湾。\n\n🎬 节奏递进：Day1 安克雷奇青旅；Day2-3 德纳利门口营地/旅舍；Day4 返城青旅；Day5 西沃德营地；Day6 基础档游船；Day7 返程。\n\n🗺️ 路线设计：北南两段不折返。能自带食物就自带，超市采购代替餐厅，园区巴士选最经济的 Transit 票，免费步道（Savage River/Exit Glacier）多安排。\n\n💡 省钱要点：① 德纳利坐 Transit 公交巴士（比观光巴士便宜近半，可中途下车徒步）；② 基奈峡湾选 6h 基础观鲸团而非全天豪华团；③ Fred Meyer 超市采购野餐；④ 多人拼车摊租车与油费；⑤ 营地需自带或租帐篷睡袋。", "stats": [{"num": "7", "label": "天数", "hint": "DAYS"}, {"num": "19", "label": "景点", "hint": "POI"}, {"num": "$1100-1500", "label": "预计花费/人", "hint": "BUDGET / PERSON", "tooltip": "不含国际机票，含青旅/营地、基础游船、Transit 巴士、拼车油费、超市自炊"}, {"num": "拼车自驾", "label": "交通方式", "hint": "TRANSPORT", "tooltip": "多人拼一辆车摊薄租车与油费"}], "highlight_title": "🔥 阿拉斯加环线独门绝技", "highlight_items": ["<b>德纳利园区巴士深入</b>（私家车进不去的荒野，看北美最高峰 6190m）", "<b>Wonder Lake 雪峰倒影</b>（晴天才有的德纳利全景明信片）", "<b>基奈峡湾观鲸冰川游船</b>（座头鲸、虎鲸 + 冰川崩塌入海）", "<b>Talkeetna 看德纳利全景</b>（小镇河畔无遮挡远眺最高峰）"], "warning_title": "⚠️ 安全/礼仪/避坑", "warning_text": "① 德纳利园区巴士与基奈峡湾游船旺季紧俏，务必提前预约；② 保持与棕熊/驼鹿至少 25-300 米距离，绝不投喂；③ 山区天气多变，游船日多带保暖防水；④ 自驾注意野生动物横穿公路，黄昏减速。 ⑤ 营地夜间低温，务必备齐保暖睡袋。", "footer": "ALASKA GRAND LOOP · 穷游省钱版 · 2026", "pretrip": {"visa": "美签 B1/B2 或 ESTA · 建议提前 1-2 月办理", "voltage": "110V · A/B 型插头", "sim": "eSIM 推荐 Airalo（$20/5GB）· 当地买卡 $30 · 园区/峡湾多无信号，提前离线下载地图", "currency": "$1 USD ≈ ¥7 RMB · 推荐使用信用卡，偏远营地备现金", "tipping": "餐厅 15-20% · 游船/向导可酌情给小费", "emergency": "911 报警急救 · 中国驻美使馆 +1-202-495-2266"}, "mode": "budget", "total_days": 7, "accent": "#3a6f9a", "accent_bg": "rgba(122, 176, 212, 0.18)", "text_dark": "#1a2838", "text_mid": "#4a5a6a"};
+const ALL_TIP = META.all_tip;
+const TOTAL_DAYS = META.total_days;
+const ORIG_CURRENCY = META.currency || 'USD';
+
+// ============ INIT LEAFLET ============
+const map = L.map('map', { center: META.map_center, zoom: META.map_zoom || 10, scrollWheelZoom: true });
+const TILES = {
+  voyager: L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://openstreetmap.org/">OSM</a> · © <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd', maxZoom: 19,
+  }),
+  topo: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://opentopomap.org/">OpenTopoMap</a> (CC-BY-SA) · © OSM',
+    subdomains: 'abc', maxZoom: 17,
+  }),
+  satellite: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Imagery © <a href="https://www.esri.com/">Esri</a>, Maxar, Earthstar Geographics',
+    maxZoom: 19,
+  }),
+};
+let currentTile = TILES.voyager.addTo(map);
+window.switchStyle = function(style) {
+  document.querySelectorAll('.style-btn').forEach(b => b.classList.toggle('active', b.dataset.style === style));
+  map.removeLayer(currentTile);
+  const wrap = document.getElementById('mapWrap');
+  wrap.classList.remove('topo');
+  if (style === 'topo') { currentTile = TILES.topo.addTo(map); wrap.classList.add('topo'); }
+  else if (style === 'satellite') { currentTile = TILES.satellite.addTo(map); }
+  else { currentTile = TILES.voyager.addTo(map); }
+};
+
+const markers = {}, routeLayers = {};
+POIs.forEach(p => {
+  const icon = L.divIcon({
+    className: 'poi-marker',
+    html: `<div class="poi-pin" data-id="${p.id}" data-day="${p.day}" style="background:${p.color}">${p.icon}<span class="poi-num">${p.num}</span></div>
+           <div class="poi-label-overlay">${p.name}</div>`,
+    iconSize: [32, 32], iconAnchor: [16, 16],
+  });
+  const marker = L.marker([p.lat, p.lng], { icon }).addTo(map);
+  marker.on('click', () => showDetail(p));
+  markers[p.id] = marker;
+});
+for (let d = 1; d <= TOTAL_DAYS; d++) {
+  const points = POIs.filter(p => p.day === d).sort((a, b) => a.num - b.num);
+  if (points.length < 2) continue;
+  const line = L.polyline(points.map(p => [p.lat, p.lng]), {
+    color: DAYS[d].color, weight: 4, opacity: 0,
+    dashArray: '8, 6', lineCap: 'round', lineJoin: 'round',
+  }).addTo(map);
+  routeLayers[d] = line;
+}
+
+// ============ PRICE: RMB 为主 · 原货币为辅 ============
+const FX_RATES = { JPY: 0.05, USD: 7.2, EUR: 7.8, GBP: 9.0, KRW: 0.0055, THB: 0.21, AUD: 4.8, CAD: 5.3 };
+const CURRENCY_LABELS = { JPY: '日元', USD: '美元', EUR: '欧元', GBP: '英镑', KRW: '韩元', THB: '泰铢', AUD: '澳元', CAD: '加元' };
+function renderPriceWithRMB(priceStr, origCurrency) {
+  origCurrency = origCurrency || ORIG_CURRENCY;
+  const rate = FX_RATES[origCurrency] || 1;
+  const label = CURRENCY_LABELS[origCurrency] || origCurrency;
+  const symMap = { USD: '\\$', EUR: '€', GBP: '£', JPY: '¥', KRW: '₩', THB: '฿', AUD: 'A\\$', CAD: 'C\\$' };
+  const symbol = symMap[origCurrency] || '¥';
+  const re = new RegExp(`${symbol}(\\d+)(?:-(\\d+))?(\\+)?`, 'g');
+  return priceStr.replace(re, (match, a, b, plus) => {
+    const minR = Math.round(parseInt(a) * rate);
+    const maxR = b ? Math.round(parseInt(b) * rate) : null;
+    const rmbBig = maxR ? `¥${minR}-${maxR}` : `¥${minR}${plus || ''}`;
+    return `<b style="color:${META.accent};font-size:13px;">${rmbBig}</b><span style="color:${META.text_mid};font-size:10px;font-weight:500;">（${match} ${label}）</span>`;
+  });
+}
+
+// ============ 多源图片搜索 ============
+const imgCache = {};
+function isGoodImage(url) { return url && /\.(jpg|jpeg|png)$/i.test(url) && !/logo|icon|seal|coat[_-]of[_-]arms|svg|flag|map|chart/i.test(url); }
+async function fetchWikipediaImages(query, max = 4) {
+  try {
+    const sr = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&srlimit=1&format=json&origin=*`);
+    const sd = await sr.json();
+    const title = sd.query?.search?.[0]?.title;
+    if (!title) return [];
+    const mr = await fetch(`https://en.wikipedia.org/api/rest_v1/page/media-list/${encodeURIComponent(title)}`);
+    if (!mr.ok) return [];
+    const md = await mr.json();
+    const urls = [];
+    for (const item of (md.items || [])) {
+      if (item.type !== 'image') continue;
+      const srcset = item.srcset || [];
+      const best = srcset.find(s => s.scale === '1.5x') || srcset.find(s => s.scale === '1x') || srcset[0];
+      let src = best?.src || item.original?.source || '';
+      if (src.startsWith('//')) src = 'https:' + src;
+      if (isGoodImage(src)) { urls.push(src); if (urls.length >= max) break; }
+    }
+    return urls;
+  } catch (e) { return []; }
+}
+async function fetchCommonsImages(query, max = 4) {
+  try {
+    const params = new URLSearchParams({
+      action: 'query', generator: 'search',
+      gsrsearch: `${query} filetype:bitmap`,
+      gsrnamespace: '6', gsrlimit: '20',
+      prop: 'imageinfo', iiprop: 'url', iiurlwidth: '640',
+      format: 'json', origin: '*',
+    });
+    const res = await fetch(`https://commons.wikimedia.org/w/api.php?${params}`);
+    const data = await res.json();
+    const pages = data.query?.pages;
+    if (!pages) return [];
+    const sorted = Object.values(pages).sort((a, b) => (a.index || 999) - (b.index || 999));
+    const urls = [];
+    for (const p of sorted) {
+      const url = p.imageinfo?.[0]?.thumburl;
+      if (isGoodImage(url)) { urls.push(url); if (urls.length >= max) break; }
+    }
+    return urls;
+  } catch (e) { return []; }
+}
+async function fetchImagesMultiSource(poi, max = 4) {
+  if (imgCache[poi.id]) return imgCache[poi.id];
+  const results = [], sources = [];
+  const query = poi.search || poi.en;
+  if (poi.images && poi.images.length) poi.images.forEach(u => { results.push(u); sources.push('curated'); });
+  if (results.length < max) {
+    const wiki = await fetchWikipediaImages(query, max - results.length);
+    wiki.forEach(u => { if (!results.includes(u)) { results.push(u); sources.push('wiki'); } });
+  }
+  if (results.length < max) {
+    const cm = await fetchCommonsImages(query, max - results.length);
+    cm.forEach(u => { if (!results.includes(u)) { results.push(u); sources.push('commons'); } });
+  }
+  const final = results.slice(0, max).map((u, i) => ({ url: u, source: sources[i] }));
+  imgCache[poi.id] = final;
+  return final;
+}
+window._lbImages = [];
+window._lbIdx = 0;
+window.openLightbox = function(url) {
+  // 用当前 POI 的全部图片做 lightbox 集合
+  const allImgs = Array.from(document.querySelectorAll('.poi-hero-cell img')).map(i => i.src);
+  window._lbImages = allImgs.length ? allImgs : [url];
+  window._lbIdx = Math.max(0, window._lbImages.indexOf(url));
+  if (window._lbIdx < 0) { window._lbImages = [url]; window._lbIdx = 0; }
+  showLightbox();
+};
+function showLightbox() {
+  document.getElementById('lightboxImg').src = window._lbImages[window._lbIdx];
+  document.getElementById('lightbox').classList.add('show');
+  // 渲染 dots
+  const dots = window._lbImages.map((_, i) =>
+    `<span class="lightbox-dot${i === window._lbIdx ? ' active' : ''}" onclick="window._lbIdx=${i};showLightbox();"></span>`
+  ).join('');
+  document.getElementById('lightboxDots').innerHTML = dots;
+  // 按钮状态
+  document.querySelector('.lightbox-prev').disabled = window._lbIdx <= 0;
+  document.querySelector('.lightbox-next').disabled = window._lbIdx >= window._lbImages.length - 1;
+}
+window.navLightbox = function(delta) {
+  const newIdx = window._lbIdx + delta;
+  if (newIdx < 0 || newIdx >= window._lbImages.length) return;
+  window._lbIdx = newIdx;
+  showLightbox();
+};
+window.closeLightbox = function() { document.getElementById('lightbox').classList.remove('show'); };
+
+// 打卡点（纯文字 + Google 图片搜索跳转）
+function renderPhotoSpots(poi) {
+  const container = document.getElementById('pdPhotoSpots');
+  const spots = poi.photo_spots.map(s => typeof s === 'string' ? { text: s, query: null } : s);
+  container.innerHTML = spots.map(s => {
+    const q = s.query || (poi.en + ' ' + s.text.replace(/^📸\s*/, '').slice(0, 25));
+    const gImg = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(q)}`;
+    return `<div class="spot-card"><div class="spot-text">${s.text}</div><a class="spot-more" href="${gImg}" target="_blank" onclick="event.stopPropagation();">🔍 搜图</a></div>`;
+  }).join('');
+}
+
+// 美食列表（每项 Google Maps 跳转）
+function renderFoods(poi) {
+  const container = document.getElementById('pdFoods');
+  const cityHint = (poi.search || poi.en || '').split(/[\s,]/)[0]; // 取主关键词作位置参考
+  container.innerHTML = poi.foods.map(f => {
+    // 抽出餐厅名（多在「」/『』之间或开头一段）
+    let name = f.replace(/^[🍡🍜🍣🍵🍢🍰🍦🥩🥪🍤🥩🍷🍕🍺☕🍔🍱🍣🥟🥗🥨🍩🥯🍴🍝🥢🐟🦀🦪🍇🥃🍫🍳🍻🍂🌮🥙🍞🧀🧊🌭🥒🥢🍙🍡🥃]+\s*/, '').replace(/[（(].*$/, '').trim();
+    const m = name.match(/[「『](.+?)[」』]/);
+    if (m) name = m[1];
+    const query = `${name} ${cityHint}`.trim();
+    const gmaps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+    return `<a class="food-link" href="${gmaps}" target="_blank" onclick="event.stopPropagation();"><span class="food-text">${f}</span><span class="food-pin">📍</span></a>`;
+  }).join('');
+}
+
+// ============ INTERACTION ============
+const dayTabs = document.querySelectorAll('.tab');
+let currentDay = 'all', currentDetailId = null;
+dayTabs.forEach(t => {
+  t.addEventListener('click', () => {
+    dayTabs.forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    currentDay = t.dataset.day;
+    filterPOIs(); renderDayOverview(); closeDetail();
+  });
+});
+
+function filterPOIs() {
+  Object.entries(markers).forEach(([id, marker]) => {
+    const poi = POIs.find(p => p.id === id);
+    const el = marker.getElement(); if (!el) return;
+    if (currentDay === 'all' || String(poi.day) === currentDay) { el.style.opacity = '1'; el.style.zIndex = '500'; }
+    else { el.style.opacity = '0.25'; el.style.zIndex = '100'; }
+  });
+  Object.entries(routeLayers).forEach(([d, line]) => {
+    line.setStyle({ opacity: (currentDay === 'all' || d === currentDay) ? 0.85 : 0 });
+  });
+  if (currentDay !== 'all') {
+    const activePOIs = POIs.filter(p => String(p.day) === currentDay);
+    if (activePOIs.length > 1) {
+      map.fitBounds(L.latLngBounds(activePOIs.map(p => [p.lat, p.lng])), { padding: [50, 50], maxZoom: 14 });
+    }
+  } else { map.setView(META.map_center, META.map_zoom || 10); }
+}
+
+function renderDayOverview() {
+  const overview = document.getElementById('dayOverview');
+  if (currentDay === 'all') {
+    const statsHtml = META.stats.map(s => `<div class="stat"${s.tooltip ? ` title="${s.tooltip}"` : ''}><span class="stat-num">${s.num}</span><span class="stat-label">${s.label}</span><span class="stat-hint">${s.hint || ''}</span></div>`).join('');
+    const highlightsHtml = META.highlight_items.map(h => `• ${h}`).join('<br>');
+    overview.innerHTML = `
+      <div class="day-header">
+        <span class="day-badge" style="background: linear-gradient(135deg, #7a9a4d 0%, #4a6a32 100%)">全部 ${TOTAL_DAYS} 天</span>
+        <div class="day-title">${META.header_emoji} ${META.title_short}</div>
+        <div class="day-where">${META.where_summary} · 含 ${POIs.length} 个核心景点</div>
+      </div>
+      <div class="day-tips all-tip">${formatAllTip(ALL_TIP)}</div>
+      <div class="stats-bar">${statsHtml}</div>
+      <div style="margin-top: 14px; padding: 14px; background: ${META.accent_bg}; border-radius: 10px;">
+        <div style="font-size: 12px; color: ${META.accent}; font-weight: 700; margin-bottom: 8px; letter-spacing: 1px;">${META.highlight_title}</div>
+        <div style="font-size: 11.5px; color: ${META.text_dark}; line-height: 1.7;">${highlightsHtml}</div>
+      </div>
+      <div style="margin-top: 14px; padding: 12px 14px; background: linear-gradient(135deg, rgba(199, 54, 32, 0.18) 0%, rgba(232, 116, 58, 0.12) 100%); border-left: 3px solid #c73620; border-radius: 6px;">
+        <div style="font-size: 11px; color: #c73620; font-weight: 700; margin-bottom: 4px;">${META.warning_title}</div>
+        <div style="font-size: 11px; color: ${META.text_dark}; line-height: 1.55;">${META.warning_text}</div>
+      </div>
+      ${renderPretrip(META.pretrip)}
+      <button class="gpx-export" onclick="exportGPX()">⬇️ 导出 GPX（导入 Google My Maps / Garmin / 离线地图）</button>
+    `;
+  } else {
+    const d = DAYS[currentDay];
+    const points = POIs.filter(p => p.day == currentDay).sort((a, b) => a.num - b.num);
+    const listItems = points.map((p, i) => {
+      let liHtml = `<li onclick="showDetailById('${p.id}')"><span class="route-num">${p.num}</span><span class="route-icon">${p.icon}</span><div class="route-info"><div class="route-name">${p.name}</div><div class="route-time">${p.time}</div></div></li>`;
+      // 在每个 POI 之后插入到下一个 POI 的距离
+      if (i < points.length - 1) {
+        const dist = haversineKm(p.lat, p.lng, points[i+1].lat, points[i+1].lng);
+        liHtml += renderDistance(dist);
+      }
+      return liHtml;
+    }).join('');
+    overview.innerHTML = `
+      <button class="back-btn" onclick="backToAll()" style="background:${META.accent_bg};border:none;color:${META.accent};padding:6px 12px;border-radius:6px;font-size:11px;cursor:pointer;margin-bottom:12px;font-weight:600;">← 返回全部 ${TOTAL_DAYS} 天行程</button>
+      <div class="day-header">
+        <span class="day-badge" style="background: ${d.color}">DAY ${currentDay}</span>
+        <div class="day-title">${d.title}</div>
+        <div class="day-where">📍 ${d.where}</div>
+      </div>
+      <ul class="day-route-list">${listItems}</ul>
+      <div class="day-tips">${d.tip}</div>
+      ${d.plan_b ? `<div class="planb-card"><b style="color:#2d5f8a;">🌧️ Plan B</b><br>${d.plan_b}</div>` : ''}
+      ${renderHotel(d.hotel)}
+    `;
+  }
+}
+
+// 智能默认建议游玩时间（按 tag/icon 推断）
+function getDefaultDuration(poi) {
+  const tags = poi.tags || [];
+  const icon = poi.icon || '';
+  if (icon === '✈️') return '— 抵达/离港';
+  if (icon === '🚄') return '— 路过/换乘';
+  if (tags.includes('必看') || tags.includes('地标') || tags.includes('震撼')) return '1-1.5 小时';
+  if (tags.includes('米其林')) return '2-3 小时';
+  if (tags.includes('美食')) return '1-1.5 小时';
+  if (tags.includes('小吃')) return '30 分钟';
+  if (tags.includes('寺庙') || tags.includes('神社')) return '30-45 分钟';
+  if (tags.includes('观景') || tags.includes('夜景')) return '20-30 分钟';
+  if (tags.includes('自然') || tags.includes('竹林')) return '30-60 分钟';
+  if (tags.includes('海滩')) return '1-3 小时';
+  if (tags.includes('野生动物')) return '1-3 小时';
+  if (tags.includes('火山') || tags.includes('地热') || tags.includes('温泉')) return '1-1.5 小时';
+  if (tags.includes('峡谷') || tags.includes('湖泊')) return '1 小时';
+  if (tags.includes('瀑布')) return '20-30 分钟';
+  if (tags.includes('体验') || tags.includes('传统')) return '半天';
+  if (tags.includes('观星')) return '4-6 小时';
+  if (tags.includes('夜潜') || tags.includes('浮潜')) return '2-3 小时';
+  if (tags.includes('徒步') || tags.includes('独家') || tags.includes('冒险')) return '2-4 小时';
+  if (tags.includes('小镇')) return '1 小时';
+  return '约 1 小时';
+}
+
+// all_tip 智能格式化：分段卡片 + 关键词高亮
+function enhanceText(text) {
+  return text
+    .replace(/「(.+?)」/g, '<b class="hl-quote">「$1」</b>')
+    .replace(/『(.+?)』/g, '<b class="hl-quote">「$1」</b>')
+    .replace(/\bDay\s*(\d+(?:[-~]\d+)?)/g, '<span class="hl-day">Day $1</span>')
+    .replace(/([¥$€£₩฿])\s*([\d,]+(?:[-~][\d,]+)?(?:K|k)?)/g, '<b class="hl-price">$1$2</b>')
+    .replace(/(\d+)\s*(月|点|天|分钟|小时|公里|km|m\b|h\b)/g, '<b class="hl-num">$1$2</b>')
+    .replace(/(早\s*\d+\s*点|清晨|傍晚|凌晨|午夜)/g, '<span class="hl-time">$1</span>');
+}
+function formatAllTip(text) {
+  const sections = text.split(/\n\n+/).filter(s => s.trim());
+  return sections.map(s => {
+    s = s.trim();
+    const m = s.match(/^([\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2700}-\u{27BF}\u{FE0F}]+)\s*(.+?)[：:]\s*([\s\S]*)$/u);
+    if (m) {
+      return `<div class="tip-section"><div class="tip-section-head"><span class="tip-emoji">${m[1]}</span><span>${m[2]}</span></div><div class="tip-body">${enhanceText(m[3])}</div></div>`;
+    }
+    return `<div class="tip-section"><div class="tip-body">${enhanceText(s)}</div></div>`;
+  }).join('');
+}
+
+function renderPretrip(p) {
+  if (!p) return '';
+  const rows = [];
+  if (p.visa) rows.push(`<div class="pretrip-row"><span class="pretrip-label">🛂 签证</span><span>${p.visa}</span></div>`);
+  if (p.voltage) rows.push(`<div class="pretrip-row"><span class="pretrip-label">🔌 电压</span><span>${p.voltage}</span></div>`);
+  if (p.sim) rows.push(`<div class="pretrip-row"><span class="pretrip-label">📱 网络</span><span>${p.sim}</span></div>`);
+  if (p.currency) rows.push(`<div class="pretrip-row"><span class="pretrip-label">💴 换汇</span><span>${p.currency}</span></div>`);
+  if (p.tipping) rows.push(`<div class="pretrip-row"><span class="pretrip-label">💵 小费</span><span>${p.tipping}</span></div>`);
+  if (p.emergency) rows.push(`<div class="pretrip-row"><span class="pretrip-label">🚨 急救</span><span>${p.emergency}</span></div>`);
+  if (!rows.length) return '';
+  return `<div class="pretrip-card"><div class="pretrip-title">✈️ 出行前必看</div>${rows.join('')}</div>`;
+}
+
+// GPX 导出：生成所有 POI + 每天路线
+window.exportGPX = function() {
+  const sorted = [...POIs].sort((a, b) => a.day === b.day ? a.num - b.num : a.day - b.day);
+  let gpx = `<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="LiveMap" xmlns="http://www.topografix.com/GPX/1/1">\n`;
+  gpx += `  <metadata>\n    <name>${META.title_short || 'LiveMap Trip'}</name>\n    <desc>Generated by LiveMap</desc>\n  </metadata>\n`;
+  // 每个 POI 一个 waypoint
+  sorted.forEach(p => {
+    gpx += `  <wpt lat="${p.lat}" lon="${p.lng}">\n    <name>Day${p.day}.${p.num} ${p.icon} ${p.name}</name>\n    <desc>${(p.desc||'').replace(/[<>&"']/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&apos;'})[c])}</desc>\n    <type>${p.tags?.[0]||'POI'}</type>\n  </wpt>\n`;
+  });
+  // 每天一条 track
+  for (let d = 1; d <= TOTAL_DAYS; d++) {
+    const points = POIs.filter(p => p.day === d).sort((a, b) => a.num - b.num);
+    if (points.length < 2) continue;
+    gpx += `  <trk>\n    <name>Day ${d} · ${DAYS[d].title}</name>\n    <trkseg>\n`;
+    points.forEach(p => { gpx += `      <trkpt lat="${p.lat}" lon="${p.lng}"><name>${p.name}</name></trkpt>\n`; });
+    gpx += `    </trkseg>\n  </trk>\n`;
+  }
+  gpx += `</gpx>`;
+  const blob = new Blob([gpx], { type: 'application/gpx+xml' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${(META.title_short || 'livemap').replace(/[^\w]/g, '_')}.gpx`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+function renderHotel(h) {
+  if (!h || !h.name_cn) {
+    return '<div class="hotel-card"><div class="hotel-card-title">🏨 推荐酒店</div><div class="hotel-empty">酒店数据待补充 · 重新生成可获取 AI 推荐</div></div>';
+  }
+  const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((h.name_en || h.name_cn) + ' ' + (h.address || ''))}`;
+  const bookingUrl = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(h.name_en || h.name_cn)}`;
+  const rows = [];
+  if (h.address) rows.push(`<div class="hotel-row"><span class="label">📍 地址</span><span>${h.address}</span></div>`);
+  if (h.price) rows.push(`<div class="hotel-row"><span class="label">💴 价格</span><span>${h.price}</span></div>`);
+  if (h.parking) rows.push(`<div class="hotel-row"><span class="label">🚗 停车</span><span>${h.parking}</span></div>`);
+  if (h.highlights) rows.push(`<div class="hotel-row"><span class="label">✨ 亮点</span><span>${h.highlights}</span></div>`);
+  return `
+    <div class="hotel-card">
+      <div class="hotel-card-title">🏨 推荐酒店</div>
+      <div class="hotel-name-cn">${h.name_cn}</div>
+      ${h.name_en ? `<div class="hotel-name-en">${h.name_en}</div>` : ''}
+      ${rows.join('')}
+      <div class="hotel-actions">
+        <a class="hotel-btn gmaps" href="${gmapsUrl}" target="_blank">📍 Google Maps</a>
+        <a class="hotel-btn booking" href="${bookingUrl}" target="_blank">🔗 Booking 搜</a>
+        ${h.url ? `<a class="hotel-btn official" href="${h.url}" target="_blank">🌐 官网/直订</a>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+// Haversine 公式：算两个经纬度之间的直线距离（km）
+function haversineKm(lat1, lng1, lat2, lng2) {
+  const R = 6371, toRad = d => d * Math.PI / 180;
+  const dLat = toRad(lat2 - lat1), dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat/2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng/2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+function renderDistance(km) {
+  // 直线 × 1.3 ≈ 路径距离
+  const realKm = km * 1.3;
+  const walkMin = Math.round(realKm / 5 * 60);   // 步行 5km/h
+  const driveMin = Math.round(realKm / 30 * 60); // 城市平均 30km/h
+  const distStr = realKm < 1 ? `${Math.round(realKm * 1000)} m` : `${realKm.toFixed(1)} km`;
+  let modes = '';
+  if (realKm < 1.5) modes = `🚶 ${walkMin} min`;
+  else if (realKm < 5) modes = `🚶 ${walkMin} min <span class="dot-sep">·</span> 🚕 ${driveMin} min`;
+  else modes = `🚕 ${driveMin} min`;
+  return `<div class="day-route-distance">${distStr} <span class="dot-sep">·</span> ${modes}</div>`;
+}
+
+function backToAll() {
+  document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+  document.querySelector('.tab.all').classList.add('active');
+  currentDay = 'all';
+  filterPOIs(); renderDayOverview(); closeDetail();
+}
+
+// POI 上一个/下一个导航
+window.navPoi = function(delta) {
+  const list = window._navPoiList || [];
+  const idx = (window._navPoiIdx || 0) + delta;
+  if (idx < 0 || idx >= list.length) return;
+  showDetail(list[idx]);
+};
+
+// 键盘 ← → 切换
+document.addEventListener('keydown', (e) => {
+  if (document.getElementById('lightbox').classList.contains('show')) {
+    if (e.key === 'ArrowLeft') navLightbox(-1);
+    if (e.key === 'ArrowRight') navLightbox(1);
+    if (e.key === 'Escape') closeLightbox();
+  } else if (document.getElementById('poiDetail').classList.contains('show')) {
+    if (e.key === 'ArrowLeft') navPoi(-1);
+    if (e.key === 'ArrowRight') navPoi(1);
+    if (e.key === 'Escape') closeDetail();
+  }
+});
+
+async function showDetail(p) {
+  currentDetailId = p.id;
+  document.getElementById('dayOverview').style.display = 'none';
+  const detail = document.getElementById('poiDetail');
+  detail.classList.add('show'); detail.scrollTop = 0;
+
+  const hero = document.getElementById('pdHero');
+  hero.classList.remove('grid-mode');
+  hero.style.background = `linear-gradient(135deg, ${p.color} 0%, rgba(0,0,0,0.4) 100%)`;
+  hero.innerHTML = `<div class="poi-hero-loading"><div class="loader"></div><div>🔍 搜索 4 张图片中...</div></div>`;
+
+  document.getElementById('pdName').textContent = `${p.icon} ${p.name}`;
+  document.getElementById('pdEn').textContent = p.en;
+  document.getElementById('pdDesc').textContent = p.desc;
+  const priceEl = document.getElementById('pdPrice');
+  if (p.price) priceEl.innerHTML = renderPriceWithRMB(p.price, ORIG_CURRENCY);
+  else priceEl.textContent = '—';
+  document.getElementById('pdHours').textContent = p.hours || '—';
+  document.getElementById('pdDuration').textContent = p.duration || getDefaultDuration(p);
+
+  const meta = document.getElementById('pdMeta'); meta.innerHTML = '';
+  const dayChip = document.createElement('span'); dayChip.className = 'meta-chip day';
+  dayChip.textContent = `Day ${p.day} · #${p.num}`; meta.appendChild(dayChip);
+  const timeChip = document.createElement('span'); timeChip.className = 'meta-chip time';
+  timeChip.textContent = `🕐 ${p.time}`; meta.appendChild(timeChip);
+  (p.tags || []).forEach(tag => {
+    const t = document.createElement('span');
+    t.className = `tag-chip tag-${tag}`;
+    t.textContent = tag; meta.appendChild(t);
+  });
+
+  const photoSection = document.getElementById('pdPhotoSection');
+  if (p.photo_spots?.length) { photoSection.style.display = 'block'; renderPhotoSpots(p); } else photoSection.style.display = 'none';
+  const foodSection = document.getElementById('pdFoodSection');
+  if (p.foods?.length) { foodSection.style.display = 'block'; renderFoods(p); } else foodSection.style.display = 'none';
+  const michelinSection = document.getElementById('pdMichelinSection');
+  if (p.michelin?.length) { michelinSection.style.display = 'block'; document.getElementById('pdMichelin').innerHTML = p.michelin.map(m => `<li>${m}</li>`).join(''); } else michelinSection.style.display = 'none';
+  const avoidSection = document.getElementById('pdAvoidSection');
+  if (p.avoid?.length) { avoidSection.style.display = 'block'; document.getElementById('pdAvoid').innerHTML = p.avoid.map(a => `<li>${a}</li>`).join(''); } else avoidSection.style.display = 'none';
+
+  document.getElementById('pdGmaps').href = `https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lng}`;
+  // 更新上一个/下一个按钮状态
+  const allPois = POIs.filter(x => currentDay === 'all' || String(x.day) === String(currentDay))
+    .sort((a, b) => a.day === b.day ? a.num - b.num : a.day - b.day);
+  const idx = allPois.findIndex(x => x.id === p.id);
+  document.getElementById('poiCounter').textContent = `${idx + 1} / ${allPois.length}`;
+  document.getElementById('prevPoiBtn').disabled = idx <= 0;
+  document.getElementById('nextPoiBtn').disabled = idx >= allPois.length - 1;
+  window._navPoiList = allPois;
+  window._navPoiIdx = idx;
+
+  document.querySelectorAll('.poi-pin').forEach(el => el.classList.remove('active'));
+  const pinEl = document.querySelector(`.poi-pin[data-id="${p.id}"]`);
+  if (pinEl) pinEl.classList.add('active');
+  map.flyTo([p.lat, p.lng], 13, { duration: 0.8 });
+
+  const imgs = await fetchImagesMultiSource(p, 4);
+  if (currentDetailId !== p.id) return;
+  if (imgs.length > 0) {
+    hero.classList.add('grid-mode');
+    const cells = Array(4).fill(0).map((_, i) => {
+      const item = imgs[i];
+      if (item) {
+        const safeUrl = item.url.replace(/"/g, '&quot;');
+        const badge = item.source === 'wiki' ? 'W' : (item.source === 'curated' ? '★' : 'C');
+        const badgeColor = item.source === 'wiki' ? '#4a8db5' : (item.source === 'curated' ? '#d4854e' : '#7a9a4d');
+        return `<div class="poi-hero-cell"><img src="${safeUrl}" alt="${p.name} ${i+1}" loading="lazy" onclick="openLightbox('${safeUrl}'); event.stopPropagation();" onerror="this.parentElement.classList.add('empty'); this.outerHTML='${p.icon}';"><span class="src-badge" style="background:${badgeColor}">${badge}</span></div>`;
+      } else {
+        return `<div class="poi-hero-cell empty" style="background:linear-gradient(135deg,${p.color}aa,rgba(0,0,0,0.3));">${p.icon}</div>`;
+      }
+    }).join('');
+    const googleSearch = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(p.en + ' ' + (p.search || ''))}`;
+    hero.innerHTML = cells + `<a class="image-source" href="${googleSearch}" target="_blank" onclick="event.stopPropagation();">🔍 Google Images 看更多 →</a>`;
+  } else {
+    hero.classList.remove('grid-mode');
+    hero.innerHTML = `<div class="poi-hero-fallback">${p.icon}</div>`;
+  }
+}
+
+function showDetailById(id) { const p = POIs.find(x => x.id === id); if (p) showDetail(p); }
+function closeDetail() {
+  currentDetailId = null;
+  document.getElementById('dayOverview').style.display = 'block';
+  document.getElementById('poiDetail').classList.remove('show');
+  document.querySelectorAll('.poi-pin').forEach(el => el.classList.remove('active'));
+}
+
+filterPOIs(); renderDayOverview();
+
+/* === HERO BACKGROUND (目的地实景底层背景) === */
+(function initHeroBg(){
+  try {
+    const header = document.querySelector('header');
+    let hero = header && header.querySelector('.hero-bg');
+    if (!header) return;
+    if (!hero) { hero = document.createElement('div'); hero.className = 'hero-bg'; header.insertBefore(hero, header.firstChild); }
+    if (hero.dataset.done) return;
+    hero.dataset.done = '1';
+    const queries = [];
+    const np = POIs.find(p => /national park/i.test(p.en || '') || /国家公园/.test(p.name || ''));
+    if (np) queries.push((np.en || np.search) + ' landscape');
+    (META.subtitle || '').split(/[\u00b7\u2022\u30fb|]/).map(s => s.trim()).filter(s => s && !/livemap|\d{4}/i.test(s)).forEach(s => queries.push(s + ' landscape'));
+    if (POIs[0]) queries.push((POIs[0].search || POIs[0].en || POIs[0].name) + ' landscape');
+    (async () => {
+      for (const q of queries) {
+        if (!q) continue;
+        let imgs = [];
+        try { imgs = await fetchWikipediaImages(q, 3); } catch(e){}
+        const url = (imgs || []).find(isGoodImage);
+        if (url) {
+          const pre = new Image();
+          pre.onload = () => { hero.style.backgroundImage = 'url("' + url + '")'; header.classList.add('has-hero'); };
+          pre.src = url;
+          return;
+        }
+      }
+    })();
+  } catch(e) { console.warn('heroBg err', e); }
+})();
+
+/* === HIGHLIGHTS ENHANCER (O+Q) === */
+function getHighlightDetail(keyword, item) {
+  const stripped = item.replace(/<[^>]+>/g, '').trim();
+  const kw = keyword || stripped.slice(0, 8);
+  return `<div style="font-weight:700; margin-bottom:4px;">${kw}</div>`
+    + `<div style="margin-bottom:8px;">${stripped}</div>`
+    + `<div style="display:flex; gap:8px; flex-wrap:wrap;">`
+    + `<a href="https://www.google.com/search?q=${encodeURIComponent(kw + ' 攻略')}" target="_blank" style="color:#4a7a9a; text-decoration:none; font-size:11px;">🔍 Google 搜攻略</a>`
+    + `<a href="https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(kw)}" target="_blank" style="color:#c73620; text-decoration:none; font-size:11px;">📕 小红书</a>`
+    + `<a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(kw)}" target="_blank" style="color:#2a7a4a; text-decoration:none; font-size:11px;">🖼️ 看图片</a>`
+    + `</div>`;
+}
+function matchHighlightToPOI(keyword) {
+  if (!keyword || typeof POIs === 'undefined') return null;
+  const kw = keyword.trim();
+  // 1. 完全包含
+  let hit = POIs.find(p => p.name && (p.name.includes(kw) || kw.includes(p.name)));
+  if (hit) return hit;
+  // 2. name_short
+  hit = POIs.find(p => p.name_short && (p.name_short.includes(kw) || kw.includes(p.name_short)));
+  if (hit) return hit;
+  // 3. 2-gram overlap (中文按字符)
+  if (kw.length >= 2) {
+    hit = POIs.find(p => {
+      const pn = (p.name || '') + (p.name_short || '');
+      for (let j = 0; j <= kw.length - 2; j++) {
+        if (pn.includes(kw.substr(j, 2))) return true;
+      }
+      return false;
+    });
+  }
+  return hit || null;
+}
+function enhanceHighlights() {
+  const overview = document.getElementById('dayOverview');
+  if (!overview) return;
+  // 寻找包含"独门绝技"或仅 🔥 的标题 div，其后的兄弟节点是 items
+  const allDivs = overview.querySelectorAll('div');
+  let itemsDiv = null;
+  for (const b of allDivs) {
+    const t = (b.textContent || '').trim();
+    if (t.length < 50 && (/独门绝技|绝技|🔥/.test(t)) && b.nextElementSibling) {
+      const cand = b.nextElementSibling;
+      if (cand.innerHTML && /<b>|•/.test(cand.innerHTML)) { itemsDiv = cand; break; }
+    }
+  }
+  if (!itemsDiv || itemsDiv.dataset.hlEnhanced === '1') return;
+  itemsDiv.dataset.hlEnhanced = '1';
+  const raw = itemsDiv.innerHTML;
+  const items = raw.split(/<br\s*\/?>/i).map(s => s.replace(/^\s*•\s*/, '').trim()).filter(Boolean);
+  itemsDiv.innerHTML = items.map((item, i) => {
+    const m = item.match(/<b>([^<]+)<\/b>/);
+    const keyword = m ? m[1].trim() : '';
+    const matched = matchHighlightToPOI(keyword);
+    if (matched) {
+      return `<div class="hl-item" data-hl="${i}" style="cursor:pointer; padding:5px 7px; border-radius:5px; margin:2px 0; transition:background 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.06)'" onmouseout="this.style.background='transparent'" onclick="showDetailById('${matched.id}')">• ${item} <span style="color:#999; font-size:10px; margin-left:4px;">→ 跳详情</span></div>`;
+    } else {
+      return `<div class="hl-item" data-hl="${i}" style="padding:5px 7px; border-radius:5px; margin:2px 0;">`
+        + `<div style="cursor:pointer;" onclick="(function(d){const x=d.querySelector('.hl-detail');x.style.display=x.style.display==='block'?'none':'block';d.querySelector('.hl-arrow').textContent=x.style.display==='block'?'▴':'▾';})(this.parentNode)">• ${item} <span class="hl-arrow" style="color:#999; font-size:10px; margin-left:4px;">▾</span></div>`
+        + `<div class="hl-detail" style="display:none; margin-top:6px; padding:8px 10px; background:rgba(255,255,255,0.55); border-radius:5px; font-size:11px; line-height:1.65; border-left:2px solid rgba(0,0,0,0.15);">${getHighlightDetail(keyword, item)}</div>`
+        + `</div>`;
+    }
+  }).join('');
+}
+if (typeof renderDayOverview === 'function') {
+  const _origRDO_HL = renderDayOverview;
+  window.renderDayOverview = function() {
+    _origRDO_HL.apply(this, arguments);
+    if (typeof currentDay !== 'undefined' && currentDay === 'all') {
+      try { enhanceHighlights(); } catch(e) { console.warn('enhanceHighlights err', e); }
+    }
+  };
+  // 首次也跑一次（因为脚本可能在初次 render 之后才注入）
+  setTimeout(() => { try { if (currentDay === 'all') enhanceHighlights(); } catch(e){} }, 100);
+}
+/* === END HIGHLIGHTS ENHANCER === */
+
+</script>
+</body>
+</html>

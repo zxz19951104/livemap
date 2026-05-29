@@ -71,7 +71,7 @@
     /* Main 单列 */
     .main { gap: 12px; }
     .map-wrap { padding: 8px; border-radius: 12px; }
-    #map { height: 360px; border-radius: 8px; }
+    #map { height: clamp(300px, calc(100vh - 240px), 480px); border-radius: 8px; }
     .style-switcher { top: 14px; right: 14px; }
     .style-btn { padding: 5px 8px; font-size: 10px; }
     .legend { padding: 8px 10px; gap: 6px 10px; font-size: 10px; }
@@ -115,7 +115,7 @@
     padding: 14px; position: relative; overflow: hidden;
     box-shadow: 0 6px 20px rgba(60, 40, 20, 0.1);
   }
-  #map { width: 100%; height: 620px; border-radius: 12px; background: #f4ebe0; box-shadow: inset 0 0 30px rgba(180, 130, 100, 0.15); }
+  #map { width: 100%; height: clamp(380px, calc(100vh - 300px), 760px); border-radius: 12px; background: #f4ebe0; box-shadow: inset 0 0 30px rgba(180, 130, 100, 0.15); }
   .leaflet-tile-pane { transition: filter 0.3s ease; }
   .map-wrap.topo .leaflet-tile-pane { filter: sepia(0.15) saturate(1.1) contrast(0.95); }
 
@@ -146,6 +146,31 @@
   .poi-num { position: absolute; top: -6px; right: -6px; width: 18px; height: 18px; background: #fff; color: #b04060; font-size: 10px; font-weight: 800; border-radius: 50%; border: 1.5px solid #b04060; display: flex; align-items: center; justify-content: center; }
   .poi-label-overlay { position: absolute; top: 36px; left: 50%; transform: translateX(-50%); background: rgba(255, 255, 255, 0.95); color: #3a2828; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 6px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.15s; box-shadow: 0 2px 6px rgba(0,0,0,0.15); border: 1px solid rgba(180, 100, 130, 0.25); }
   .poi-pin:hover + .poi-label-overlay, .poi-pin.active + .poi-label-overlay { opacity: 1; }
+  /* 总览模式：每天一个「Day N · 主题」旗标 */
+  .day-flag-marker { background: transparent !important; border: none !important; }
+  .day-flag { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.96);
+    border: 2px solid var(--c, #888); border-radius: 20px; padding: 3px 11px 3px 3px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.28); white-space: nowrap; cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease; backdrop-filter: blur(4px); }
+  .day-flag:hover { transform: scale(1.06); box-shadow: 0 5px 16px rgba(0,0,0,0.38); }
+  .day-flag-num { width: 24px; height: 24px; border-radius: 50%; background: var(--c, #888);
+    color: #fff; font-weight: 800; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .day-flag-text { font-size: 12px; font-weight: 700; color: #2b2b2b; letter-spacing: 0.2px; }
+  /* 单日视图：景点名 + 特色 标签 */
+  .leaflet-tooltip.poi-tip { background: rgba(255,255,255,0.97); border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 9px; box-shadow: 0 2px 9px rgba(0,0,0,0.22); padding: 4px 9px; font-family: inherit;
+    white-space: nowrap; max-width: 200px; }
+  .leaflet-tooltip.poi-tip::before { display: none; }
+  .poi-tip-name { font-size: 12px; font-weight: 700; color: #222; }
+  .poi-tip-feat { font-size: 10px; color: #6a6a6a; margin-top: 1px; white-space: normal; line-height: 1.3; max-width: 180px; }
+  .seg-label-marker { background: transparent !important; border: none !important; }
+  .seg-label { background: rgba(40,62,48,0.88); color: #fff; font-size: 10px; font-weight: 600;
+    padding: 2px 8px; border-radius: 11px; white-space: nowrap; box-shadow: 0 1px 5px rgba(0,0,0,0.28); }
+  @media (max-width: 768px) {
+    .leaflet-tooltip.poi-tip { padding: 3px 7px; }
+    .poi-tip-name { font-size: 11px; } .poi-tip-feat { display: none; }
+    .seg-label { font-size: 9px; padding: 1px 6px; }
+  }
 
   .leaflet-control-attribution { background: rgba(253, 246, 236, 0.85) !important; color: #7a5a5a !important; font-size: 10px !important; }
   .leaflet-control-attribution a { color: #b04060 !important; }
@@ -350,6 +375,7 @@
   header.has-hero .eyebrow, header.has-hero h1, header.has-hero .sub { position: relative; z-index: 2; }
   header.has-hero .sub { text-shadow: 0 1px 3px rgba(255,255,255,0.7); }
 </style>
+<style id="gesture-hint-style">.map-gesture-hint{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:1200;background:rgba(0,0,0,0.62);color:#fff;font-size:11px;font-weight:600;padding:6px 13px;border-radius:16px;pointer-events:none;white-space:nowrap;transition:opacity 0.6s ease;box-shadow:0 2px 8px rgba(0,0,0,0.3);}</style>
 </head>
 <body>
 <!-- LIVEMAP-BACK-BTN -->
@@ -480,6 +506,34 @@ const TILES = {
   }),
 };
 let currentTile = TILES.voyager.addTo(map);
+
+// ====== 移动端防误触：单指滑动浏览页面，双指拖动/缩放地图 ======
+(function mobileGestureGuard() {
+  const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches || 'ontouchstart' in window;
+  if (!isTouch) return;
+  map.dragging.disable();
+  map.scrollWheelZoom.disable();
+  if (map.tap) map.tap.disable();
+  const wrap = document.getElementById('mapWrap') || document.querySelector('.map-wrap');
+  const hint = document.createElement('div');
+  hint.className = 'map-gesture-hint';
+  hint.textContent = '\uD83D\uDC46 \u5355\u6307\u6ED1\u52A8\u6D4F\u89C8\u9875\u9762 \u00B7 \u53CC\u6307\u62D6\u52A8 / \u7F29\u653E\u5730\u56FE';
+  if (wrap) wrap.appendChild(hint);
+  const container = map.getContainer();
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length >= 2) { map.dragging.enable(); if (hint) hint.style.opacity = '0'; }
+  }, { passive: true });
+  container.addEventListener('touchend', (e) => {
+    if (e.touches.length === 0) map.dragging.disable();
+  }, { passive: true });
+  setTimeout(() => { if (hint) hint.style.opacity = '0'; }, 4500);
+})();
+
+let _resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(_resizeTimer);
+  _resizeTimer = setTimeout(() => map.invalidateSize(), 200);
+});
 window.switchStyle = function(style) {
   document.querySelectorAll('.style-btn').forEach(b => b.classList.toggle('active', b.dataset.style === style));
   map.removeLayer(currentTile);
@@ -494,14 +548,25 @@ const markers = {}, routeLayers = {};
 POIs.forEach(p => {
   const icon = L.divIcon({
     className: 'poi-marker',
-    html: `<div class="poi-pin" data-id="${p.id}" data-day="${p.day}" style="background:${p.color}">${p.icon}<span class="poi-num">${p.num}</span></div>
+    html: `<div class="poi-pin" data-id="${p.id}" data-day="${p.day}" style="background:${p.color};box-shadow:0 0 0 3px ${(DAYS[p.day]||{}).color||'#fff'}, 0 4px 10px rgba(0,0,0,0.45)">${p.icon}<span class="poi-num" style="background:${(DAYS[p.day]||{}).color||'#fff'};color:#fff;border-color:#fff">${p.num}</span></div>
            <div class="poi-label-overlay">${p.name}</div>`,
     iconSize: [32, 32], iconAnchor: [16, 16],
   });
   const marker = L.marker([p.lat, p.lng], { icon }).addTo(map);
   marker.on('click', () => showDetail(p));
+  marker.bindTooltip(poiTipHtml(p), { permanent: true, direction: 'top', offset: [0, -16], className: 'poi-tip', interactive: false });
   markers[p.id] = marker;
 });
+function poiBriefFeature(p) {
+  let t = (p.desc || '').trim();
+  t = t.split(/[。.!！?？;；\n]/)[0].trim();
+  if (t.length > 20) t = t.slice(0, 19) + '…';
+  return t;
+}
+function poiTipHtml(p) {
+  const feat = poiBriefFeature(p);
+  return `<div class="poi-tip-name">${p.num}. ${p.name}</div>` + (feat ? `<div class="poi-tip-feat">${feat}</div>` : '');
+}
 for (let d = 1; d <= TOTAL_DAYS; d++) {
   const points = POIs.filter(p => p.day === d).sort((a, b) => a.num - b.num);
   if (points.length < 2) continue;
@@ -511,6 +576,56 @@ for (let d = 1; d <= TOTAL_DAYS; d++) {
   }).addTo(map);
   routeLayers[d] = line;
 }
+
+// ============ 总览旗标：每天一个「Day N · 主题」标签 ============
+function dayThemeText(d) {
+  const t = (DAYS[d] && DAYS[d].title) || '';
+  let theme = t.includes('·') ? t.split('·').slice(1).join('·').trim() : t.replace(/^Day\s*\d+\s*/i, '').trim();
+  if (!theme) theme = (DAYS[d] && DAYS[d].where) || ('Day ' + d);
+  if (theme.length > 11) theme = theme.slice(0, 10) + '…';
+  return theme;
+}
+const dayFlags = {};
+Object.keys(DAYS).map(Number).sort((a, b) => a - b).forEach(d => {
+  const pts = POIs.filter(p => p.day === d).sort((a, b) => a.num - b.num);
+  if (!pts.length) return;
+  const mid = pts[Math.floor(pts.length / 2)];
+  const color = (DAYS[d] || {}).color || '#888';
+  const icon = L.divIcon({
+    className: 'day-flag-marker',
+    html: `<div class="day-flag" style="--c:${color}"><span class="day-flag-num">${d}</span><span class="day-flag-text">${dayThemeText(d)}</span></div>`,
+    iconSize: null, iconAnchor: [16, 14],
+  });
+  const fm = L.marker([mid.lat, mid.lng], { icon, zIndexOffset: 2000 }).addTo(map);
+  fm.on('click', () => {
+    currentDay = String(d);
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.day === String(d)));
+    filterPOIs(); renderDayOverview(); closeDetail();
+  });
+  dayFlags[d] = fm;
+});
+
+// ============ 路段车程小胶囊（单日视图显示在两点之间）============
+function segLabelText(km) {
+  const realKm = km * 1.3;
+  const driveMin = Math.round(realKm / 30 * 60);
+  const walkMin = Math.round(realKm / 5 * 60);
+  const distStr = realKm < 1 ? `${Math.round(realKm * 1000)} m` : `${realKm.toFixed(1)} km`;
+  const mode = realKm < 1.5 ? `🚶 ${walkMin} min` : `🚗 ${driveMin} min`;
+  return `${distStr} · ${mode}`;
+}
+const segLabels = [];
+Object.keys(DAYS).map(Number).forEach(d => {
+  const pts = POIs.filter(p => p.day === d).sort((a, b) => a.num - b.num);
+  for (let i = 0; i < pts.length - 1; i++) {
+    const a = pts[i], b = pts[i + 1];
+    const km = haversineKm(a.lat, a.lng, b.lat, b.lng);
+    const mid = [(a.lat + b.lat) / 2, (a.lng + b.lng) / 2];
+    const icon = L.divIcon({ className: 'seg-label-marker', html: `<div class="seg-label">${segLabelText(km)}</div>`, iconSize: null, iconAnchor: [22, 9] });
+    const m = L.marker(mid, { icon, interactive: false, zIndexOffset: 1500 }).addTo(map);
+    segLabels.push({ day: d, marker: m });
+  }
+});
 
 // ============ PRICE: RMB 为主 · 原货币为辅 ============
 const FX_RATES = { JPY: 0.05, USD: 7.2, EUR: 7.8, GBP: 9.0, KRW: 0.0055, THB: 0.21, AUD: 4.8, CAD: 5.3 };
@@ -666,14 +781,36 @@ dayTabs.forEach(t => {
 });
 
 function filterPOIs() {
+  const isAll = currentDay === 'all';
   Object.entries(markers).forEach(([id, marker]) => {
     const poi = POIs.find(p => p.id === id);
     const el = marker.getElement(); if (!el) return;
-    if (currentDay === 'all' || String(poi.day) === currentDay) { el.style.opacity = '1'; el.style.zIndex = '500'; }
-    else { el.style.opacity = '0.25'; el.style.zIndex = '100'; }
+    if (isAll) { el.style.opacity = '0'; el.style.pointerEvents = 'none'; el.style.zIndex = '100'; }
+    else if (String(poi.day) === currentDay) { el.style.opacity = '1'; el.style.pointerEvents = ''; el.style.zIndex = '500'; }
+    else { el.style.opacity = '0.2'; el.style.pointerEvents = 'none'; el.style.zIndex = '100'; }
   });
+  if (typeof dayFlags !== 'undefined') {
+    Object.values(dayFlags).forEach(fm => {
+      const el = fm.getElement(); if (!el) return;
+      el.style.opacity = isAll ? '1' : '0';
+      el.style.pointerEvents = isAll ? '' : 'none';
+    });
+  }
+  // 单日视图才显示「景点名+特色」标签；总览隐藏
+  Object.entries(markers).forEach(([id, marker]) => {
+    const poi = POIs.find(p => p.id === id);
+    const tt = marker.getTooltip && marker.getTooltip();
+    const tel = tt && tt.getElement();
+    if (tel) tel.style.display = (!isAll && String(poi.day) === currentDay) ? '' : 'none';
+  });
+  if (typeof segLabels !== 'undefined') {
+    segLabels.forEach(seg => {
+      const el = seg.marker.getElement(); if (!el) return;
+      el.style.display = (!isAll && String(seg.day) === currentDay) ? '' : 'none';
+    });
+  }
   Object.entries(routeLayers).forEach(([d, line]) => {
-    line.setStyle({ opacity: (currentDay === 'all' || d === currentDay) ? 0.85 : 0 });
+    line.setStyle({ opacity: (isAll || d === currentDay) ? 0.85 : 0 });
   });
   if (currentDay !== 'all') {
     const activePOIs = POIs.filter(p => String(p.day) === currentDay);

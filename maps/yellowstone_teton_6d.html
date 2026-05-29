@@ -606,6 +606,41 @@ function declutterLabels() {
       if (outOfMap(r) || placed.some(q => hit(r, q))) el.style.display = 'none'; else placed.push(r);
     });
   }
+  if (isAll && typeof dayFlags !== 'undefined') {
+    // 幂等：用「当前 translateY」反推原始位置，绝不靠清空 transform 再量（清空-重排在多次调用下会失稳）
+    const fl = [];
+    Object.keys(dayFlags).sort((a, b) => (+a) - (+b)).forEach(d => {
+      const wrap = dayFlags[d].getElement(); if (!wrap) return;
+      const el = wrap.querySelector('.day-flag') || wrap;
+      const cur = parseFloat((el.style.transform.match(/-?[\d.]+/) || [0])[0]) || 0;
+      const r = el.getBoundingClientRect();
+      if (r.width) fl.push({ el, left: r.left, right: r.right, top0: r.top - cur, h: r.bottom - r.top });
+    });
+    fl.sort((a, b) => a.top0 - b.top0 || a.left - b.left);
+    const placedF = [];
+    fl.forEach(f => {
+      let top = f.top0, moved = true, guard = 0;
+      while (moved && guard++ < 60) {
+        moved = false;
+        for (const q of placedF) {
+          const hx = Math.min(f.right, q.right) - Math.max(f.left, q.left);
+          const vy = Math.min(top + f.h, q.bottom) - Math.max(top, q.top);
+          if (hx > -4 && vy > -4) { top = q.bottom + 4; moved = true; }
+        }
+      }
+      f.top1 = top;
+      placedF.push({ left: f.left, right: f.right, top, bottom: top + f.h });
+    });
+    // 整列若超出地图下边界，则整体上移，尽量留在图内
+    if (mb && placedF.length) {
+      const over = Math.max(...placedF.map(q => q.bottom)) - (mb.bottom - 4);
+      if (over > 0) fl.forEach(f => { f.top1 -= over; });
+    }
+    fl.forEach(f => {
+      const dy = Math.round(f.top1 - f.top0);
+      f.el.style.transform = dy ? `translateY(${dy}px)` : '';
+    });
+  }
 }
 if (typeof map !== 'undefined' && map.on) map.on('zoomend moveend', declutterLabels);
 for (let d = 1; d <= TOTAL_DAYS; d++) {
@@ -839,6 +874,8 @@ function filterPOIs() {
   }
   // 标签/车程胶囊显示与防重叠统一交给 declutterLabels（fitBounds 动画结束后 moveend 会再跑一次）
   declutterLabels();
+  requestAnimationFrame(declutterLabels);
+  setTimeout(declutterLabels, 380);
   Object.entries(routeLayers).forEach(([d, line]) => {
     line.setStyle({ opacity: (isAll || d === currentDay) ? 0.85 : 0 });
   });
@@ -849,7 +886,11 @@ function filterPOIs() {
     } else if (activePOIs.length === 1) {
       map.setView([activePOIs[0].lat, activePOIs[0].lng], 13);
     }
-  } else { map.setView(META.map_center, META.map_zoom || 10); }
+  } else {
+    const allPts = POIs.map(p => [p.lat, p.lng]);
+    if (allPts.length > 1) map.fitBounds(L.latLngBounds(allPts), { paddingTopLeft: [70, 80], paddingBottomRight: [150, 90], maxZoom: META.map_zoom || 10 });
+    else map.setView(META.map_center, META.map_zoom || 10);
+  }
 }
 
 function renderDayOverview() {

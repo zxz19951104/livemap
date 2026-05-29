@@ -1,0 +1,19 @@
+# Render 一键部署蓝图（完整版 · 支持在线 AI 生成）
+# 用法：把仓库连到 Render → New + → Blueprint → 选本仓库 → 部署。
+# 部署后在 Render 控制台 Environment 里填入真实 VOLC_API_KEY（不要写进仓库）。
+services:
+  - type: web
+    name: livemap
+    runtime: python
+    plan: free
+    buildCommand: pip install -r generator/requirements.txt
+    startCommand: python3 generator/server.py
+    envVars:
+      - key: PUBLIC_DEPLOY        # 公网模式：强制火山便宜模型，关闭贵的 Claude
+        value: "1"
+      - key: LLM_PROVIDER
+        value: volc
+      - key: VOLC_MODEL           # 豆包 · 约 ¥0.05/张
+        value: doubao-1-5-pro-32k-250115
+      - key: VOLC_API_KEY         # ⚠️ 在 Render 控制台手动填，sync:false 表示不进仓库
+        sync: false

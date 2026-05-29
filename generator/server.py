@@ -167,32 +167,41 @@ class LiveMapHandler(http.server.SimpleHTTPRequestHandler):
 
 def main():
     load_env_file()
+
+    # 公网托管模式：强制走便宜模型（火山豆包），避免被刷爆时用到贵的 Claude
+    public = os.getenv("PUBLIC_DEPLOY", "").lower() in ("1", "true", "yes")
+    if public:
+        os.environ["LLM_PROVIDER"] = "volc"
+
     if not (os.getenv("VOLC_API_KEY") or os.getenv("ANTHROPIC_API_KEY")):
-        print("❌ 未设 VOLC_API_KEY 或 ANTHROPIC_API_KEY。请检查 generator/.env 是否正确")
+        print("❌ 未设 VOLC_API_KEY 或 ANTHROPIC_API_KEY。请检查 generator/.env 或托管平台环境变量")
+        sys.exit(1)
+    if public and not os.getenv("VOLC_API_KEY"):
+        print("❌ PUBLIC_DEPLOY=1 需要 VOLC_API_KEY（强制使用火山便宜模型）")
         sys.exit(1)
 
     # 报告当前 LLM 提供商
     provider = os.getenv("LLM_PROVIDER", "").lower()
     if not provider:
         provider = "volc" if os.getenv("VOLC_API_KEY") else "anthropic"
-    model_info = ""
     if provider in ("volc", "volcengine", "ark"):
         model_info = f" · 模型 {os.getenv('VOLC_ENDPOINT_ID') or os.getenv('VOLC_MODEL', 'doubao-1-5-pro-32k-250115')}"
     else:
         model_info = f" · 模型 {os.getenv('CLAUDE_MODEL', 'claude-sonnet-4-5')}"
-    print(f"  🤖 LLM 后端：{provider}{model_info}")
+    print(f"  🤖 LLM 后端：{provider}{model_info}{' · 公网模式（强制便宜模型）' if public else ''}")
 
-    # 允许端口立即重用
-    socketserver.TCPServer.allow_reuse_address = True
+    # 托管平台（Render/Railway/Fly）通过 $PORT 指定端口，并需绑定 0.0.0.0
+    host = "0.0.0.0" if (public or os.getenv("PORT")) else "localhost"
+    port = int(os.getenv("PORT", PORT))
 
-    with socketserver.TCPServer(("localhost", PORT), LiveMapHandler) as httpd:
-        url = f"http://localhost:{PORT}/"
+    # 多线程：LLM 生成耗时 ~10s，避免阻塞画廊浏览
+    http.server.ThreadingHTTPServer.allow_reuse_address = True
+    with http.server.ThreadingHTTPServer((host, port), LiveMapHandler) as httpd:
+        url = f"http://{host}:{port}/"
         print("=" * 60)
         print(f"  🚀 LiveMap 服务已启动")
-        print(f"  📍 浏览器打开：{url}")
-        print(f"  📡 API 端点：")
-        print(f"     POST {url}api/generate  · 生成新地图")
-        print(f"     GET  {url}api/list      · 列出已有地图")
+        print(f"  📍 监听：{url}")
+        print(f"  📡 API： POST /api/generate · GET /api/list")
         print(f"  ⏹  停止：Ctrl+C")
         print("=" * 60)
         try:

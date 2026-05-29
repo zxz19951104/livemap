@@ -44,9 +44,34 @@ python3 -m http.server 8000      # 浏览器开 http://localhost:8000
 
 ---
 
-## 完整版（含实时 AI 生成）
+## 方式 D · 托管完整版（Render，公网可在线生成）⭐
 
-分享版只读浏览。要让别人也能输入任意目的地秒出新图，需要后端 + API key：
+让分享链接「输入目的地 → 点生成 → 自动出图」，需要一个藏着 API key 的常驻后端。
+现成的 `generator/server.py` 已支持托管：读 `$PORT`、绑定 `0.0.0.0`、多线程、公网模式强制走便宜模型。
+
+**一键蓝图（仓库已含 `render.yaml`）：**
+1. 注册 / 登录 [Render](https://render.com)（免费档即可）
+2. **New + → Blueprint → 选本仓库 → Apply**（会自动读 `render.yaml`）
+3. 部署后到该服务的 **Environment** 里，手动填入真实 `VOLC_API_KEY`（火山控制台拿，**不要写进仓库**）
+4. 几分钟后访问 Render 给的 `https://livemap-xxxx.onrender.com/` —— 这就是「能在线生成」的完整版链接
+
+**关键环境变量（render.yaml 已预设，仅 key 需手填）：**
+
+| 变量 | 值 | 作用 |
+|---|---|---|
+| `PUBLIC_DEPLOY` | `1` | 公网模式：**强制火山便宜模型**，关闭贵的 Claude |
+| `LLM_PROVIDER` | `volc` | 指定火山引擎 |
+| `VOLC_MODEL` | `doubao-1-5-pro-32k-250115` | 豆包 · 约 ¥0.05/张 |
+| `VOLC_API_KEY` | （手填） | 你的火山 key，`sync:false` 不进仓库 |
+
+> ⚠️ 说明：
+> - 公网生成接口用的是**你的 key**＝别人也能花你的 token；已强制只走便宜豆包，单张约 ¥0.05。如需进一步防刷，可再加每日额度上限（告诉我即可补）。
+> - Render 免费档**磁盘是临时的**：预置的 29 张图随代码常在，但访客新生成的图在实例重启后会丢（缓存期内可正常访问）。要永久保留需接对象存储。
+> - GitHub Pages 静态版（方式 A）仍可保留作只读镜像；想要在线生成就发 Render 链接。
+
+---
+
+## 本地完整版（开发 / 自用）
 
 ```bash
 cd generator

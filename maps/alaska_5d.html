@@ -1000,6 +1000,10 @@ window.renderFoods = function(poi) {
   const cityHint = (poi.search || poi.en || '').split(/[\s,]/)[0];
   container.innerHTML = poi.foods.map(f => {
     let name = f.replace(/^[🍡🍜🍣🍵🍢🍰🍦🥩🥪🍤🍷🍕🍺☕🍔🍱🥟🥗🥨🍩🥯🍴🍝🥢🐟🦀🦪🍇🥃🍫🍳🍻🌮🥙🍞🧀🧊🌭🥒🍙]+\s*/, '').replace(/[（(].*$/, '').trim();
+    // 去掉价格（$20 / ¥80 / RMB 等），避免污染地图搜索
+    name = name.replace(/[$¥￥]\s?\d[\d,.\-–~]*\+?/g, '').replace(/\b(RMB|USD|JPY|EUR|KRW)\b/gi, '').trim();
+    // 店名以拉丁字母开头时，去掉后面的中文用途/描述，只留店名
+    if (/^[^一-鿿]*[A-Za-z]/.test(name)) name = name.replace(/\s*[一-鿿].*$/, '').trim();
     const m = name.match(/[「『](.+?)[」』]/);
     if (m) name = m[1];
     const query = `${name} ${cityHint}`.trim();

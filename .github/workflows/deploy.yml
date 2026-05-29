@@ -14,6 +14,10 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+# 让 Node 20 的 actions 以 Node 24 运行，消除弃用告警（2026-06-02 后将成为默认）
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest

@@ -570,9 +570,43 @@ function poiTipSide(p) {
   return rank % 2 === 0 ? 'right' : 'left';
 }
 function poiTipHtml(p) {
-  const feat = poiBriefFeature(p);
-  return `<div class="poi-tip-name">${p.num}. ${p.name}</div>` + (feat ? `<div class="poi-tip-feat">${feat}</div>` : '');
+  return `<div class="poi-tip-name">${p.num}. ${p.name}</div>`;
 }
+// ===== 标签碰撞消解：名称优先贪心放置，冲突即隐藏；车程胶囊次优先，避让名称与彼此 =====
+function declutterLabels() {
+  const isAll = currentDay === 'all';
+  const placed = [];
+  const M = 4; // 最小间距：贴得太近也算冲突，避免显挤
+  const mapEl = document.querySelector('.leaflet-container');
+  const mb = mapEl ? mapEl.getBoundingClientRect() : null;
+  const hit = (r, q) => (Math.min(r.right, q.right) - Math.max(r.left, q.left) > -M) && (Math.min(r.bottom, q.bottom) - Math.max(r.top, q.top) > -M);
+  const outOfMap = (r) => mb && (r.left < mb.left - 1 || r.right > mb.right + 1 || r.top < mb.top - 1 || r.bottom > mb.bottom + 1);
+  const tips = [];
+  Object.entries(markers).forEach(([id, marker]) => {
+    const poi = POIs.find(p => p.id === id);
+    const tt = marker.getTooltip && marker.getTooltip();
+    const el = tt && tt.getElement(); if (!el) return;
+    if (isAll || String(poi.day) !== currentDay) { el.style.display = 'none'; return; }
+    tips.push({ num: poi.num, el });
+  });
+  tips.sort((a, b) => a.num - b.num).forEach(t => {
+    t.el.style.display = '';
+    const r = t.el.getBoundingClientRect();
+    if (!r.width) return;
+    if (outOfMap(r) || placed.some(q => hit(r, q))) t.el.style.display = 'none'; else placed.push(r);
+  });
+  if (typeof segLabels !== 'undefined') {
+    segLabels.forEach(seg => {
+      const el = seg.marker.getElement(); if (!el) return;
+      if (isAll || String(seg.day) !== currentDay) { el.style.display = 'none'; return; }
+      el.style.display = '';
+      const r = el.getBoundingClientRect();
+      if (!r.width) return;
+      if (outOfMap(r) || placed.some(q => hit(r, q))) el.style.display = 'none'; else placed.push(r);
+    });
+  }
+}
+if (typeof map !== 'undefined' && map.on) map.on('zoomend moveend', declutterLabels);
 for (let d = 1; d <= TOTAL_DAYS; d++) {
   const points = POIs.filter(p => p.day === d).sort((a, b) => a.num - b.num);
   if (points.length < 2) continue;
@@ -802,26 +836,17 @@ function filterPOIs() {
       el.style.pointerEvents = isAll ? '' : 'none';
     });
   }
-  // 单日视图才显示「景点名+特色」标签；总览隐藏
-  Object.entries(markers).forEach(([id, marker]) => {
-    const poi = POIs.find(p => p.id === id);
-    const tt = marker.getTooltip && marker.getTooltip();
-    const tel = tt && tt.getElement();
-    if (tel) tel.style.display = (!isAll && String(poi.day) === currentDay) ? '' : 'none';
-  });
-  if (typeof segLabels !== 'undefined') {
-    segLabels.forEach(seg => {
-      const el = seg.marker.getElement(); if (!el) return;
-      el.style.display = (!isAll && String(seg.day) === currentDay) ? '' : 'none';
-    });
-  }
+  // 标签/车程胶囊显示与防重叠统一交给 declutterLabels（fitBounds 动画结束后 moveend 会再跑一次）
+  declutterLabels();
   Object.entries(routeLayers).forEach(([d, line]) => {
     line.setStyle({ opacity: (isAll || d === currentDay) ? 0.85 : 0 });
   });
   if (currentDay !== 'all') {
     const activePOIs = POIs.filter(p => String(p.day) === currentDay);
     if (activePOIs.length > 1) {
-      map.fitBounds(L.latLngBounds(activePOIs.map(p => [p.lat, p.lng])), { padding: [50, 50], maxZoom: 14 });
+      map.fitBounds(L.latLngBounds(activePOIs.map(p => [p.lat, p.lng])), { padding: [70, 110], maxZoom: 14 });
+    } else if (activePOIs.length === 1) {
+      map.setView([activePOIs[0].lat, activePOIs[0].lng], 13);
     }
   } else { map.setView(META.map_center, META.map_zoom || 10); }
 }

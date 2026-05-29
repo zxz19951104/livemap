@@ -13,3 +13,7 @@ dist/
 
 # Unrelated
 Nestle MMM Executive Summary.html
+
+node_modules/
+package.json
+package-lock.json

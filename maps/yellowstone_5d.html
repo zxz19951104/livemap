@@ -559,7 +559,7 @@
 
 <script>
 const POIs = [
-  { id: 'west-yel', day: 1, num: 1, name: 'West Yellowstone 入口', en: 'West Entrance',
+  { id: 'west-yel', day: 1, num: 1, name: 'West Yellowstone 入口', name_cn: '西黄石镇入口', en: 'West Entrance',
     lat: 44.6587, lng: -111.0996, icon: '✈️', color: '#4a5d52',
     search: 'West Yellowstone entrance gate',
     price: '门票 $35/车（7 天有效）· Bozeman 租车 $80/天',
@@ -569,7 +569,7 @@ const POIs = [
     foods: ['🍕 Wild West Pizzeria（小镇 No.1，本地人最爱）', '🥩 Buckaroo Bill\'s（牛排饭 $25）', '☕ Mocha Mamma\'s 早餐咖啡'],
     tags: ['小镇'], time: '抵达' },
 
-  { id: 'fountain', day: 1, num: 2, name: 'Fountain Paint Pot', en: 'Lower Geyser Basin',
+  { id: 'fountain', day: 1, num: 2, name: 'Fountain Paint Pot', name_cn: '喷泉彩锅', en: 'Lower Geyser Basin',
     lat: 44.5510, lng: -110.8090, icon: '🌋', color: '#d4854e',
     search: 'Fountain Paint Pot Yellowstone',
     price: '免费（含在公园门票内）', hours: '24h 步道开放',
@@ -578,7 +578,7 @@ const POIs = [
     foods: ['🥪 自带三明治在 picnic area（步道旁有桌椅）'],
     tags: ['亲子', '地热'], time: '中午' },
 
-  { id: 'grand-prismatic', day: 1, num: 3, name: 'Grand Prismatic 大棱镜', en: 'Grand Prismatic Spring',
+  { id: 'grand-prismatic', day: 1, num: 3, name: 'Grand Prismatic 大棱镜', name_cn: '大棱镜', en: 'Grand Prismatic Spring',
     lat: 44.5251, lng: -110.8383, icon: '♨️', color: '#d4854e',
     search: 'Grand Prismatic Spring Yellowstone',
     price: '免费（含在公园门票内）', hours: '24h（最佳光线 11am-2pm）',
@@ -587,7 +587,7 @@ const POIs = [
     foods: ['🥨 Old Faithful General Store（步行 10 分钟，零食 $3-8）'],
     tags: ['必看', '地标', '震撼'], time: '下午 1-3 点' },
 
-  { id: 'old-faithful', day: 1, num: 4, name: 'Old Faithful 老忠实喷泉', en: 'Old Faithful Geyser',
+  { id: 'old-faithful', day: 1, num: 4, name: 'Old Faithful 老忠实喷泉', name_cn: '老忠实喷泉', en: 'Old Faithful Geyser',
     lat: 44.4605, lng: -110.8281, icon: '🌋', color: '#d4854e',
     search: 'Old Faithful Geyser Yellowstone eruption',
     price: '免费 · Old Faithful Inn 房间 $350-500/晚',
@@ -597,7 +597,7 @@ const POIs = [
     foods: ['🍺 Old Faithful Inn 大堂 Bear Pit Lounge（喷发时段啤酒 $10）', '🥗 Bear Paw Deli（轻食 $12-15）', '🍰 Old Faithful Snow Lodge 餐厅 dinner $30+'],
     tags: ['必看', '地标'], time: '傍晚' },
 
-  { id: 'biscuit', day: 2, num: 1, name: 'Biscuit + Black Sand Basin', en: 'Biscuit & Black Sand Basin',
+  { id: 'biscuit', day: 2, num: 1, name: 'Biscuit + Black Sand Basin', name_cn: '饼干黑沙盆地', en: 'Biscuit & Black Sand Basin',
     lat: 44.4881, lng: -110.8534, icon: '♨️', color: '#d4854e',
     search: 'Biscuit Basin Sapphire Pool Yellowstone',
     price: '免费', hours: '24h（推荐早 8-10am 光线柔和）',
@@ -606,7 +606,7 @@ const POIs = [
     foods: ['☕ Old Faithful Snow Lodge 早餐 buffet $20'],
     tags: ['地热', '观景'], time: '早 8-10 点' },
 
-  { id: 'west-thumb', day: 2, num: 2, name: 'West Thumb Geyser Basin', en: 'West Thumb · Lake-side Geysers',
+  { id: 'west-thumb', day: 2, num: 2, name: 'West Thumb Geyser Basin', name_cn: '西拇指间歇泉盆地', en: 'West Thumb · Lake-side Geysers',
     lat: 44.4163, lng: -110.5736, icon: '♨️', color: '#d4854e',
     search: 'West Thumb Geyser Basin Yellowstone Lake',
     price: '免费', hours: '24h（夏季 9am-9pm 最美）',
@@ -615,7 +615,7 @@ const POIs = [
     foods: ['🥪 Grant Village Lake House Restaurant（湖景餐厅，$25-40）'],
     tags: ['必看', '地热', '独家'], time: '中午' },
 
-  { id: 'lake', day: 2, num: 3, name: 'Yellowstone Lake 湖区', en: 'Yellowstone Lake · Fishing Bridge',
+  { id: 'lake', day: 2, num: 3, name: 'Yellowstone Lake 湖区', name_cn: '黄石湖湖区', en: 'Yellowstone Lake · Fishing Bridge',
     lat: 44.5634, lng: -110.3768, icon: '🌊', color: '#4a8db5',
     search: 'Yellowstone Lake Hotel Fishing Bridge',
     price: '免费 · Lake Hotel 下午茶免费坐 · 房间 $300-500/晚',
@@ -625,7 +625,7 @@ const POIs = [
     foods: ['🥂 Lake Hotel Dining Room 高级 dinner $50-80（订位）', '🍪 Lake Hotel Deli 三明治 $12', '🍦 Fishing Bridge General Store 冰激凌 $5'],
     tags: ['湖泊', '观景'], time: '下午' },
 
-  { id: 'hayden', day: 2, num: 4, name: 'Mud Volcano + Hayden Valley', en: 'Mud Volcano · Hayden Valley',
+  { id: 'hayden', day: 2, num: 4, name: 'Mud Volcano + Hayden Valley', name_cn: '泥火山与海登谷', en: 'Mud Volcano · Hayden Valley',
     lat: 44.6266, lng: -110.4365, icon: '🦬', color: '#7a9a4d',
     search: 'Hayden Valley bison Yellowstone',
     price: '免费', hours: '24h（动物 prime time 6-8am 和 6-8pm）',
@@ -634,7 +634,7 @@ const POIs = [
     foods: ['🥪 Canyon Village Eatery（自助 $20）', '🍔 Canyon Lodge Dining Room $35'],
     tags: ['必看', '野生动物'], time: '傍晚' },
 
-  { id: 'artist-pt', day: 3, num: 1, name: 'Artist Point 艺术家观景点', en: 'Artist Point · Lower Falls',
+  { id: 'artist-pt', day: 3, num: 1, name: 'Artist Point 艺术家观景点', name_cn: '艺术家观景点', en: 'Artist Point · Lower Falls',
     lat: 44.7204, lng: -110.4805, icon: '🏞️', color: '#c2542e',
     search: 'Artist Point Grand Canyon Yellowstone Lower Falls',
     price: '免费', hours: '24h（最佳光线 9-11am）',
@@ -643,7 +643,7 @@ const POIs = [
     foods: ['☕ Canyon Lodge Coffee（步行 8 分钟）'],
     tags: ['必看', '地标'], time: '早晨' },
 
-  { id: 'upper-falls', day: 3, num: 2, name: 'Brink of Upper Falls', en: 'Brink of the Upper Falls',
+  { id: 'upper-falls', day: 3, num: 2, name: 'Brink of Upper Falls', name_cn: '上瀑布边缘', en: 'Brink of the Upper Falls',
     lat: 44.7106, lng: -110.4969, icon: '💦', color: '#2d5f8a',
     search: 'Upper Falls Yellowstone brink',
     price: '免费', hours: '24h',
@@ -652,7 +652,7 @@ const POIs = [
     foods: ['🥪 自带或回 Canyon Village'],
     tags: ['瀑布', '震撼'], time: '上午' },
 
-  { id: 'north-rim', day: 3, num: 3, name: 'North Rim Drive 北缘车道', en: 'North Rim Drive · 3 Overlooks',
+  { id: 'north-rim', day: 3, num: 3, name: 'North Rim Drive 北缘车道', name_cn: '北缘车道', en: 'North Rim Drive · 3 Overlooks',
     lat: 44.7236, lng: -110.4977, icon: '🏞️', color: '#c2542e',
     search: 'Grand Canyon Yellowstone Lookout Point',
     price: '免费', hours: '24h（5-10 月道路开放）',
@@ -661,7 +661,7 @@ const POIs = [
     foods: ['🍕 Canyon Village 餐厅 $15-25'],
     tags: ['观景', '峡谷'], time: '中午' },
 
-  { id: 'washburn', day: 3, num: 4, name: 'Mt. Washburn / Dunraven Pass', en: 'Mt. Washburn · Dunraven',
+  { id: 'washburn', day: 3, num: 4, name: 'Mt. Washburn / Dunraven Pass', name_cn: '沃什伯恩山/邓拉文山口', en: 'Mt. Washburn · Dunraven',
     lat: 44.7967, lng: -110.4341, icon: '🏔️', color: '#6b7a6e',
     search: 'Mount Washburn Dunraven Pass Yellowstone',
     price: '免费', hours: '24h · Dunraven Pass 仅 5/27-10/13 开放',
@@ -670,7 +670,7 @@ const POIs = [
     foods: ['🥪 山顶 picnic 自带（无供应）'],
     tags: ['观景', '徒步'], time: '下午' },
 
-  { id: 'lamar', day: 4, num: 1, name: 'Lamar Valley 日出', en: 'Lamar Valley · Serengeti of NA',
+  { id: 'lamar', day: 4, num: 1, name: 'Lamar Valley 日出', name_cn: '拉马尔谷日出', en: 'Lamar Valley · Serengeti of NA',
     lat: 44.8989, lng: -110.2089, icon: '🦬', color: '#7a9a4d',
     search: 'Lamar Valley wolves Yellowstone',
     price: '免费 · 望远镜租赁 $30/天',
@@ -680,7 +680,7 @@ const POIs = [
     foods: ['☕ 自带保温杯热咖啡（最近的咖啡在 Cooke City，开车 20 分钟）', '🥯 Cooke City Beartooth Cafe（早 6 点开门 $10-15）'],
     tags: ['必看', '野生动物', '独家'], time: '日出前后' },
 
-  { id: 'slough', day: 4, num: 2, name: 'Slough Creek', en: 'Slough Creek · Junction Wolves',
+  { id: 'slough', day: 4, num: 2, name: 'Slough Creek', name_cn: '斯劳溪', en: 'Slough Creek · Junction Wolves',
     lat: 44.9325, lng: -110.3068, icon: '🦬', color: '#7a9a4d',
     search: 'Slough Creek Yellowstone wolves',
     price: '免费', hours: '24h · 砾石路 5-10 月开放',
@@ -689,7 +689,7 @@ const POIs = [
     foods: ['🥪 自带 picnic'],
     tags: ['野生动物'], time: '上午' },
 
-  { id: 'tower', day: 4, num: 3, name: 'Tower Fall 塔瀑', en: 'Tower Fall',
+  { id: 'tower', day: 4, num: 3, name: 'Tower Fall 塔瀑', name_cn: '塔瀑', en: 'Tower Fall',
     lat: 44.8930, lng: -110.3866, icon: '💦', color: '#2d5f8a',
     search: 'Tower Fall Yellowstone basalt',
     price: '免费', hours: '24h（观景台仅 3 分钟即可看完）',
@@ -698,7 +698,7 @@ const POIs = [
     foods: ['🥨 Tower General Store 旁 snack $3-8'],
     tags: ['瀑布'], time: '中午' },
 
-  { id: 'calcite', day: 4, num: 4, name: 'Calcite Springs + Roosevelt', en: 'Calcite Springs · Roosevelt Lodge',
+  { id: 'calcite', day: 4, num: 4, name: 'Calcite Springs + Roosevelt', name_cn: '方解石泉与罗斯福', en: 'Calcite Springs · Roosevelt Lodge',
     lat: 44.9114, lng: -110.4036, icon: '🏞️', color: '#c2542e',
     search: 'Roosevelt Lodge Yellowstone Old West cookout',
     price: '免费观景 · Old West Cookout 篝火晚餐 $108/人（提前订）',
@@ -708,7 +708,7 @@ const POIs = [
     foods: ['🥩 Old West Cookout 篝火牛排晚餐（独家体验）', '🍝 Roosevelt Lodge Dining Room casual dinner $25'],
     tags: ['观景', '美食'], time: '下午-傍晚' },
 
-  { id: 'mammoth', day: 5, num: 1, name: 'Mammoth Hot Springs 阶地', en: 'Mammoth · Travertine Terraces',
+  { id: 'mammoth', day: 5, num: 1, name: 'Mammoth Hot Springs 阶地', name_cn: '猛犸热泉阶地', en: 'Mammoth · Travertine Terraces',
     lat: 44.9728, lng: -110.7036, icon: '♨️', color: '#b8a85e',
     search: 'Mammoth Hot Springs Minerva Terrace',
     price: '免费 · Mammoth Hotel 房间 $250-450/晚',
@@ -718,7 +718,7 @@ const POIs = [
     foods: ['🍳 Mammoth Hotel Dining Room 早餐 $20', '🍔 Terrace Grill 汉堡 $15', '☕ Mammoth General Store 咖啡 $4'],
     tags: ['必看', '地标'], time: '上午' },
 
-  { id: '45th', day: 5, num: 2, name: '45° N 北纬线 + Gardiner', en: '45th Parallel · Gardiner',
+  { id: '45th', day: 5, num: 2, name: '45° N 北纬线 + Gardiner', name_cn: '北纬45°加德纳', en: '45th Parallel · Gardiner',
     lat: 44.9999, lng: -110.6991, icon: '📍', color: '#6b7a6e',
     search: 'Gardiner Montana Roosevelt Arch',
     price: '免费 · Gardiner 餐厅人均 $15-30',
@@ -728,7 +728,7 @@ const POIs = [
     foods: ['🍔 Iron Horse Bar & Grille 牛肉汉堡 $18 ⭐', '🥩 Wonderland Cafe 早餐 $14', '🍕 K-Bar Pizza 招牌 $20'],
     tags: ['观景', '小镇'], time: '中午' },
 
-  { id: 'norris', day: 5, num: 3, name: 'Norris Geyser Basin', en: 'Norris · Steamboat Geyser',
+  { id: 'norris', day: 5, num: 3, name: 'Norris Geyser Basin', name_cn: '诺里斯间歇泉盆地', en: 'Norris · Steamboat Geyser',
     lat: 44.7263, lng: -110.7034, icon: '🌋', color: '#d4854e',
     search: 'Norris Geyser Basin Steamboat',
     price: '免费', hours: '24h 步道 · 博物馆 5-10 月 9am-5pm',
@@ -737,7 +737,7 @@ const POIs = [
     foods: ['🥪 Norris Picnic Area（带食物）'],
     tags: ['必看', '地热', '震撼'], time: '下午' },
 
-  { id: 'paint-pots', day: 5, num: 4, name: 'Artist Paint Pots → 离开', en: 'Artist Paint Pots · Departure',
+  { id: 'paint-pots', day: 5, num: 4, name: 'Artist Paint Pots → 离开', name_cn: '艺术家彩锅（离开）', en: 'Artist Paint Pots · Departure',
     lat: 44.6938, lng: -110.7611, icon: '🎨', color: '#d4854e',
     search: 'Artist Paint Pots Yellowstone mud',
     price: '免费', hours: '24h',
@@ -754,9 +754,9 @@ const DAYS = {
        tip: '💡 Hayden Valley 傍晚 6-8 点是动物 prime time，比 Lamar Valley 离 Canyon 近。Lake Hotel 下午茶免费坐，殖民风大堂值得停 30 分钟。湖边气温常低 10°C，带外套。' , "hotel": {"name_cn": "Canyon Lodge 大峡谷酒店", "name_en": "Canyon Lodge & Cabins", "address": "Canyon Village, Yellowstone National Park, WY", "price": "¥2200-2900/晚", "parking": "免费", "highlights": "湖区+Hayden Valley 中点，去 Lake/Mud Volcano 都不远", "url": "https://www.yellowstonenationalparklodges.com/lodging/canyon-lodge-cabins/"}},
   3: { color: '#c2542e', title: 'Day 3 · 大峡谷全日', where: '住 Canyon Lodge',
        tip: '💡 上午光线最适合 Artist Point（瀑布朝东）。Brink of Upper Falls 比 Brink of Lower Falls 容易很多（下者陡且 1.5 hr 体力）。Mt. Washburn 雷雨预警下午常有，早晨爬最稳。' , "hotel": {"name_cn": "Canyon Lodge 大峡谷酒店", "name_en": "Canyon Lodge & Cabins", "address": "同上（不换酒店）", "price": "¥2200-2900/晚", "parking": "免费", "highlights": "步行可达 Artist Point 等大峡谷观景点"}},
-  4: { color: '#7a9a4d', title: 'Day 4 · Lamar 野生动物日', where: '住 Mammoth Hotel（¥1800-3240/晚）或 Gardiner（¥1080）',
+  4: { color: '#7a9a4d', title: 'Day 4 · 拉马尔野生动物日', where: '住 Mammoth Hotel（¥1800-3240/晚）或 Gardiner（¥1080）',
        tip: '💡 Lamar 看动物核心：早起。日出前 30 分钟到，热成像加持。本地 wolf watcher 是免费指路人——他们的 spotting scope 比你强 10 倍，礼貌问可以分享一眼。带望远镜。' , "hotel": {"name_cn": "Mammoth Hot Springs Hotel 猛犸温泉酒店", "name_en": "Mammoth Hot Springs Hotel", "address": "1 Grand Loop Rd, Mammoth, WY 82190", "price": "¥1800-3200/晚", "parking": "免费", "highlights": "北门出口附近，去 Lamar Valley 看狼群最近", "url": "https://www.yellowstonenationalparklodges.com/lodging/mammoth-hot-springs-hotel/"}},
-  5: { color: '#b8a85e', title: 'Day 5 · Mammoth + Norris + 离开', where: '回程',
+  5: { color: '#b8a85e', title: 'Day 5 · 猛犸+诺里斯+离开', where: '回程',
        tip: '💡 Mammoth Terrace 早晨蒸汽最浓最出片。Norris 是黄石最危险地热区，严格走木栈道（地表 93°C 一脚下去致命）。如果飞机晚，可加 Firehole Lake Drive 短环线再走。' , "hotel": {"name_cn": "Mammoth Hot Springs Hotel", "name_en": "Mammoth Hot Springs Hotel", "address": "同上", "price": "¥1800-3200/晚", "parking": "免费", "highlights": "回程方便：Mammoth→Norris→Madison→West 出口 1.5h"}},
 };
 
@@ -1295,7 +1295,7 @@ async function showDetail(p) {
   hero.style.background = `linear-gradient(135deg, ${p.color} 0%, rgba(0,0,0,0.4) 100%)`;
   hero.innerHTML = `<div class="poi-hero-loading"><div class="loader"></div><div>🔍 搜索 4 张图片中...</div></div>`;
 
-  document.getElementById('pdName').textContent = `${p.icon} ${p.name}`;
+  document.getElementById('pdName').textContent = `${p.icon} ${p.name_cn || p.name}`;
   document.getElementById('pdEn').textContent = p.en;
   document.getElementById('pdDesc').textContent = p.desc;
   (function(){ var qb = encodeURIComponent((p.name || p.en || '') + ' 旅游'), qg = encodeURIComponent((p.en || p.name || '') + ' 攻略'), qc = encodeURIComponent((p.name || p.en || '') + ' 攻略'); var g = document.getElementById('pdGuides'); if (g) g.innerHTML = '<a class="g-bili" href="https://search.bilibili.com/all?keyword=' + qb + '" target="_blank" rel="noopener">📺 B站视频</a>' + '<a class="g-ggl" href="https://www.google.com/search?q=' + qg + '" target="_blank" rel="noopener">🔍 Google</a>' + '<a class="g-baidu" href="https://www.baidu.com/s?wd=' + qc + '" target="_blank" rel="noopener">📖 百度攻略</a>'; })();

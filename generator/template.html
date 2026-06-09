@@ -1119,7 +1119,7 @@ async function showDetail(p) {
   hero.style.background = `linear-gradient(135deg, ${p.color} 0%, rgba(0,0,0,0.4) 100%)`;
   hero.innerHTML = `<div class="poi-hero-loading"><div class="loader"></div><div>🔍 搜索 4 张图片中...</div></div>`;
 
-  document.getElementById('pdName').textContent = `${p.icon} ${p.name}`;
+  document.getElementById('pdName').textContent = `${p.icon} ${p.name_cn || p.name}`;
   document.getElementById('pdEn').textContent = p.en;
   document.getElementById('pdDesc').textContent = p.desc;
   (function(){ var qb = encodeURIComponent((p.name || p.en || '') + ' 旅游'), qg = encodeURIComponent((p.en || p.name || '') + ' 攻略'), qc = encodeURIComponent((p.name || p.en || '') + ' 攻略'); var g = document.getElementById('pdGuides'); if (g) g.innerHTML = '<a class="g-bili" href="https://search.bilibili.com/all?keyword=' + qb + '" target="_blank" rel="noopener">📺 B站视频</a>' + '<a class="g-ggl" href="https://www.google.com/search?q=' + qg + '" target="_blank" rel="noopener">🔍 Google</a>' + '<a class="g-baidu" href="https://www.baidu.com/s?wd=' + qc + '" target="_blank" rel="noopener">📖 百度攻略</a>'; })();

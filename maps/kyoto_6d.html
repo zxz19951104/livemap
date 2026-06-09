@@ -768,7 +768,7 @@
 <script>
 // ====== POI DATA with search query + price + hours ======
 const POIs = [
-  { id: 'kix', day: 1, num: 1, name: '关西机场 KIX', en: 'Kansai International Airport',
+  { id: 'kix', day: 1, num: 1, name: '关西机场 KIX', name_cn: '关西机场', en: 'Kansai International Airport',
     lat: 34.4347, lng: 135.2440, icon: '✈️', color: '#4a5d52',
     search: 'Kansai International Airport Terminal',
     price: 'ICOCA & Haruka 套票 ¥3600（含 ¥1500 IC 卡）',
@@ -778,7 +778,7 @@ const POIs = [
     foods: ['🍱 「鶴橋風月」大阪烧（站内分店）', '🍣 「がんこ寿司」站内回转寿司', '☕ 「Star Sky Coffee」落地第一杯'],
     tags: ['交通'], time: '抵达' },
 
-  { id: 'kyoto-stn', day: 1, num: 2, name: '京都站 + 京都塔', en: 'Kyoto Station',
+  { id: 'kyoto-stn', day: 1, num: 2, name: '京都站 + 京都塔', name_cn: '京都站及京都塔', en: 'Kyoto Station',
     lat: 34.9858, lng: 135.7588, icon: '🚄', color: '#4a8db5',
     search: 'Kyoto Station building architecture',
     price: '京都塔展望台 ¥900 · 站内免费',
@@ -788,7 +788,7 @@ const POIs = [
     foods: ['🍜 「拉麺小路」10 家全国名店集结（10F）', '🍰 「Malebranche」抹茶猫舌饼（伊势丹 B1）', '🍱 京都駅弁「鯖姿寿司」御伽草子'],
     tags: ['交通', '观景'], time: '中午抵达' },
 
-  { id: 'gion', day: 1, num: 3, name: '祇園 + 花见小路', en: 'Gion Hanamikoji',
+  { id: 'gion', day: 1, num: 3, name: '祇園 + 花见小路', name_cn: '祇园与花见小路', en: 'Gion Hanamikoji',
     lat: 35.0036, lng: 135.7780, icon: '👘', color: '#b88e5e',
     search: 'Hanamikoji Gion Kyoto street',
     price: '免费（散步）',
@@ -800,7 +800,7 @@ const POIs = [
     avoid: ['🚫 不要在花见小路拦截艺伎拍照（罚款 ¥500 RMB / ¥10000 JPY）', '🚫 不要走进町屋私人区域（黑色围栏外都禁入）', '⏰ 周一多家店休——查好再去'],
     tags: ['必看', '传统', '夜景'], time: '傍晚 5-7 点' },
 
-  { id: 'kiyomizu', day: 1, num: 4, name: '清水寺夜间参拜', en: 'Kiyomizu-dera Temple',
+  { id: 'kiyomizu', day: 1, num: 4, name: '清水寺夜间参拜', name_cn: '清水寺夜参', en: 'Kiyomizu-dera Temple',
     lat: 34.9948, lng: 135.7850, icon: '🛕', color: '#6b4a7e',
     search: 'Kiyomizu-dera Kyoto night',
     price: '日间 ¥400 · 夜间参拜 ¥400（樱花/红叶季限定）',
@@ -812,7 +812,7 @@ const POIs = [
     avoid: ['🚫 寺前商业街多旅游纪念品店质量参差，「七味家」是真老店但非游客必买', '⏰ 日间 9am-4pm 是地狱排队时段，晨 6-7am 或夜间参拜（季节限定）才是正确打开方式', '💸 二年坂三年坂的「人力车」¥150 RMB/15 分钟，价格随便涨——上车前先砍价'],
     tags: ['必看', '寺庙', '夜景'], time: '晚 6-9 点' },
 
-  { id: 'ginkakuji', day: 2, num: 1, name: '银阁寺', en: 'Ginkaku-ji Temple',
+  { id: 'ginkakuji', day: 2, num: 1, name: '银阁寺', name_cn: '银阁寺', en: 'Ginkaku-ji Temple',
     lat: 35.0270, lng: 135.7984, icon: '🛕', color: '#6b4a7e',
     search: 'Ginkaku-ji silver pavilion Kyoto',
     price: '¥500',
@@ -822,7 +822,7 @@ const POIs = [
     foods: ['🍦 「銀閣寺名物 おみやげ亭」抹茶冰激凌', '🍡 「ますたに」清汤拉面（步行 5 分钟）', '🥟 「おめん」乌冬冷面'],
     tags: ['寺庙', '传统'], time: '早 9 点' },
 
-  { id: 'tetsugaku', day: 2, num: 2, name: '哲学之道', en: 'Philosophers Path',
+  { id: 'tetsugaku', day: 2, num: 2, name: '哲学之道', name_cn: '哲学之道', en: 'Philosophers Path',
     lat: 35.0188, lng: 135.7945, icon: '🎋', color: '#5a7a4a',
     search: 'Philosophers Path Kyoto cherry blossoms',
     price: '免费',
@@ -832,7 +832,7 @@ const POIs = [
     foods: ['☕ 「茂庵」山顶咖啡屋（需爬 15 分钟，但值得）', '🍮 「ヨウショク オオモリ」蛋包饭', '🍵 「叶匠寿庵」和果子'],
     tags: ['必看', '自然', '免费'], time: '上午' },
 
-  { id: 'eikando', day: 2, num: 3, name: '永观堂', en: 'Eikan-do Zenrin-ji',
+  { id: 'eikando', day: 2, num: 3, name: '永观堂', name_cn: '永观堂', en: 'Eikan-do Zenrin-ji',
     lat: 35.0148, lng: 135.7950, icon: '🛕', color: '#6b4a7e',
     search: 'Eikando temple Kyoto autumn',
     price: '日间 ¥600 · 红叶夜灯 ¥600（另购）',
@@ -842,7 +842,7 @@ const POIs = [
     foods: ['🍵 「Walden Woods Kyoto」抹茶咖啡馆（白色教堂）', '🍣 「八千代」汤豆腐料理', '🍰 「Cricket」抹茶冻'],
     tags: ['必看', '寺庙', '独家'], time: '下午' },
 
-  { id: 'nanzenji', day: 2, num: 4, name: '南禅寺 + 水路阁', en: 'Nanzen-ji Suirokaku',
+  { id: 'nanzenji', day: 2, num: 4, name: '南禅寺 + 水路阁', name_cn: '南禅寺与水路阁', en: 'Nanzen-ji Suirokaku',
     lat: 35.0114, lng: 135.7937, icon: '🛕', color: '#6b4a7e',
     search: 'Nanzen-ji aqueduct Suirokaku Kyoto',
     price: '境内免费 · 三门 ¥600 · 方丈庭园 ¥600',
@@ -852,7 +852,7 @@ const POIs = [
     foods: ['🍵 「奧丹」南禅寺汤豆腐 350 年老店（套餐 ¥3800）', '🍮 「Walter Wonder Cafe」', '🍣 「松籟庵」怀石便当'],
     tags: ['寺庙', '观景'], time: '傍晚' },
 
-  { id: 'arashiyama-stn', day: 3, num: 1, name: '嵐山小火车 + 渡月桥', en: 'Togetsukyo Bridge Arashiyama',
+  { id: 'arashiyama-stn', day: 3, num: 1, name: '嵐山小火车 + 渡月桥', name_cn: '岚山小火车及渡月桥', en: 'Togetsukyo Bridge Arashiyama',
     lat: 35.0181, lng: 135.6816, icon: '🚄', color: '#4a8db5',
     search: 'Togetsukyo bridge Arashiyama autumn',
     price: '小火车 ¥880 · 保津川泛舟 ¥4500',
@@ -862,7 +862,7 @@ const POIs = [
     foods: ['☕ 「% Arabica」嵐山店（桥头观景）', '🍡 「老松」蕨饼（创业 1908）', '🍱 「松籟庵」怀石便当'],
     tags: ['必看', '观景'], time: '早晨' },
 
-  { id: 'bamboo', day: 3, num: 2, name: '嵯峨野竹林', en: 'Arashiyama Bamboo Grove',
+  { id: 'bamboo', day: 3, num: 2, name: '嵯峨野竹林', name_cn: '嵯峨野竹林', en: 'Arashiyama Bamboo Grove',
     lat: 35.0170, lng: 135.6712, icon: '🎋', color: '#5a7a4a',
     search: 'Arashiyama bamboo grove Kyoto',
     price: '免费',
@@ -873,7 +873,7 @@ const POIs = [
     avoid: ['🚫 9am 后游客密度不可接受——必须早 7am 前到（否则照片全是人头）', '🚫 不要碰/刻竹子（违法 + 罚款 ¥350 RMB / ¥7000 JPY）', '⚠️ 入口街区"人力车 30 分 ¥600 RMB"——价不透明，先口头确认价格再上'],
     tags: ['必看', '竹林', '免费'], time: '早 7-9 点' },
 
-  { id: 'tenryuji', day: 3, num: 3, name: '天龙寺 + 曹源池', en: 'Tenryu-ji',
+  { id: 'tenryuji', day: 3, num: 3, name: '天龙寺 + 曹源池', name_cn: '天龙寺与曹源池', en: 'Tenryu-ji',
     lat: 35.0156, lng: 135.6739, icon: '🛕', color: '#6b4a7e',
     search: 'Tenryu-ji garden Arashiyama',
     price: '庭园 ¥500 · 本堂 +¥300 · 云龙图 +¥500（特别开放）',
@@ -883,7 +883,7 @@ const POIs = [
     foods: ['🍱 「天龙寺 篩月」精进料理 ¥3300', '☕ 「西山艸堂」汤豆腐套餐'],
     tags: ['寺庙', '传统'], time: '上午' },
 
-  { id: 'arashiyama-eat', day: 3, num: 4, name: '% Arabica + 汤豆腐', en: 'Arabica Arashiyama',
+  { id: 'arashiyama-eat', day: 3, num: 4, name: '% Arabica + 汤豆腐', name_cn: '%阿拉比卡与汤豆腐', en: 'Arabica Arashiyama',
     lat: 35.0119, lng: 135.6764, icon: '🍵', color: '#c97b5a',
     search: 'Arashiyama cherry blossom',
     price: '汤豆腐 ¥3500 · 咖啡 ¥600',
@@ -893,7 +893,7 @@ const POIs = [
     foods: ['☕ 「% Arabica」嵐山限定杯', '🍡 「中村屋」可乐饼（嵐山名物）', '🍦 「お亀堂」抹茶蕨饼冰'],
     tags: ['美食'], time: '中午' },
 
-  { id: 'kinkakuji', day: 4, num: 1, name: '金阁寺', en: 'Kinkaku-ji Golden Pavilion',
+  { id: 'kinkakuji', day: 4, num: 1, name: '金阁寺', name_cn: '金阁寺', en: 'Kinkaku-ji Golden Pavilion',
     lat: 35.0394, lng: 135.7292, icon: '🛕', color: '#d4a560',
     search: 'Kinkaku-ji golden pavilion Kyoto',
     price: '¥500（含特制护身符门票）',
@@ -905,7 +905,7 @@ const POIs = [
     avoid: ['🚫 金阁寺无法入内只能远观，停留 30 分钟足够，不要安排 1h+', '🚫 寺前 8 家"金箔冰激凌店"都差不多，¥600 RMB 是纪念意义不是味道', '⏰ 旺季 10am-2pm 镜湖池观景台堵到拍不到水面倒影——早 9 点开门冲进去最好'],
     tags: ['必看', '地标'], time: '早 9 点' },
 
-  { id: 'ryoanji', day: 4, num: 2, name: '龙安寺石庭', en: 'Ryoan-ji rock garden',
+  { id: 'ryoanji', day: 4, num: 2, name: '龙安寺石庭', name_cn: '龙安寺石庭', en: 'Ryoan-ji rock garden',
     lat: 35.0344, lng: 135.7184, icon: '🛕', color: '#6b4a7e',
     search: 'Ryoan-ji rock garden Kyoto',
     price: '¥600',
@@ -915,7 +915,7 @@ const POIs = [
     foods: ['🍲 「西源院」境内汤豆腐料亭 ¥3300（七草汤豆腐限定）', '🍡 「龙安寺 西源院」抹茶蕨饼'],
     tags: ['必看', '寺庙', '独家'], time: '上午' },
 
-  { id: 'ninnaji', day: 4, num: 3, name: '仁和寺', en: 'Ninna-ji Omuro Sakura',
+  { id: 'ninnaji', day: 4, num: 3, name: '仁和寺', name_cn: '仁和寺', en: 'Ninna-ji Omuro Sakura',
     lat: 35.0307, lng: 135.7138, icon: '🛕', color: '#6b4a7e',
     search: 'Ninna-ji temple Kyoto pagoda',
     price: '境内免费 · 御殿庭园 ¥800 · 灵宝馆 ¥500（春秋限定）',
@@ -925,7 +925,7 @@ const POIs = [
     foods: ['🍜 「お福」拉面（步行 5 分钟，老牌町中华）', '🍱 「西源院」精进料理'],
     tags: ['寺庙'], time: '中午' },
 
-  { id: 'nishijin', day: 4, num: 4, name: '西阵和服体验', en: 'Nishijin kimono',
+  { id: 'nishijin', day: 4, num: 4, name: '西阵和服体验', name_cn: '西阵和服体验', en: 'Nishijin kimono',
     lat: 35.0334, lng: 135.7461, icon: '👘', color: '#b88e5e',
     search: 'Nishijin textile Kimono Kyoto',
     price: '和服租赁 ¥3000-5000/天（含妆发） · 织布馆免费',
@@ -935,7 +935,7 @@ const POIs = [
     foods: ['🍡 「鳥岩楼」鸡肉亲子丼（隐藏名店）', '🍵 「とらや」千年羊羹老铺', '🍣 「むぎ酒場」町家居酒屋'],
     tags: ['体验', '传统'], time: '下午' },
 
-  { id: 'fushimi', day: 5, num: 1, name: '伏见稻荷大社', en: 'Fushimi Inari Taisha Torii',
+  { id: 'fushimi', day: 5, num: 1, name: '伏见稻荷大社', name_cn: '伏见稻荷大社', en: 'Fushimi Inari Taisha Torii',
     lat: 34.9671, lng: 135.7727, icon: '⛩️', color: '#b04060',
     search: 'Fushimi Inari Taisha torii gates',
     price: '完全免费',
@@ -946,7 +946,7 @@ const POIs = [
     avoid: ['🚫 严禁中午 10am-3pm 来——千本鸟居全是游客头，零美照', '🚫 山门外那条小街的「狐狸面具」「招财猫」是中国制 ¥50 廉价品——真品在「総本家」店里 ¥300', '⚠️ 山顶四ツ辻附近有"假抹茶店"卖速溶粉冲的抹茶 ¥600，看到不要进'],
     tags: ['必看', '神社', '地标'], time: '早 6-9 点' },
 
-  { id: 'byodoin', day: 5, num: 2, name: '宇治平等院凤凰堂', en: 'Byodo-in Phoenix Hall Uji',
+  { id: 'byodoin', day: 5, num: 2, name: '宇治平等院凤凰堂', name_cn: '宇治平等院凤凰堂', en: 'Byodo-in Phoenix Hall Uji',
     lat: 34.8895, lng: 135.8077, icon: '🛕', color: '#d4a560',
     search: 'Byodo-in Phoenix Hall Uji',
     price: '庭园 ¥700 · 凤凰堂内 +¥300（限 50 人/批）',
@@ -956,7 +956,7 @@ const POIs = [
     foods: ['🍵 「中村藤吉本店」生茶冻（150 年老铺）', '🍡 「伊藤久右卫门」抹茶荞麦面', '🍦 「福寿园 宇治茶工房」抹茶冰激凌'],
     tags: ['必看', '地标'], time: '上午' },
 
-  { id: 'uji-matcha', day: 5, num: 3, name: '宇治抹茶 + 中村藤吉', en: 'Nakamura Tokichi matcha',
+  { id: 'uji-matcha', day: 5, num: 3, name: '宇治抹茶 + 中村藤吉', name_cn: '宇治抹茶与中村藤吉', en: 'Nakamura Tokichi matcha',
     lat: 34.8908, lng: 135.8085, icon: '🍵', color: '#c97b5a',
     search: 'Matcha parfait Uji Kyoto',
     price: '生茶冻 ¥1430 · 抹茶巴菲 ¥1500 左右',
@@ -966,7 +966,7 @@ const POIs = [
     foods: ['🍮 「中村藤吉」生茶冻 ¥1430（招牌）', '🍡 「伊藤久右卫门」抹茶大福', '🍦 「福寿园」抹茶 7 等级冰激凌', '🥟 「Tsujiri 辻利」抹茶巴菲'],
     tags: ['美食', '必看'], time: '中午' },
 
-  { id: 'gion-night2', day: 5, num: 4, name: '先斗町晚餐', en: 'Pontocho Alley Kyoto',
+  { id: 'gion-night2', day: 5, num: 4, name: '先斗町晚餐', name_cn: '先斗町晚餐', en: 'Pontocho Alley Kyoto',
     lat: 35.0078, lng: 135.7711, icon: '🍵', color: '#c97b5a',
     search: 'Pontocho alley Kyoto night',
     price: '怀石 ¥10000+ · 居酒屋 ¥3000/人 · 川床套餐 ¥15000+',
@@ -978,7 +978,7 @@ const POIs = [
     avoid: ['🚫 不要轻信"中文菜单"的店——多是面向团客的旅游店，料贵 30%+', '⏰ 5-9 月川床必须 1 个月+ 预订，临时去 99% 没位', '💸 街口有人拉客「酒肉随便吃 ¥3000」的店是陷阱——劣质日酒 + 普通刺身'],
     tags: ['美食', '夜景'], time: '晚上' },
 
-  { id: 'nishiki', day: 6, num: 1, name: '锦市场', en: 'Nishiki Market Kyoto',
+  { id: 'nishiki', day: 6, num: 1, name: '锦市场', name_cn: '锦市场', en: 'Nishiki Market Kyoto',
     lat: 35.0050, lng: 135.7647, icon: '🍵', color: '#c97b5a',
     search: 'Nishiki Market Kyoto food',
     price: '免费入场 · 小吃 ¥100-500/份',
@@ -989,7 +989,7 @@ const POIs = [
     avoid: ['🚫 不要边走边吃（违反日本街头礼仪，多数店有内食区）', '⚠️ 「试吃 1 片渍物」被店员强卖一大盒陷阱——不想买就明确说「見てるだけ」', '⏰ 周三 + 周日 60% 店休，避开这两天去', '💸 海鲜串「2 个 ¥1000 RMB / 20000 JPY 帝王蟹」——价比内陆翻 3 倍，不值'],
     tags: ['必看', '美食'], time: '上午' },
 
-  { id: 'gosho', day: 6, num: 2, name: '京都御所', en: 'Kyoto Imperial Palace',
+  { id: 'gosho', day: 6, num: 2, name: '京都御所', name_cn: '京都御所', en: 'Kyoto Imperial Palace',
     lat: 35.0254, lng: 135.7625, icon: '🛕', color: '#6b4a7e',
     search: 'Kyoto Imperial Palace garden',
     price: '完全免费（需出示护照）',
@@ -999,7 +999,7 @@ const POIs = [
     foods: ['🍱 「近为」京都漬物千枚漬便当', '🍦 「都松庵」豆乳布丁（步行 5 分钟）'],
     tags: ['免费', '观景'], time: '中午' },
 
-  { id: 'tokyo-or-kix', day: 6, num: 3, name: '出发：东京 or 关西', en: 'Shinkansen Nozomi Kyoto',
+  { id: 'tokyo-or-kix', day: 6, num: 3, name: '出发：东京 or 关西', name_cn: '出发：东京或关西', en: 'Shinkansen Nozomi Kyoto',
     lat: 34.9858, lng: 135.7588, icon: '🚄', color: '#4a8db5',
     search: 'Shinkansen Nozomi Kyoto station',
     price: 'Haruka 到 KIX ¥3400 · Nozomi 到东京 ¥14170',
@@ -1610,7 +1610,7 @@ async function showDetail(p) {
     </div>
   `;
 
-  document.getElementById('pdName').textContent = `${p.icon} ${p.name}`;
+  document.getElementById('pdName').textContent = `${p.icon} ${p.name_cn || p.name}`;
   document.getElementById('pdEn').textContent = p.en;
   document.getElementById('pdDesc').textContent = p.desc;
   (function(){ var qb = encodeURIComponent((p.name || p.en || '') + ' 旅游'), qg = encodeURIComponent((p.en || p.name || '') + ' 攻略'), qc = encodeURIComponent((p.name || p.en || '') + ' 攻略'); var g = document.getElementById('pdGuides'); if (g) g.innerHTML = '<a class="g-bili" href="https://search.bilibili.com/all?keyword=' + qb + '" target="_blank" rel="noopener">📺 B站视频</a>' + '<a class="g-ggl" href="https://www.google.com/search?q=' + qg + '" target="_blank" rel="noopener">🔍 Google</a>' + '<a class="g-baidu" href="https://www.baidu.com/s?wd=' + qc + '" target="_blank" rel="noopener">📖 百度攻略</a>'; })();

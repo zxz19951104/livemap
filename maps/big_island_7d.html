@@ -555,7 +555,7 @@
 <script>
 const POIs = [
   // Day 1 — 抵达 Kona
-  { id: 'koa1', day: 1, num: 1, name: 'Kona 国际机场', en: 'KOA Airport',
+  { id: 'koa1', day: 1, num: 1, name: 'Kona 国际机场', name_cn: '科纳国际机场', en: 'KOA Airport',
     lat: 19.7388, lng: -156.0456, icon: '✈️', color: '#4a5d52',
     search: 'Kona International Airport Hawaii',
     price: '租车 $60-90/天（普通车足够，除非上 Mauna Kea 山顶要 4WD）',
@@ -564,7 +564,7 @@ const POIs = [
     photo_spots: ['✈️ 露天航站楼茅草屋顶（夏威夷特色）', '🌺 落机第一个 leis 花环迎接'],
     foods: ['☕ Kona Coffee Bar 落地第一杯（机场内 $7）', '🥥 椰子水现开 $5'],
     tags: [], time: '抵达' },
-  { id: 'magic-sands', day: 1, num: 2, name: 'Magic Sands Beach', en: 'Laʻaloa Bay',
+  { id: 'magic-sands', day: 1, num: 2, name: 'Magic Sands Beach', name_cn: '魔法沙滩', en: 'Laʻaloa Bay',
     lat: 19.5878, lng: -155.9667, icon: '🏖️', color: '#1f7a5a',
     search: 'Magic Sands Beach Kona Hawaii',
     price: '免费 · 停车免费',
@@ -573,7 +573,7 @@ const POIs = [
     photo_spots: ['🌅 沙滩西端日落剪影', '🌊 boogie board 玩家追浪', '🏖️ 沙滩两端黑岩 + 白沙对比'],
     foods: ['🍣 Da Poke Shack（步行 10 分钟，Yelp 4.9 ⭐ Poke 碗 $16）', '🍔 Splasher\'s Grill 海景汉堡 $18'],
     tags: ['必去', '海滩'], time: '傍晚日落' },
-  { id: 'alii-drive1', day: 1, num: 3, name: 'Aliʻi Drive 散步晚餐', en: 'Kailua-Kona',
+  { id: 'alii-drive1', day: 1, num: 3, name: 'Aliʻi Drive 散步晚餐', name_cn: '阿利伊大道散步晚餐', en: 'Kailua-Kona',
     lat: 19.6400, lng: -155.9961, icon: '🏘️', color: '#6b7a6e',
     search: 'Alii Drive Kailua Kona Hawaii',
     price: '免费散步 · 餐厅人均 $25-50',
@@ -584,7 +584,7 @@ const POIs = [
     tags: ['美食'], time: '晚餐' },
 
   // Day 2 — Kona 海上
-  { id: 'kealakekua', day: 2, num: 1, name: 'Kealakekua Bay', en: 'Captain Cook Monument',
+  { id: 'kealakekua', day: 2, num: 1, name: 'Kealakekua Bay', name_cn: '凯阿拉凯夸湾', en: 'Captain Cook Monument',
     lat: 19.4779, lng: -155.9276, icon: '🤿', color: '#2d5f8a',
     search: 'Kealakekua Bay Captain Cook Monument Hawaii',
     price: 'Kayak 出租 $50-70/天 · 船 tour $130/人',
@@ -593,7 +593,7 @@ const POIs = [
     photo_spots: ['🐬 海豚群跃出水面（船 tour 早晨 7am）', '🏛️ Captain Cook 白色方尖碑', '🐢 海龟特写（浮潜镜中）'],
     foods: ['🥪 Choice Mart Captain Cook 三明治（带船上吃 $10）', '☕ Coffee Shack Bay 景咖啡 $8'],
     tags: ['浮潜'], time: '上午' },
-  { id: 'two-step', day: 2, num: 2, name: 'Two Step + Puʻuhonua', en: 'Honaunau National Hist. Park',
+  { id: 'two-step', day: 2, num: 2, name: 'Two Step + Puʻuhonua', name_cn: '两步岩与避难所', en: 'Honaunau National Hist. Park',
     lat: 19.4225, lng: -155.9097, icon: '🤿', color: '#2d5f8a',
     search: 'Two Step Puuhonua Honaunau Hawaii',
     price: '公园 $20/车（7 天）· 浮潜免费',
@@ -602,7 +602,7 @@ const POIs = [
     photo_spots: ['🗿 Tiki 木雕（公园内）', '🐢 浮潜遇绿海龟（不要触碰，10ft 距离）', '⛵️ 双体 outrigger 独木舟'],
     foods: ['🍣 South Kona Fruit Stand 热带水果便当 $12', '🌮 Annie\'s Burgers 古巴汉堡 $14'],
     tags: ['浮潜', '免费'], time: '下午' },
-  { id: 'manta', day: 2, num: 3, name: '曼塔魟夜潜', en: 'Manta Ray Night Dive',
+  { id: 'manta', day: 2, num: 3, name: '曼塔魟夜潜', name_cn: '曼塔魟夜潜', en: 'Manta Ray Night Dive',
     lat: 19.5611, lng: -155.9619, icon: '🌊', color: '#1a3a82',
     search: 'Manta Ray Night Dive Kona Hawaii',
     price: '$110-130/人（2 小时含浮潜装备）',
@@ -613,7 +613,7 @@ const POIs = [
     tags: ['必去', '夜潜', '独家'], time: '晚 6:30 / 8:30' },
 
   // Day 3 — Kohala + Mauna Kea
-  { id: 'hapuna', day: 3, num: 1, name: 'Hapuna Beach', en: 'Hapuna Beach State Park',
+  { id: 'hapuna', day: 3, num: 1, name: 'Hapuna Beach', name_cn: '哈普纳海滩', en: 'Hapuna Beach State Park',
     lat: 19.9931, lng: -155.8244, icon: '🏖️', color: '#1f7a5a',
     search: 'Hapuna Beach State Park Hawaii',
     price: '州立公园 $10/车 + $5/人',
@@ -622,7 +622,7 @@ const POIs = [
     photo_spots: ['🏖️ 沙滩南端俯瞰整片海湾', '🌊 浮潜区珊瑚礁特写', '🌅 日落 + 棕榈剪影'],
     foods: ['🍴 Westin Hapuna Beach Hotel 海景 lunch $40', '🍣 Bay Terrace 海鲜 buffet $60'],
     tags: ['必去', '海滩'], time: '上午' },
-  { id: 'pololu', day: 3, num: 2, name: 'Pololū Valley 观景', en: 'Pololū Lookout',
+  { id: 'pololu', day: 3, num: 2, name: 'Pololū Valley 观景', name_cn: '波洛鲁谷观景', en: 'Pololū Lookout',
     lat: 20.2007, lng: -155.7340, icon: '🥾', color: '#5a7a4a',
     search: 'Pololu Valley Lookout Hawaii',
     price: '免费',
@@ -631,7 +631,7 @@ const POIs = [
     photo_spots: ['📸 观景台标志性拍照点（山谷 + 黑沙滩 + 海）', '🥾 山谷下黑沙滩近景', '🌿 步道树林框景'],
     foods: ['🍔 Bamboo Restaurant Hawi（小镇 $25 fusion）', '☕ Kohala Coffee Mill 招牌咖啡 $6'],
     tags: ['观景', '徒步'], time: '中午' },
-  { id: 'waimea', day: 3, num: 3, name: 'Waimea 牛仔小镇', en: 'Kamuela',
+  { id: 'waimea', day: 3, num: 3, name: 'Waimea 牛仔小镇', name_cn: '怀梅阿牛仔小镇', en: 'Kamuela',
     lat: 20.0205, lng: -155.6678, icon: '🍽️', color: '#c97b3a',
     search: 'Waimea Kamuela Hawaii Parker Ranch',
     price: '免费 · 餐厅人均 $40-80',
@@ -640,7 +640,7 @@ const POIs = [
     photo_spots: ['🐎 Parker Ranch 牧场牛群 + Mauna Kea 远景', '🏠 Waimea 木屋小镇主街'],
     foods: ['🥩 Merriman\'s 农场到餐桌餐厅 $50 ⭐（招牌 mahi mahi）', '🍔 Big Island Brewhaus 精酿 + 汉堡 $22', '🍰 Lilikoi Cafe 百香果蛋糕 $9'],
     tags: ['美食'], time: '午餐' },
-  { id: 'maunakea', day: 3, num: 4, name: 'Mauna Kea 观星', en: 'White Mountain · 4205m',
+  { id: 'maunakea', day: 3, num: 4, name: 'Mauna Kea 观星', name_cn: '莫纳克亚山观星', en: 'White Mountain · 4205m',
     lat: 19.8207, lng: -155.4681, icon: '⭐', color: '#5c4a8b',
     search: 'Mauna Kea summit observatory Hawaii',
     price: 'Tour $220-280/人（含日落+星空+晚餐）· 自驾免费但需 4WD',
@@ -651,7 +651,7 @@ const POIs = [
     tags: ['必去', '观星', '独家'], time: '傍晚-夜晚' },
 
   // Day 4 — 跨岛到 Hilo
-  { id: 'waipio', day: 4, num: 1, name: 'Waipiʻo Valley 观景', en: 'Valley of the Kings',
+  { id: 'waipio', day: 4, num: 1, name: 'Waipiʻo Valley 观景', name_cn: '威皮奥谷观景', en: 'Valley of the Kings',
     lat: 20.1142, lng: -155.5928, icon: '🥾', color: '#5a7a4a',
     search: 'Waipio Valley Lookout Hawaii',
     price: '免费',
@@ -660,7 +660,7 @@ const POIs = [
     photo_spots: ['📸 观景台拍 1000m 悬崖 + 黑沙滩弯', '🌧️ 远处瀑布从崖壁倾泻', '🌅 清晨云海覆山谷'],
     foods: ['🥪 Cafe il Mondo Honokaa 意式套餐 $25'],
     tags: ['观景'], time: '上午' },
-  { id: 'tex', day: 4, num: 2, name: 'Tex Drive-In', en: 'Honokaʻa',
+  { id: 'tex', day: 4, num: 2, name: 'Tex Drive-In', name_cn: '泰克斯汽车餐馆', en: 'Honokaʻa',
     lat: 20.0790, lng: -155.4691, icon: '🍩', color: '#c97b3a',
     search: 'Tex Drive In Malasada Honokaa Hawaii',
     price: 'Malasada $1.50/个',
@@ -669,7 +669,7 @@ const POIs = [
     photo_spots: ['🍩 现炸 Malasada 出锅瞬间', '🛻 Tex Drive-In 复古路边店招牌'],
     foods: ['🍩 Tex Malasada 原味（必吃）+ 草莓馅 + 巧克力馅', '🍔 Tex 招牌汉堡 $10'],
     tags: ['必吃', '小吃'], time: '路过' },
-  { id: 'akaka', day: 4, num: 3, name: 'ʻAkaka Falls', en: '442ft 单级瀑布',
+  { id: 'akaka', day: 4, num: 3, name: 'ʻAkaka Falls', name_cn: '阿卡卡瀑布', en: '442ft 单级瀑布',
     lat: 19.8526, lng: -155.1531, icon: '💦', color: '#0d4d3a',
     search: 'Akaka Falls Hawaii waterfall',
     price: '州立公园 $5/人 + $10/车',
@@ -678,7 +678,7 @@ const POIs = [
     photo_spots: ['💦 主观景台正面拍瀑布全景', '🎋 竹林步道仰拍', '🌺 红姜花特写'],
     foods: ['🍦 Akaka Falls Inn 椰子冰激凌 $6'],
     tags: ['瀑布'], time: '中午' },
-  { id: 'hilo-mkt', day: 4, num: 4, name: 'Hilo 农夫市场', en: '+ Big Island Candies',
+  { id: 'hilo-mkt', day: 4, num: 4, name: 'Hilo 农夫市场', name_cn: '希洛农夫市场', en: '+ Big Island Candies',
     lat: 19.7227, lng: -155.0848, icon: '🍽️', color: '#c97b3a',
     search: 'Hilo Farmers Market Hawaii',
     price: '免费 · 摊位 $3-15',
@@ -689,7 +689,7 @@ const POIs = [
     tags: ['购物', '美食'], time: '下午' },
 
   // Day 5 — 火山公园
-  { id: 'kilauea-vc', day: 5, num: 1, name: 'Kīlauea Visitor Center', en: 'HVNP 入口',
+  { id: 'kilauea-vc', day: 5, num: 1, name: 'Kīlauea Visitor Center', name_cn: '基拉韦厄游客中心', en: 'HVNP 入口',
     lat: 19.4292, lng: -155.2581, icon: '🏛️', color: '#6b7a6e',
     search: 'Kilauea Visitor Center Hawaii Volcanoes',
     price: '公园门票 $30/车（7 天有效）',
@@ -698,7 +698,7 @@ const POIs = [
     photo_spots: ['🏛️ VC 木质大堂展览', '🗺️ Ranger 实时喷发地图墙'],
     foods: ['🥪 Volcano House Crater Rim Cafe $18（火山口边餐厅）'],
     tags: ['必去'], time: '上午' },
-  { id: 'thurston', day: 5, num: 2, name: 'Thurston Lava Tube', en: 'Nāhuku',
+  { id: 'thurston', day: 5, num: 2, name: 'Thurston Lava Tube', name_cn: '瑟斯顿熔岩洞', en: 'Nāhuku',
     lat: 19.4143, lng: -155.2406, icon: '🕳️', color: '#3d2820',
     search: 'Thurston Lava Tube Nahuku Hawaii',
     price: '免费（含在公园门票内）',
@@ -707,7 +707,7 @@ const POIs = [
     photo_spots: ['🕳️ 熔岩管隧道入口光影', '🌿 雨林步道蕨类植物'],
     foods: ['🥨 自带水 + zero food（保护环境）'],
     tags: ['必去', '亲子'], time: '上午 10 前' },
-  { id: 'halemaumau', day: 5, num: 3, name: 'Halemaʻumaʻu 火山口', en: 'Crater Rim Drive',
+  { id: 'halemaumau', day: 5, num: 3, name: 'Halemaʻumaʻu 火山口', name_cn: '哈雷茂茂火山口', en: 'Crater Rim Drive',
     lat: 19.4099, lng: -155.2829, icon: '🌋', color: '#c2542e',
     search: 'Halemaumau Crater Kilauea Hawaii',
     price: '免费（含在公园门票内）',
@@ -716,7 +716,7 @@ const POIs = [
     photo_spots: ['🌋 Uēkahuna 观景台俯瞰主火山口', '🔥 夜晚熔岩湖橙红发光（必看）', '☁️ 白天蒸汽羽柱'],
     foods: ['🍷 Volcano House Hotel 火山口边晚餐 $40-60（订位）'],
     tags: ['必去', '火山'], time: '白天 + 夜晚' },
-  { id: 'sea-arch', day: 5, num: 4, name: 'Holei Sea Arch', en: 'Chain of Craters Rd 终点',
+  { id: 'sea-arch', day: 5, num: 4, name: 'Holei Sea Arch', name_cn: '霍莱海拱', en: 'Chain of Craters Rd 终点',
     lat: 19.2954, lng: -155.0995, icon: '🌊', color: '#3d5847',
     search: 'Holei Sea Arch Hawaii Volcanoes',
     price: '免费（含在公园门票内）',
@@ -725,7 +725,7 @@ const POIs = [
     photo_spots: ['🌊 海拱门 + 蓝海广角', '⚫ 公路两侧黑色熔岩流地表（车窗外）', '🐦 海鸟在拱门栖息'],
     foods: ['🥪 自带 picnic（车程远，途中无餐厅）'],
     tags: ['观景'], time: '下午' },
-  { id: 'keanakakoi', day: 5, num: 5, name: 'Keanakākoʻi 夜观', en: '地狱之眼',
+  { id: 'keanakakoi', day: 5, num: 5, name: 'Keanakākoʻi 夜观', name_cn: '基阿纳卡科伊夜观', en: '地狱之眼',
     lat: 19.4030, lng: -155.2710, icon: '🔥', color: '#c2542e',
     search: 'Keanakakoi Crater Kilauea night',
     price: '免费（含在公园门票内）',
@@ -736,7 +736,7 @@ const POIs = [
     tags: ['必去', '震撼', '夜景'], time: '夜晚' },
 
   // Day 6 — 黑沙 + 南端
-  { id: 'rainbow', day: 6, num: 1, name: 'Rainbow Falls', en: '彩虹瀑布',
+  { id: 'rainbow', day: 6, num: 1, name: 'Rainbow Falls', name_cn: '彩虹瀑布', en: '彩虹瀑布',
     lat: 19.7193, lng: -155.1100, icon: '💦', color: '#0d4d3a',
     search: 'Rainbow Falls Hilo Hawaii',
     price: '免费',
@@ -745,7 +745,7 @@ const POIs = [
     photo_spots: ['🌈 上午 8-10am 瀑布水雾彩虹', '🌿 观景台前榕树老根'],
     foods: ['🍳 Ken\'s House of Pancakes 早餐 $14（Hilo 老牌）'],
     tags: ['瀑布', '免费'], time: '上午' },
-  { id: 'punaluu', day: 6, num: 3, name: 'Punaluʻu 黑沙滩', en: 'Black Sand Beach',
+  { id: 'punaluu', day: 6, num: 3, name: 'Punaluʻu 黑沙滩', name_cn: '普纳鲁乌黑沙滩', en: 'Black Sand Beach',
     lat: 19.1361, lng: -155.5048, icon: '🐢', color: '#1a1612',
     search: 'Punaluu Black Sand Beach Hawaii turtles',
     price: '免费',
@@ -754,7 +754,7 @@ const POIs = [
     photo_spots: ['🐢 海龟晒太阳（保持 10ft 距离）', '🌴 黑沙 + 椰子树标志构图', '🌊 黑色玄武岩礁石浪花'],
     foods: ['🍞 Punaluʻu Bake Shop 招牌甜面包 $5（路上）'],
     tags: ['必去', '海龟'], time: '下午' },
-  { id: 'south-point', day: 6, num: 4, name: 'South Point (Ka Lae)', en: '美国最南端',
+  { id: 'south-point', day: 6, num: 4, name: 'South Point (Ka Lae)', name_cn: '南点（卡莱角）', en: '美国最南端',
     lat: 18.9111, lng: -155.6810, icon: '📍', color: '#c2542e',
     search: 'South Point Ka Lae Hawaii',
     price: '免费 · 部分私人地段 $5 维护费',
@@ -763,7 +763,7 @@ const POIs = [
     photo_spots: ['📍 美国最南点标志（自带打印有标识更佳）', '🌊 40ft 悬崖跳水点（自负风险）', '💨 草地"风梳"独特地貌'],
     foods: ['🥪 自带 picnic（最近餐厅 30 分钟）'],
     tags: ['极点', '冒险'], time: '下午' },
-  { id: 'papakolea', day: 6, num: 5, name: 'Papakōlea 绿沙滩', en: '全球仅 4 个',
+  { id: 'papakolea', day: 6, num: 5, name: 'Papakōlea 绿沙滩', name_cn: '帕帕科莱阿绿沙滩', en: '全球仅 4 个',
     lat: 18.9357, lng: -155.6469, icon: '🏖️', color: '#1f7a5a',
     search: 'Papakolea Green Sand Beach Hawaii',
     price: '免费（不要付当地"非法"卡车摆渡 $20-40）',
@@ -774,7 +774,7 @@ const POIs = [
     tags: ['独家', '徒步'], time: '下午' },
 
   // Day 7 — 离港
-  { id: 'greenwell', day: 7, num: 1, name: 'Greenwell Farms', en: 'Kona 咖啡农场',
+  { id: 'greenwell', day: 7, num: 1, name: 'Greenwell Farms', name_cn: '格林威尔农场', en: 'Kona 咖啡农场',
     lat: 19.5042, lng: -155.9213, icon: '☕', color: '#6b2e1a',
     search: 'Greenwell Farms Kona coffee Hawaii',
     price: '免费参观 + 品尝',
@@ -783,7 +783,7 @@ const POIs = [
     photo_spots: ['☕ 红色咖啡樱桃 + 绿叶（采摘季 10-2 月）', '🏭 烘焙机展示 + 工人现场操作'],
     foods: ['☕ Greenwell Kona 咖啡试饮 5 种（免费）', '🍫 100% Kona Peaberry Chocolate 手信 $25'],
     tags: ['免费', '美食'], time: '上午' },
-  { id: 'koa7', day: 7, num: 3, name: 'Kona 机场离港', en: 'KOA',
+  { id: 'koa7', day: 7, num: 3, name: 'Kona 机场离港', name_cn: '科纳机场离港', en: 'KOA',
     lat: 19.7388, lng: -156.0456, icon: '✈️', color: '#4a5d52',
     search: 'Kona International Airport departure',
     price: '机场 lounge $50/小时 · Lyft 到镇 $15',
@@ -795,17 +795,17 @@ const POIs = [
 ];
 
 const DAYS = {
-  1: { color: '#e8743a', title: 'Day 1 · 抵达 Kona', where: '住 Kona / Kohala 西海岸',
+  1: { color: '#e8743a', title: 'Day 1 · 抵达科纳', where: '住 Kona / Kohala 西海岸',
        tip: '💡 取车后直奔 Magic Sands 看日落是最经典的"抵达仪式"。落地当天别安排太多，调时差为主。' , "hotel": {"name_cn": "Sheraton Kona 喜来登 Kona 度假村", "name_en": "Sheraton Kona Resort & Spa", "address": "78-128 Ehukai St, Kailua-Kona, HI", "price": "¥1800-3200/晚", "parking": "¥250/晚（必要）", "highlights": "曼塔魟夜潜出海点 Keauhou Bay 步行 5 分钟，海景房直接看夜潜灯光", "url": "https://www.marriott.com/en-us/hotels/koasi-sheraton-kona-resort-and-spa-at-keauhou-bay/"}},
-  2: { color: '#2d5f8a', title: 'Day 2 · Kona 海上日', where: '住 Kona',
+  2: { color: '#2d5f8a', title: 'Day 2 · 科纳海上日出', where: '住 Kona',
        tip: '💡 曼塔魟夜潜是大岛标志体验，旺季必须提前 1-2 个月订（¥800-950/人）。下午别太累，留体力给晚上的夜潜。' , "hotel": {"name_cn": "Sheraton Kona", "name_en": "Sheraton Kona Resort & Spa", "address": "同上", "price": "¥1800-3200/晚", "parking": "¥250/晚", "highlights": "海上 Kona 行程不换酒店最方便"}},
-  3: { color: '#5c4a8b', title: 'Day 3 · Kohala + Mauna Kea 观星', where: '住 Kona',
+  3: { color: '#5c4a8b', title: 'Day 3 · 科哈拉与莫纳克亚观星', where: '住 Kona',
        tip: '💡 Mauna Kea 山顶可能 0°C 以下，带羽绒。多数 tour（¥1600-2000/人）提供保暖装备和热饮，省事省力。' , "hotel": {"name_cn": "Sheraton Kona", "name_en": "Sheraton Kona Resort & Spa", "address": "同上", "price": "¥1800-3200/晚", "parking": "¥250/晚", "highlights": "Mauna Kea 观星 tour 提供来回接送，不用自驾"}},
-  4: { color: '#e8a85e', title: 'Day 4 · 跨岛到 Hilo', where: '住 Volcano Village 或 Hilo',
+  4: { color: '#e8a85e', title: 'Day 4 · 跨岛到希洛', where: '住 Volcano Village 或 Hilo',
        tip: '💡 跨岛走 Saddle Road 或 Hamakua Coast。后者风景更好但慢 1 小时。Volcano Village 加油站贵 ¥2/L+，在 Hilo 加满。' , "hotel": {"name_cn": "Volcano Village Lodge 火山村小屋", "name_en": "Volcano Village Lodge", "address": "19-4183 Road E, Volcano, HI 96785", "price": "¥1500-2400/晚", "parking": "免费", "highlights": "火山公园入口 5 分钟车程，Day5 夜观熔岩最近", "url": "https://volcanovillagelodge.com/"}},
   5: { color: '#c2542e', title: 'Day 5 · 火山公园全日 ⭐', where: '住 Volcano Village',
        tip: '💡 一天分白天和夜晚两段。下午 4-5 点回酒店休息吃饭，9-10 点再出门看橙红色火山——最值得的体验。' , "hotel": {"name_cn": "Volcano Village Lodge", "name_en": "Volcano Village Lodge", "address": "同上", "price": "¥1500-2400/晚", "parking": "免费", "highlights": "Day5 火山全日来回最方便，夜观熔岩 10pm 回酒店"}},
-  6: { color: '#58a87c', title: 'Day 6 · Hilo + 南端', where: '住 Hilo 或回 Kona',
+  6: { color: '#58a87c', title: 'Day 6 · 希洛与南端', where: '住 Hilo 或回 Kona',
        tip: '💡 行程长，全程开车 4+ 小时（含从 Hilo 回 Kona）。早出发，South Point 风大注意车门。' , "hotel": {"name_cn": "Hilo Hawaiian Hotel 希洛夏威夷酒店", "name_en": "Hilo Hawaiian Hotel", "address": "71 Banyan Dr, Hilo, HI 96720", "price": "¥1000-1800/晚", "parking": "免费", "highlights": "Hilo 港口湾景，去南端黑沙滩往返出发点", "url": "https://www.castleresorts.com/properties/hilo-hawaiian-hotel/"}},
   7: { color: '#c97b3a', title: 'Day 7 · 悠闲告别', where: '回程',
        tip: '💡 美国 → 大岛航班多是夜班，白天有大半天可以放松。咖啡农场是最不踩雷的告别活动。' , "hotel": {"name_cn": "Hilo Hawaiian Hotel", "name_en": "Hilo Hawaiian Hotel", "address": "同上", "price": "¥1000-1800/晚", "parking": "免费", "highlights": "Hilo 机场离港或开 Saddle Rd 回 Kona 机场都方便"}},
@@ -1327,7 +1327,7 @@ async function showDetail(p) {
   hero.style.background = `linear-gradient(135deg, ${p.color} 0%, rgba(0,0,0,0.4) 100%)`;
   hero.innerHTML = `<div class="poi-hero-loading"><div class="loader"></div><div>🔍 搜索 4 张图片中...</div></div>`;
 
-  document.getElementById('pdName').textContent = `${p.icon} ${p.name}`;
+  document.getElementById('pdName').textContent = `${p.icon} ${p.name_cn || p.name}`;
   document.getElementById('pdEn').textContent = p.en;
   document.getElementById('pdDesc').textContent = p.desc;
   (function(){ var qb = encodeURIComponent((p.name || p.en || '') + ' 旅游'), qg = encodeURIComponent((p.en || p.name || '') + ' 攻略'), qc = encodeURIComponent((p.name || p.en || '') + ' 攻略'); var g = document.getElementById('pdGuides'); if (g) g.innerHTML = '<a class="g-bili" href="https://search.bilibili.com/all?keyword=' + qb + '" target="_blank" rel="noopener">📺 B站视频</a>' + '<a class="g-ggl" href="https://www.google.com/search?q=' + qg + '" target="_blank" rel="noopener">🔍 Google</a>' + '<a class="g-baidu" href="https://www.baidu.com/s?wd=' + qc + '" target="_blank" rel="noopener">📖 百度攻略</a>'; })();

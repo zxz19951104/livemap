@@ -335,9 +335,9 @@
   .guide-links { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
   .guide-links a { flex: 1 1 0; min-width: 88px; display: flex; align-items: center; justify-content: center; gap: 5px; padding: 9px 8px; border-radius: 9px; font-size: 12px; font-weight: 700; text-decoration: none; border: 1px solid rgba(0,0,0,0.08); transition: transform .12s ease, box-shadow .12s ease; }
   .guide-links a:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.14); }
-  .guide-links a.g-xhs { background: #fff0ee; color: #c73620; }
-  .guide-links a.g-mfw { background: #fff6e8; color: #c8810d; }
+  .guide-links a.g-bili { background: #fff0f6; color: #e23a82; }
   .guide-links a.g-ggl { background: #eef3fb; color: #3a6ea5; }
+  .guide-links a.g-baidu { background: #eef6ff; color: #2575c4; }
   .poi-detail .desc { font-size: 13px; color: #1a2838; line-height: 1.65; padding: 14px; background: rgba(255, 255, 255, 0.5); border-radius: 8px; margin-bottom: 14px; border: 1px solid rgba(80, 130, 170, 0.25); }
 
   .detail-section { margin-bottom: 14px; padding: 12px 14px; background: rgba(255, 255, 255, 0.5); border-radius: 8px; border: 1px solid rgba(80, 130, 170, 0.25); }
@@ -1131,7 +1131,7 @@ async function showDetail(p) {
   document.getElementById('pdName').textContent = `${p.icon} ${p.name}`;
   document.getElementById('pdEn').textContent = p.en;
   document.getElementById('pdDesc').textContent = p.desc;
-  (function(){ var q = encodeURIComponent(p.name || p.en || ''), qe = encodeURIComponent((p.en || p.name || '') + ' 攻略'); var g = document.getElementById('pdGuides'); if (g) g.innerHTML = '<a class="g-xhs" href="https://www.xiaohongshu.com/search_result?keyword=' + q + '" target="_blank" rel="noopener">📕 小红书攻略</a>' + '<a class="g-mfw" href="https://www.mafengwo.cn/search/q.php?q=' + q + '" target="_blank" rel="noopener">🐝 马蜂窝</a>' + '<a class="g-ggl" href="https://www.google.com/search?q=' + qe + '" target="_blank" rel="noopener">🔍 Google</a>'; })();
+  (function(){ var qb = encodeURIComponent((p.name || p.en || '') + ' 旅游'), qg = encodeURIComponent((p.en || p.name || '') + ' 攻略'), qc = encodeURIComponent((p.name || p.en || '') + ' 攻略'); var g = document.getElementById('pdGuides'); if (g) g.innerHTML = '<a class="g-bili" href="https://search.bilibili.com/all?keyword=' + qb + '" target="_blank" rel="noopener">📺 B站视频</a>' + '<a class="g-ggl" href="https://www.google.com/search?q=' + qg + '" target="_blank" rel="noopener">🔍 Google</a>' + '<a class="g-baidu" href="https://www.baidu.com/s?wd=' + qc + '" target="_blank" rel="noopener">📖 百度攻略</a>'; })();
   const priceEl = document.getElementById('pdPrice');
   if (p.price) priceEl.innerHTML = renderPriceWithRMB(p.price, ORIG_CURRENCY);
   else priceEl.textContent = '—';

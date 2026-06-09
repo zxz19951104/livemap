@@ -55,6 +55,11 @@ def build(out_dir: Path):
         if src.exists():
             shutil.copy(src, out_dir / extra)
 
+    # 2.5 拷贝静态资源（行程海报明信片底图等）
+    assets_src = ROOT / "assets"
+    if assets_src.exists():
+        shutil.copytree(assets_src, out_dir / "assets")
+
     # 3. 处理 index.html：注入静态标志 + 地图列表
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     maps = collect_maps()

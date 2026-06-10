@@ -1414,6 +1414,13 @@ function _posterBgStyle(cb){
   img.onerror=()=>cb('background-image:linear-gradient(165deg,#16302a,#3a2c1e 70%,#4a3020)');
   img.src=url;
 }
+function _posterShareURL(){
+  var u=location.href.split('#')[0];
+  if(/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)||location.protocol==='file:'){
+    u='https://zxz19951104.github.io/livemap/maps/'+location.pathname.split('/').pop();
+  }
+  return u;
+}
 window.generatePoster=function(){
   const stage=document.getElementById('posterStage');
   const title=(typeof META!=='undefined'&&META.title_short)||document.title.split('·')[0].trim();
@@ -1428,7 +1435,7 @@ window.generatePoster=function(){
         <div class="ps-foot"><div class="ps-qr" id="posterQR"></div><div class="ps-fcta"><b>扫码查看可交互活地图</b><p>每个点位有图片 · 攻略 · 营业时间 · 路线 — 还能一键生成你自己的行程海报</p></div></div>
       </div></div>`;
     const qd=document.getElementById('posterQR'); qd.innerHTML='';
-    try{ new QRCode(qd,{text:location.href.split('#')[0],width:170,height:170,colorDark:'#0e1a14',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }catch(e){}
+    try{ new QRCode(qd,{text:_posterShareURL(),width:170,height:170,colorDark:'#0e1a14',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M}); }catch(e){}
     document.getElementById('posterModal').classList.add('show');
   });
 };

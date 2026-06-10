@@ -1661,7 +1661,8 @@ if (typeof renderDayOverview === 'function') {
 function _posterProject(W,H,PAD){
   const flat=[...POIs].sort((a,b)=>a.day===b.day?a.num-b.num:a.day-b.day)
     .map(x=>({day:x.day,lat:x.lat,lng:x.lng,color:(DAYS[x.day]||{}).color||'#888'}));
-  const lats=flat.map(p=>p.lat),lngs=flat.map(p=>p.lng);
+  const _cu=(window._lmCustom||[]);
+  const lats=flat.map(p=>p.lat).concat(_cu.map(c=>c.lat)),lngs=flat.map(p=>p.lng).concat(_cu.map(c=>c.lng));
   const mnLa=Math.min(...lats),mxLa=Math.max(...lats),mnLn=Math.min(...lngs),mxLn=Math.max(...lngs);
   const spLa=(mxLa-mnLa)||0.01,spLn=(mxLn-mnLn)||0.01;
   const sc=Math.min((W-2*PAD)/spLn,(H-2*PAD)/spLa);
@@ -1678,7 +1679,9 @@ function _posterSVG(){
   const badge=dayNums.map(d=>{const dp=POIs.filter(x=>x.day===d).map(q=>({x:P.X(q.lng),y:P.Y(q.lat)}));if(!dp.length)return'';
     const cx=dp.reduce((s,q)=>s+q.x,0)/dp.length,cy=dp.reduce((s,q)=>s+q.y,0)/dp.length,c=(DAYS[d]||{}).color||'#888';
     return `<g><circle cx="${cx.toFixed(1)}" cy="${(cy-2).toFixed(1)}" r="21" fill="${c}" stroke="#fff" stroke-width="3.5"/><text x="${cx.toFixed(1)}" y="${(cy+6).toFixed(1)}" fill="#fff" font-size="21" font-weight="900" text-anchor="middle">${d}</text></g>`;}).join('');
-  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><defs><filter id="pbl"><feGaussianBlur stdDeviation="6"/></filter></defs>${glow}${seg}${dot}${badge}</svg>`;
+  const _cust=(window._lmCustom||[]);
+  const cdot=_cust.map(c=>`<g><circle cx="${P.X(c.lng).toFixed(1)}" cy="${P.Y(c.lat).toFixed(1)}" r="10" fill="#7b61c9" stroke="#fff" stroke-width="3"/><text x="${P.X(c.lng).toFixed(1)}" y="${(P.Y(c.lat)+5).toFixed(1)}" font-size="14" text-anchor="middle">📍</text></g>`).join('');
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><defs><filter id="pbl"><feGaussianBlur stdDeviation="6"/></filter></defs>${glow}${seg}${dot}${badge}${cdot}</svg>`;
 }
 function _posterDays(){
   const clean=s=>(s||'').replace(/^\d+\.\s*/,'').trim();
@@ -1714,7 +1717,7 @@ window.generatePoster=function(){
       <div class="ps-wrap">
         <div class="ps-top"><div class="ps-kick"><span>LiveMap</span>活地图 · 精准行程</div><div class="ps-seal">甄选<small>CURATED</small></div></div>
         <h1>${title}</h1>
-        <div class="ps-chips"><div class="ps-chip">📅 <b>${Object.keys(DAYS).map(Number).filter(n=>!isNaN(n)).length}</b> 天</div><div class="ps-chip">📍 <b>${POIs.length}</b> 个精选点</div><div class="ps-chip">🚗 自驾路线</div></div>
+        <div class="ps-chips"><div class="ps-chip">📅 <b>${Object.keys(DAYS).map(Number).filter(n=>!isNaN(n)).length}</b> 天</div><div class="ps-chip">📍 <b>${POIs.length}</b> 个精选点</div>${(window._lmVisitedCount&&window._lmVisitedCount()>0)?'<div class="ps-chip">✅ 已打卡 <b>'+window._lmVisitedCount()+'</b></div>':'<div class="ps-chip">🚗 自驾路线</div>'}${(window._lmCustom&&window._lmCustom.length)?'<div class="ps-chip">📍 我的点 <b>'+window._lmCustom.length+'</b></div>':''}</div>
         <div class="ps-map">${_posterSVG()}</div>
         <div class="ps-days">${_posterDays()}</div>
         <div class="ps-foot"><div class="ps-qr" id="posterQR"></div><div class="ps-fcta"><b>扫码查看可交互活地图</b><p>每个点位有图片 · 攻略 · 营业时间 · 路线 — 还能一键生成你自己的行程海报</p></div></div>
@@ -1740,5 +1743,6 @@ window.downloadPoster=function(btn){
   }).catch(e=>{ stage.style.transform=_pt; alert('生成失败：'+e.message); btn.textContent=old; btn.disabled=false; });
 };
 </script>
+<script src="../assets/lm_checkin.js" defer></script>
 </body>
 </html>

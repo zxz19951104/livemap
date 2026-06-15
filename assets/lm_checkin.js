@@ -166,7 +166,7 @@
     const res = modal.querySelector('.sres');
     res.innerHTML = '<div style="font-size:12px;color:#9aa;padding:3px">搜索中…</div>';
     const hits = await geocode(q);
-    if (!hits.length) { res.innerHTML = '<div style="font-size:12px;color:#c1440e;padding:3px">没找到，换个名字或更具体试试</div>'; return; }
+    if (!hits.length) { res.innerHTML = '<div style="font-size:12px;color:#c1440e;padding:3px">没找到 · 海外景点用英文官方名（如 Universal Studios Florida）</div>'; return; }
     res.innerHTML = '';
     hits.forEach(h => {
       const it = document.createElement('div');

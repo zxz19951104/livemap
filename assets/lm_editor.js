@@ -58,6 +58,46 @@
     document.body.appendChild(drawer);
     render();
 
+    async function geocode(q) {
+      if (!q) return [];
+      try {
+        const r = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=6&accept-language=zh&q=' + encodeURIComponent(q));
+        return r.ok ? await r.json() : [];
+      } catch (e) { return []; }
+    }
+    function addPOI(lat, lng, name) {
+      const day = 1, num = data.pois.filter(x => x.day === day).length + 1;
+      data.pois.push({ id: 'p' + Date.now(), day, num, name: name || '新景点', name_cn: name || '新景点', en: '', lat: +(+lat).toFixed(5), lng: +(+lng).toFixed(5), icon: '📍', color: (data.days[day] || {}).color || '#888', desc: '', tags: [], time: '' });
+      dirty = true; render(); drawer.classList.add('show');
+      try { map.setView([lat, lng], Math.max(map.getZoom(), 10)); } catch (e) {}
+    }
+    function buildSearch() {
+      const wrap = document.createElement('div');
+      const sec = document.createElement('div'); sec.className = 'lmed-sec'; sec.textContent = '🔍 搜景点自动加点'; wrap.appendChild(sec);
+      const row = document.createElement('div'); row.className = 'lmed-row';
+      const inp = document.createElement('input'); inp.placeholder = '景点名，如 都江堰 / Eiffel Tower';
+      const btn = document.createElement('button'); btn.textContent = '搜索'; btn.className = 'lmed-add'; btn.style.cssText = 'flex:0 0 64px;border-radius:7px;padding:7px';
+      row.appendChild(inp); row.appendChild(btn); wrap.appendChild(row);
+      const res = document.createElement('div'); res.style.cssText = 'margin-top:6px'; wrap.appendChild(res);
+      const run = async () => {
+        const q = inp.value.trim(); if (!q) return;
+        res.innerHTML = '<div style="font-size:12px;color:#9aa;padding:4px">搜索中…</div>';
+        const hits = await geocode(q);
+        if (!hits.length) { res.innerHTML = '<div style="font-size:12px;color:#c1440e;padding:4px">没找到，换个名字或更具体试试</div>'; return; }
+        res.innerHTML = '';
+        hits.forEach(h => {
+          const it = document.createElement('div');
+          it.style.cssText = 'padding:7px 9px;border:1px solid #e2e6df;border-radius:7px;margin-bottom:5px;cursor:pointer;font-size:12px;background:#fff';
+          it.innerHTML = `<b>📍 ${q}</b><br><span style="color:#8a948c">${(h.display_name || '').slice(0, 50)}</span>`;
+          it.onclick = () => addPOI(h.lat, h.lon, q);
+          res.appendChild(it);
+        });
+      };
+      btn.onclick = run;
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
+      return wrap;
+    }
+
     function field(label, val, oninput, type, opts) {
       const f = document.createElement('div'); f.className = 'lmed-f';
       f.innerHTML = `<label>${label}</label>`;
@@ -78,6 +118,7 @@
       drawer.appendChild(h);
 
       const body = document.createElement('div'); body.className = 'lmed-body';
+      body.appendChild(buildSearch());
       // 行程信息
       const s1 = document.createElement('div'); s1.className = 'lmed-sec'; s1.textContent = '行程信息'; body.appendChild(s1);
       body.appendChild(field('标题', data.meta.title, v => data.meta.title = v));
@@ -122,9 +163,17 @@
       r3.appendChild(field('纬度', p.lat, v => p.lat = parseFloat(v), 'number'));
       r3.appendChild(field('经度', p.lng, v => p.lng = parseFloat(v), 'number'));
       inn.appendChild(r3);
+      const btns = document.createElement('div'); btns.className = 'lmed-row'; btns.style.marginTop = '4px';
+      const loc = document.createElement('button'); loc.className = 'lmed-add'; loc.style.cssText = 'border-radius:7px;padding:6px'; loc.textContent = '🔍 按名定位';
+      loc.onclick = async () => {
+        loc.textContent = '定位中…';
+        const hits = await geocode(p.name_cn || p.name);
+        if (hits[0]) { p.lat = +(+hits[0].lat).toFixed(5); p.lng = +(+hits[0].lon).toFixed(5); dirty = true; try { map.setView([p.lat, p.lng], Math.max(map.getZoom(), 10)); } catch (e) {} render(); }
+        else { loc.textContent = '✗ 没找到'; setTimeout(() => loc.textContent = '🔍 按名定位', 1500); }
+      };
       const del = document.createElement('button'); del.className = 'lmed-del'; del.textContent = '删除此点';
       del.onclick = () => { data.pois = data.pois.filter(x => x !== p); dirty = true; render(); };
-      inn.appendChild(del); d.appendChild(inn);
+      btns.appendChild(loc); btns.appendChild(del); inn.appendChild(btns); d.appendChild(inn);
       return d;
     }
 
@@ -137,9 +186,7 @@
     map.on('click', e => {
       if (!addMode) return;
       addMode = false; document.getElementById('map').style.cursor = ''; if (hint) { hint.remove(); hint = null; }
-      const day = 1, num = data.pois.filter(x => x.day === day).length + 1;
-      data.pois.push({ id: 'p' + Date.now(), day, num, name: '新景点', name_cn: '新景点', en: '', lat: +e.latlng.lat.toFixed(5), lng: +e.latlng.lng.toFixed(5), icon: '📍', color: (data.days[day] || {}).color || '#888', desc: '', tags: [], time: '' });
-      dirty = true; render(); drawer.classList.add('show');
+      addPOI(e.latlng.lat, e.latlng.lng, '新景点');
     });
 
     function doSave(ev) {

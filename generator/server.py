@@ -60,7 +60,36 @@ class LiveMapHandler(http.server.SimpleHTTPRequestHandler):
     def do_POST(self):
         if self.path == "/api/generate":
             return self._generate()
+        if self.path == "/api/save":
+            return self._save()
         self.send_error(404, "API not found")
+
+    def _save(self):
+        """可视化编辑器保存：收完整 data(meta/days/pois/legend) → render_html → 写回地图文件 + JSON 备份。"""
+        try:
+            length = int(self.headers.get("Content-Length", 0))
+            payload = json.loads(self.rfile.read(length).decode("utf-8"))
+            filename = (payload.get("filename") or "").strip()
+            data = payload.get("data")
+            # 安全：仅允许 maps/ 下的纯文件名
+            if not filename.endswith(".html") or any(c in filename for c in ("/", "\\", "..")):
+                return self._json(400, {"error": "非法文件名"})
+            if not isinstance(data, dict) or not all(k in data for k in ("meta", "days", "pois")):
+                return self._json(400, {"error": "数据缺 meta/days/pois"})
+            data.setdefault("legend", [])
+            html = render_html(data)
+            MAPS_DIR.mkdir(exist_ok=True)
+            (MAPS_DIR / filename).write_text(html, encoding="utf-8")
+            DATA_DIR.mkdir(exist_ok=True)
+            (DATA_DIR / (filename[:-5] + ".json")).write_text(
+                json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+            print(f"💾 编辑已保存：{filename}（{len(data.get('pois', []))} POI）")
+            return self._json(200, {"success": True, "map_url": f"/maps/{filename}"})
+        except json.JSONDecodeError:
+            return self._json(400, {"error": "JSON 解析失败"})
+        except Exception as e:
+            import traceback; traceback.print_exc()
+            return self._json(500, {"error": f"{type(e).__name__}: {e}"})
 
     def _generate(self):
         try:

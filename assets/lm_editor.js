@@ -65,6 +65,18 @@
         return r.ok ? await r.json() : [];
       } catch (e) { return []; }
     }
+    async function translateZhEn(q) {
+      try { const r = await fetch('https://api.mymemory.translated.net/get?langpair=zh|en&q=' + encodeURIComponent(q)); const d = await r.json(); const t = d && d.responseData && d.responseData.translatedText; return (t && t.trim()) ? t.trim() : ''; }
+      catch (e) { return ''; }
+    }
+    async function smartGeo(q) {
+      let hits = await geocode(q), note = '';
+      if (!hits.length && /[一-鿿]/.test(q)) {
+        const en = await translateZhEn(q);
+        if (en) { const h2 = await geocode(en); if (h2.length) { hits = h2; note = '已按英文「' + en + '」搜索'; } }
+      }
+      return { hits, note };
+    }
     function addPOI(lat, lng, name) {
       const day = 1, num = data.pois.filter(x => x.day === day).length + 1;
       data.pois.push({ id: 'p' + Date.now(), day, num, name: name || '新景点', name_cn: name || '新景点', en: '', lat: +(+lat).toFixed(5), lng: +(+lng).toFixed(5), icon: '📍', color: (data.days[day] || {}).color || '#888', desc: '', tags: [], time: '' });
@@ -81,10 +93,10 @@
       const res = document.createElement('div'); res.style.cssText = 'margin-top:6px'; wrap.appendChild(res);
       const run = async () => {
         const q = inp.value.trim(); if (!q) return;
-        res.innerHTML = '<div style="font-size:12px;color:#9aa;padding:4px">搜索中…</div>';
-        const hits = await geocode(q);
+        res.innerHTML = '<div style="font-size:12px;color:#9aa;padding:4px">搜索中…（中文自动翻译后再查）</div>';
+        const { hits, note } = await smartGeo(q);
         if (!hits.length) { res.innerHTML = '<div style="font-size:12px;color:#c1440e;padding:4px">没找到 · 海外景点用英文官方名（如 Universal Studios Florida）</div>'; return; }
-        res.innerHTML = '';
+        res.innerHTML = note ? '<div style="font-size:11px;color:#8a948c;padding:0 0 4px">' + note + '</div>' : '';
         hits.forEach(h => {
           const it = document.createElement('div');
           it.style.cssText = 'padding:7px 9px;border:1px solid #e2e6df;border-radius:7px;margin-bottom:5px;cursor:pointer;font-size:12px;background:#fff';

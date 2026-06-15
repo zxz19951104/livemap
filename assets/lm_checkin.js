@@ -128,6 +128,19 @@
     try { const r = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=6&accept-language=zh&q=' + encodeURIComponent(q)); return r.ok ? await r.json() : []; }
     catch (e) { return []; }
   }
+  async function translateZhEn(q) {
+    try { const r = await fetch('https://api.mymemory.translated.net/get?langpair=zh|en&q=' + encodeURIComponent(q)); const d = await r.json(); const t = d && d.responseData && d.responseData.translatedText; return (t && t.trim()) ? t.trim() : ''; }
+    catch (e) { return ''; }
+  }
+  // 中文先查 OSM，没命中就翻成英文再查
+  async function smartGeo(q) {
+    let hits = await geocode(q), note = '';
+    if (!hits.length && /[一-鿿]/.test(q)) {
+      const en = await translateZhEn(q);
+      if (en) { const h2 = await geocode(en); if (h2.length) { hits = h2; note = '已按英文「' + en + '」搜索'; } }
+    }
+    return { hits, note };
+  }
 
   // ---------- 添加/编辑弹窗 ----------
   const modal = document.createElement('div');
@@ -164,10 +177,10 @@
   const runSearch = async () => {
     const q = modal.querySelector('.sq').value.trim(); if (!q) return;
     const res = modal.querySelector('.sres');
-    res.innerHTML = '<div style="font-size:12px;color:#9aa;padding:3px">搜索中…</div>';
-    const hits = await geocode(q);
+    res.innerHTML = '<div style="font-size:12px;color:#9aa;padding:3px">搜索中…（中文自动翻译后再查）</div>';
+    const { hits, note } = await smartGeo(q);
     if (!hits.length) { res.innerHTML = '<div style="font-size:12px;color:#c1440e;padding:3px">没找到 · 海外景点用英文官方名（如 Universal Studios Florida）</div>'; return; }
-    res.innerHTML = '';
+    res.innerHTML = note ? '<div style="font-size:11px;color:#8a948c;margin-bottom:4px">' + note + '</div>' : '';
     hits.forEach(h => {
       const it = document.createElement('div');
       it.style.cssText = 'padding:6px 8px;border:1px solid #e3ece5;border-radius:7px;margin-bottom:4px;cursor:pointer;font-size:12px;background:#fff';

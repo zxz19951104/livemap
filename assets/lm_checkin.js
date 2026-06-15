@@ -122,11 +122,24 @@
   }
   function saveCustomArr() { LS.set('custom', custom); window._lmCustom = custom; }
 
+  // ---------- 地理编码（搜地点）----------
+  async function geocode(q) {
+    if (!q) return [];
+    try { const r = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=6&accept-language=zh&q=' + encodeURIComponent(q)); return r.ok ? await r.json() : []; }
+    catch (e) { return []; }
+  }
+
   // ---------- 添加/编辑弹窗 ----------
   const modal = document.createElement('div');
   modal.className = 'lm-modal';
   modal.innerHTML = `<div class="lm-card">
     <h4 class="t">添加我的点</h4>
+    <div class="lm-search">
+      <div style="display:flex;gap:6px"><input class="sq" placeholder="🔍 搜地点，如 Universal Studios" style="flex:1"><button class="lm-sbtn" type="button" style="flex:0 0 auto;background:#eef6ff;color:#1f6fd0">搜</button></div>
+      <div class="sres" style="margin-top:6px"></div>
+      <div class="sloc" style="display:none;font-size:12px;color:#1f7a5a;font-weight:700;margin:2px 0"></div>
+      <button class="lm-mapbtn" type="button" style="background:#f0f0f5;color:#555;margin-bottom:6px">📍 或点地图选位置</button>
+    </div>
     <input class="nm" placeholder="名字，如『超好吃的拉面店』" maxlength="20">
     <textarea class="nt" rows="2" placeholder="备注（可选）" maxlength="80"></textarea>
     <div class="row">
@@ -142,9 +155,35 @@
     modal.querySelector('.nm').value = name || '';
     modal.querySelector('.nt').value = note || '';
     modal.querySelector('.lm-del').style.display = isEdit ? 'block' : 'none';
+    modal.querySelector('.lm-search').style.display = isEdit ? 'none' : 'block';
+    modal.querySelector('.sq').value = ''; modal.querySelector('.sres').innerHTML = '';
+    const loc = modal.querySelector('.sloc'); loc.style.display = pending ? 'block' : 'none'; loc.textContent = pending ? '✓ 已选位置，点保存即可' : '';
     modal.classList.add('show');
-    setTimeout(() => modal.querySelector('.nm').focus(), 50);
+    setTimeout(() => modal.querySelector(isEdit ? '.nm' : '.sq').focus(), 50);
   }
+  const runSearch = async () => {
+    const q = modal.querySelector('.sq').value.trim(); if (!q) return;
+    const res = modal.querySelector('.sres');
+    res.innerHTML = '<div style="font-size:12px;color:#9aa;padding:3px">搜索中…</div>';
+    const hits = await geocode(q);
+    if (!hits.length) { res.innerHTML = '<div style="font-size:12px;color:#c1440e;padding:3px">没找到，换个名字或更具体试试</div>'; return; }
+    res.innerHTML = '';
+    hits.forEach(h => {
+      const it = document.createElement('div');
+      it.style.cssText = 'padding:6px 8px;border:1px solid #e3ece5;border-radius:7px;margin-bottom:4px;cursor:pointer;font-size:12px;background:#fff';
+      it.textContent = '📍 ' + (h.display_name || '').slice(0, 48);
+      it.onclick = () => {
+        pending = { lat: +(+h.lat).toFixed(5), lng: +(+h.lon).toFixed(5) };
+        if (!modal.querySelector('.nm').value) modal.querySelector('.nm').value = q;
+        const loc = modal.querySelector('.sloc'); loc.style.display = 'block'; loc.textContent = '✓ 已定位「' + q + '」，点保存即可';
+        res.innerHTML = ''; try { map.setView([pending.lat, pending.lng], Math.max(map.getZoom(), 12)); } catch (e) {}
+      };
+      res.appendChild(it);
+    });
+  };
+  modal.querySelector('.lm-sbtn').onclick = runSearch;
+  modal.querySelector('.sq').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); runSearch(); } });
+  modal.querySelector('.lm-mapbtn').onclick = () => { modal.classList.remove('show'); setAddMode(true); };
   modal.querySelector('.lm-cancel').onclick = () => { modal.classList.remove('show'); editing = pending = null; };
   modal.querySelector('.lm-save').onclick = () => {
     const name = modal.querySelector('.nm').value.trim() || '我的点';
@@ -154,7 +193,7 @@
     } else if (pending) {
       const c = { id: 'c' + Date.now(), name, note, lat: pending.lat, lng: pending.lng };
       custom.push(c); renderCustom();
-    }
+    } else { alert('请先搜索地点，或点「📍 或点地图选位置」'); return; }
     saveCustomArr(); modal.classList.remove('show'); editing = pending = null;
   };
   modal.querySelector('.lm-del').onclick = () => {
@@ -176,7 +215,11 @@
     if (on && !hint) { hint = document.createElement('div'); hint.className = 'lm-hint'; hint.textContent = '点击地图任意位置添加你的点'; document.body.appendChild(hint); }
     if (!on && hint) { hint.remove(); hint = null; }
   }
-  addBtn.onclick = () => setAddMode(!addMode);
+  addBtn.onclick = () => {
+    if (addMode) { setAddMode(false); return; }
+    editing = null; pending = null;
+    openModal('添加我的点', '', '', false);
+  };
   map.on('click', e => {
     if (!addMode) return;
     pending = { lat: +e.latlng.lat.toFixed(5), lng: +e.latlng.lng.toFixed(5) }; editing = null;
